@@ -1,0 +1,250 @@
+---
+interface Props {
+  bundlePrice: number;
+}
+
+const { bundlePrice } = Astro.props;
+---
+
+<cv-cart-drawer data-bundle-price={bundlePrice}>
+  <dialog
+    id="cv-cart-dialog"
+    aria-labelledby="cv-cart-title"
+    class="m-auto w-full max-w-lg border border-[var(--cv-border-strong)] bg-[var(--cv-surface)] p-0 text-[var(--cv-text)] backdrop:bg-black/75"
+  >
+    <div class="p-6">
+      <div class="flex items-center justify-between border-b border-dashed border-[var(--cv-border)] pb-4">
+        <div>
+          <p class="font-mono text-xs font-bold text-[var(--cv-accent)]">
+            LICENSE MANIFEST // CART
+          </p>
+          <h2 id="cv-cart-title" class="mt-0.5 text-lg font-bold text-[var(--cv-text)]">
+            Selected Templates
+          </h2>
+        </div>
+        <button
+          type="button"
+          data-cart-close
+          aria-label="Close cart dialog"
+          class="min-h-11 min-w-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-3 py-1.5 font-mono text-xs font-bold text-[var(--cv-text)] hover:border-[var(--cv-accent)]"
+        >
+          ESC
+        </button>
+      </div>
+
+      <!-- Empty Cart State -->
+      <div data-cart-empty class="py-8 text-center">
+        <p class="font-mono text-xs font-bold text-[var(--cv-text-muted)]">
+          0 ITEMS IN MANIFEST
+        </p>
+        <p class="mt-2 text-sm text-[var(--cv-text-muted)]">
+          Select individual templates from the catalog or add the 50% off All-Access Bundle.
+        </p>
+        <button
+          type="button"
+          data-cart-quick-bundle
+          class="mt-4 inline-flex min-h-11 items-center justify-center border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-4 py-2 font-mono text-xs font-bold text-[var(--cv-accent-contrast)]"
+        >
+          Add All-Access Bundle (${bundlePrice})
+        </button>
+      </div>
+
+      <!-- Active Cart Items List -->
+      <div data-cart-filled hidden>
+        <ul data-cart-list class="divide-y divide-dashed divide-[var(--cv-border)] py-3"></ul>
+
+        <div class="mt-4 flex items-baseline justify-between border-t border-dashed border-[var(--cv-border-strong)] pt-4 font-mono">
+          <span class="text-xs text-[var(--cv-text-muted)]">TOTAL LICENSE FEE</span>
+          <span data-cart-total class="text-xl font-bold text-[var(--cv-accent)]">$0</span>
+        </div>
+
+        <form data-cart-checkout-form class="mt-5 space-y-3">
+          <div>
+            <label
+              for="cv-checkout-email"
+              class="block font-mono text-xs font-bold text-[var(--cv-text)]"
+            >
+              DELIVERY EMAIL (GITHUB &amp; EMDASH INVITE)
+            </label>
+            <input
+              id="cv-checkout-email"
+              type="email"
+              required
+              placeholder="you@studio.dev"
+              class="mt-1.5 min-h-11 w-full border border-[var(--cv-border)] bg-[var(--cv-bg)] px-3 py-2 font-mono text-xs text-[var(--cv-text)] placeholder:text-[var(--cv-text-muted)] focus:border-[var(--cv-accent)]"
+            />
+          </div>
+          <div class="flex items-center justify-between gap-2 pt-2">
+            <button
+              type="button"
+              data-cart-clear
+              class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text-muted)] hover:text-[var(--cv-text)]"
+            >
+              Clear Manifest
+            </button>
+            <button
+              type="submit"
+              class="min-h-11 border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-5 py-2.5 font-mono text-xs font-bold text-[var(--cv-accent-contrast)]"
+            >
+              Issue License Key
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Checkout Confirmation State -->
+      <div
+        data-cart-status
+        hidden
+        role="status"
+        aria-live="polite"
+        class="mt-4 border border-[var(--cv-accent)] bg-[var(--cv-bg)] p-4 font-mono text-xs text-[var(--cv-text)]"
+      ></div>
+    </div>
+  </dialog>
+</cv-cart-drawer>
+
+<script>
+  interface CartItem {
+    id: string;
+    title: string;
+    price: number;
+  }
+
+  class CvCartDrawer extends HTMLElement {
+    private items: CartItem[] = [];
+
+    connectedCallback() {
+      const dialog = this.querySelector<HTMLDialogElement>('#cv-cart-dialog');
+      const closeBtn = this.querySelector<HTMLButtonElement>('[data-cart-close]');
+      const quickBundleBtn = this.querySelector<HTMLButtonElement>('[data-cart-quick-bundle]');
+      const clearBtn = this.querySelector<HTMLButtonElement>('[data-cart-clear]');
+      const checkoutForm = this.querySelector<HTMLFormElement>('[data-cart-checkout-form]');
+      const statusBox = this.querySelector<HTMLElement>('[data-cart-status]');
+      const bundlePrice = Number(this.dataset.bundlePrice || 246);
+
+      if (!dialog) return;
+
+      document.querySelectorAll<HTMLButtonElement>('[data-cart-open-trigger]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          statusBox?.setAttribute('hidden', '');
+          dialog.showModal();
+        });
+      });
+
+      closeBtn?.addEventListener('click', () => dialog.close());
+
+      quickBundleBtn?.addEventListener('click', () => {
+        this.addItem({
+          id: 'bundle-all-access',
+          title: 'All-Access Studio Bundle (All 8 Templates)',
+          price: bundlePrice,
+        });
+      });
+
+      clearBtn?.addEventListener('click', () => {
+        this.items = [];
+        statusBox?.setAttribute('hidden', '');
+        this.render();
+      });
+
+      checkoutForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const emailInput = this.querySelector<HTMLInputElement>('#cv-checkout-email');
+        const email = emailInput?.value.trim() || 'studio@example.com';
+        const total = this.items.reduce((acc, item) => acc + item.price, 0);
+        if (statusBox) {
+          statusBox.textContent = `LICENSE DISPATCHED: Repository access for ${this.items.length} item(s) ($${total} USD) queued for ${email}.`;
+          statusBox.removeAttribute('hidden');
+        }
+        this.items = [];
+        this.render();
+      });
+
+      window.addEventListener('cv:cart-add', (event: Event) => {
+        const customEvent = event as CustomEvent<CartItem>;
+        if (!customEvent.detail) return;
+        statusBox?.setAttribute('hidden', '');
+        this.addItem(customEvent.detail);
+        if (!dialog.open) {
+          dialog.showModal();
+        }
+      });
+
+      this.render();
+    }
+
+    private addItem(item: CartItem) {
+      const exists = this.items.some((i) => i.id === item.id);
+      if (!exists) {
+        this.items.push(item);
+      }
+      this.render();
+    }
+
+    private removeItem(id: string) {
+      this.items = this.items.filter((i) => i.id !== id);
+      this.render();
+    }
+
+    private render() {
+      const emptyEl = this.querySelector<HTMLElement>('[data-cart-empty]');
+      const filledEl = this.querySelector<HTMLElement>('[data-cart-filled]');
+      const listEl = this.querySelector<HTMLElement>('[data-cart-list]');
+      const totalEl = this.querySelector<HTMLElement>('[data-cart-total]');
+      const badgeEls = document.querySelectorAll<HTMLElement>('[data-cart-count]');
+
+      badgeEls.forEach((badge) => {
+        badge.textContent = String(this.items.length);
+      });
+
+      if (this.items.length === 0) {
+        emptyEl?.removeAttribute('hidden');
+        filledEl?.setAttribute('hidden', '');
+        return;
+      }
+
+      emptyEl?.setAttribute('hidden', '');
+      filledEl?.removeAttribute('hidden');
+
+      if (listEl) {
+        listEl.innerHTML = this.items
+          .map(
+            (item) => `
+          <li class="flex items-center justify-between gap-3 py-2.5 text-sm">
+            <div>
+              <p class="font-bold text-[var(--cv-text)]">${item.title}</p>
+              <p class="font-mono text-xs text-[var(--cv-text-muted)]">$${item.price} USD</p>
+            </div>
+            <button
+              type="button"
+              data-remove-id="${item.id}"
+              aria-label="Remove ${item.title} from cart"
+              class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-3 py-1 font-mono text-xs text-[var(--cv-text-muted)] hover:border-[var(--cv-accent)] hover:text-[var(--cv-text)]"
+            >
+              Remove
+            </button>
+          </li>
+        `
+          )
+          .join('');
+
+        listEl.querySelectorAll<HTMLButtonElement>('[data-remove-id]').forEach((btn) => {
+          btn.addEventListener('click', () => {
+            const id = btn.dataset.removeId || '';
+            this.removeItem(id);
+          });
+        });
+      }
+
+      const total = this.items.reduce((sum, item) => sum + item.price, 0);
+      if (totalEl) {
+        totalEl.textContent = `$${total} USD`;
+      }
+    }
+  }
+
+  if (!customElements.get('cv-cart-drawer')) {
+    customElements.define('cv-cart-drawer', CvCartDrawer);
+  }
+</script>

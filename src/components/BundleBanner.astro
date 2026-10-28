@@ -1,0 +1,119 @@
+---
+interface Props {
+  totalTemplatesCount: number;
+  retailValue: number;
+  bundlePrice: number;
+}
+
+const { totalTemplatesCount, retailValue, bundlePrice } = Astro.props;
+const savingsAmount = retailValue - bundlePrice;
+---
+
+<section
+  id="bundle"
+  aria-labelledby="bundle-heading"
+  class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+>
+  <div class="cv-vertex-card border-[var(--cv-border-strong)] bg-[var(--cv-surface-elevated)] p-6 sm:p-8 lg:p-10">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
+      <!-- Left 8 Cols: Bundle Value Proposition & Included Specs -->
+      <div class="lg:col-span-8">
+        <div class="inline-flex items-center gap-2 border border-[var(--cv-accent)] bg-[var(--cv-bg)] px-3 py-1 font-mono text-xs font-bold text-[var(--cv-accent)]">
+          <span>STUDIO ALL-ACCESS PASS</span>
+          <span>//</span>
+          <span>{totalTemplatesCount} TEMPLATES INCLUDED</span>
+        </div>
+
+        <h2
+          id="bundle-heading"
+          class="mt-4 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl lg:text-4xl"
+        >
+          50% Off: One Purchase, All Templates.
+        </h2>
+
+        <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--cv-text-muted)] sm:text-base">
+          Unlock the complete Creative Vertices repository: all {totalTemplatesCount} Astro v7 +
+          Tailwind CSS v4 templates, typed EmDash CMS content schemas, self-hosted variable font
+          packs, and unlimited commercial project rights.
+        </p>
+
+        <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-4">
+          <div>
+            <dt class="text-[var(--cv-text-muted)]">INDIVIDUAL SUM</dt>
+            <dd class="mt-1 text-sm font-bold line-through text-[var(--cv-text-muted)]">
+              ${retailValue} USD
+            </dd>
+          </div>
+          <div>
+            <dt class="text-[var(--cv-text-muted)]">BUNDLE PRICE</dt>
+            <dd class="mt-1 text-sm font-bold text-[var(--cv-accent)]">
+              ${bundlePrice} USD
+            </dd>
+          </div>
+          <div>
+            <dt class="text-[var(--cv-text-muted)]">DIRECT SAVINGS</dt>
+            <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
+              Save ${savingsAmount} (50%)
+            </dd>
+          </div>
+          <div>
+            <dt class="text-[var(--cv-text-muted)]">LICENSE SCOPE</dt>
+            <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
+              Unlimited Domains
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <!-- Right 4 Cols: Checkout Action Box -->
+      <div class="flex flex-col justify-between border border-dashed border-[var(--cv-border-strong)] bg-[var(--cv-bg)] p-5 sm:p-6 lg:col-span-4">
+        <div>
+          <div class="flex items-baseline justify-between font-mono">
+            <span class="text-xs text-[var(--cv-text-muted)]">ONE-TIME ARCHIVE LICENSE</span>
+            <span class="text-2xl font-bold text-[var(--cv-text)]">${bundlePrice}</span>
+          </div>
+          <ul class="mt-4 space-y-2 font-mono text-xs text-[var(--cv-text-muted)]">
+            <li class="flex items-center gap-2">
+              <span class="h-1.5 w-1.5 bg-[var(--cv-accent)]" aria-hidden="true"></span>
+              <span>Full Git monorepo + EmDash seed files</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="h-1.5 w-1.5 bg-[var(--cv-accent)]" aria-hidden="true"></span>
+              <span>Astro v7.4 + Tailwind v4.3 strict config</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <span class="h-1.5 w-1.5 bg-[var(--cv-accent)]" aria-hidden="true"></span>
+              <span>Perpetual agency &amp; client license</span>
+            </li>
+          </ul>
+        </div>
+
+        <button
+          type="button"
+          data-add-bundle-to-cart
+          data-bundle-price={bundlePrice}
+          class="mt-6 inline-flex min-h-11 w-full items-center justify-center border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-5 py-3 font-mono text-xs font-bold tracking-wider text-[var(--cv-accent-contrast)] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+        >
+          Add All-Access Bundle (${bundlePrice})
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-add-bundle-to-cart]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const price = Number(btn.dataset.bundlePrice || 246);
+      window.dispatchEvent(
+        new CustomEvent('cv:cart-add', {
+          detail: {
+            id: 'bundle-all-access',
+            title: 'All-Access Studio Bundle (All 8 Templates)',
+            price,
+          },
+        })
+      );
+    });
+  });
+</script>

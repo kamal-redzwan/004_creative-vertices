@@ -1,0 +1,108 @@
+---
+interface Props {
+  totalTemplatesCount: number;
+  freeTemplatesCount: number;
+  bundlePrice: number;
+  retailValue: number;
+  syncedAtIso: string;
+}
+
+const {
+  totalTemplatesCount,
+  freeTemplatesCount,
+  bundlePrice,
+  retailValue,
+  syncedAtIso,
+} = Astro.props;
+---
+
+<section
+  aria-labelledby="hero-heading"
+  class="border-b border-dashed border-[var(--cv-rail)] px-4 py-10 sm:px-6 lg:px-8 lg:py-16"
+>
+  <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-start">
+    <!-- Left 7 Cols: Direct Headline & Specific CTAs (No redundant eyebrow pill above H1) -->
+    <div class="lg:col-span-7">
+      <h1
+        id="hero-heading"
+        class="text-3xl font-bold tracking-tight text-[var(--cv-text)] sm:text-5xl lg:leading-[1.08]"
+      >
+        Production Astro v7 Templates Wired to EmDash CMS.
+      </h1>
+
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-[var(--cv-text-muted)] sm:text-lg">
+        Architectural, code-first storefronts, documentation manuals, and agency ledgers authored
+        with Tailwind CSS v4, native Custom Web Elements, and self-hosted variable typography.
+      </p>
+
+      <div class="mt-7 flex flex-wrap items-center gap-3">
+        <a
+          href="#storefront"
+          class="inline-flex min-h-11 items-center justify-center border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-5 py-2.5 font-mono text-xs font-bold tracking-wider text-[var(--cv-accent-contrast)] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+        >
+          Browse {totalTemplatesCount} EmDash Templates
+        </a>
+        <a
+          href="#bundle"
+          class="inline-flex min-h-11 items-center justify-center border border-[var(--cv-border-strong)] bg-[var(--cv-surface)] px-5 py-2.5 font-mono text-xs font-bold tracking-wider text-[var(--cv-text)] transition-colors hover:border-[var(--cv-accent)] hover:bg-[var(--cv-surface-hover)]"
+        >
+          Claim All-Access Bundle (${bundlePrice})
+        </a>
+      </div>
+
+      <dl class="mt-8 grid grid-cols-2 gap-4 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-3">
+        <div>
+          <dt class="text-[var(--cv-text-muted)]">RUNTIME STACK</dt>
+          <dd class="mt-1 font-bold text-[var(--cv-text)]">Astro v7.4 + Tailwind v4.3</dd>
+        </div>
+        <div>
+          <dt class="text-[var(--cv-text-muted)]">CATALOG SPLIT</dt>
+          <dd class="mt-1 font-bold text-[var(--cv-text)]">
+            {totalTemplatesCount - freeTemplatesCount} Premium / {freeTemplatesCount} Free
+          </dd>
+        </div>
+        <div class="col-span-2 sm:col-span-1">
+          <dt class="text-[var(--cv-text-muted)]">BUNDLE SAVINGS</dt>
+          <dd class="mt-1 font-bold text-[var(--cv-accent)]">
+            ${bundlePrice} vs ${retailValue} Individual
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Right 5 Cols: EmDash Content Layer Schema Specification Card -->
+    <div class="lg:col-span-5">
+      <div class="cv-vertex-card bg-[var(--cv-surface)] p-5 sm:p-6">
+        <div class="flex items-center justify-between border-b border-dashed border-[var(--cv-border)] pb-3 font-mono text-xs">
+          <span class="font-bold text-[var(--cv-accent)]">src/content.config.ts</span>
+          <span class="text-[var(--cv-text-muted)]">SYNC: {syncedAtIso.slice(0, 10)}</span>
+        </div>
+
+        <pre
+          class="mt-4 overflow-x-auto border border-[var(--cv-border)] bg-[var(--cv-bg)] p-3.5 font-mono text-xs leading-relaxed text-[var(--cv-text)]"
+        ><code>{`import { defineCollection, z } from 'astro:content';
+import { emdashLoader } from '@emdash/astro-loader';
+
+export const collections = {
+  templates: defineCollection({
+    loader: emdashLoader({
+      collection: 'cv_storefront_templates',
+    }),
+    schema: z.object({
+      title: z.string(),
+      tier: z.enum(['PREMIUM', 'FREE']),
+      styleTag: z.string(),
+      swatches: z.array(z.string()).length(3),
+      pageCount: z.number().int(),
+    }),
+  }),
+};`}</code></pre>
+
+        <div class="mt-4 flex items-center justify-between font-mono text-[11px] text-[var(--cv-text-muted)]">
+          <span>ZERO RUNTIME HYDRATION OVERHEAD</span>
+          <span class="font-bold text-[var(--cv-text)]">100% TYPED</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

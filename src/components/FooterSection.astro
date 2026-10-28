@@ -1,0 +1,71 @@
+---
+interface Props {
+  totalTemplatesCount: number;
+  cmsVersion: string;
+}
+
+const { totalTemplatesCount, cmsVersion } = Astro.props;
+---
+
+<footer class="px-4 py-10 sm:px-6 lg:px-8">
+  <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+    <div>
+      <div class="flex items-center gap-2">
+        <span class="inline-block h-2 w-2 bg-[var(--cv-accent)]" aria-hidden="true"></span>
+        <span class="text-sm font-bold text-[var(--cv-text)]">Creative Vertices</span>
+        <span class="font-mono text-xs text-[var(--cv-text-muted)]">
+          // {totalTemplatesCount} Verified Astro v7 Templates
+        </span>
+      </div>
+      <p class="mt-1.5 font-mono text-xs text-[var(--cv-text-muted)]">
+        Powered by {cmsVersion} &amp; Tailwind CSS v4. Zero third-party tracking scripts.
+      </p>
+    </div>
+
+    <!-- Real internal section anchors only (R-24) -->
+    <nav aria-label="Footer navigation">
+      <ul class="flex flex-wrap items-center gap-2 font-mono text-xs">
+        <li>
+          <a
+            href="#top"
+            class="inline-flex min-h-11 items-center border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 text-[var(--cv-text)] hover:border-[var(--cv-border-strong)]"
+          >
+            Top &uarr;
+          </a>
+        </li>
+        <li>
+          <a
+            href="#storefront"
+            class="inline-flex min-h-11 items-center border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 text-[var(--cv-text)] hover:border-[var(--cv-border-strong)]"
+          >
+            Catalog
+          </a>
+        </li>
+        <li>
+          <a
+            href="#architecture"
+            class="inline-flex min-h-11 items-center border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 text-[var(--cv-text)] hover:border-[var(--cv-border-strong)]"
+          >
+            Architecture
+          </a>
+        </li>
+        <li>
+          <a
+            href="#bundle"
+            class="inline-flex min-h-11 items-center border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 text-[var(--cv-text)] hover:border-[var(--cv-border-strong)]"
+          >
+            All-Access
+          </a>
+        </li>
+        <li>
+          <a
+            href="#faq"
+            class="inline-flex min-h-11 items-center border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 text-[var(--cv-text)] hover:border-[var(--cv-border-strong)]"
+          >
+            FAQ
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</footer>

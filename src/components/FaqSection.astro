@@ -1,0 +1,148 @@
+---
+import type { EmDashFaqItem } from '../data/emdash-cms';
+
+interface Props {
+  faqs: EmDashFaqItem[];
+}
+
+const { faqs } = Astro.props;
+---
+
+<section
+  id="faq"
+  aria-labelledby="faq-heading"
+  class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+>
+  <cv-faq class="block">
+    <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+      <!-- Left Column: Section Heading & Accordion Controls -->
+      <div class="lg:col-span-4">
+        <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+          TECHNICAL DOCUMENTATION // FAQ
+        </p>
+        <h2
+          id="faq-heading"
+          class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
+        >
+          Architecture &amp; Licensing Questions
+        </h2>
+        <p class="mt-3 text-sm leading-relaxed text-[var(--cv-text-muted)]">
+          Specific answers regarding EmDash Content Layer synchronization, Tailwind CSS v4
+          stylesheets, native Web Component hydration, and agency client rights.
+        </p>
+
+        <div class="mt-6 flex flex-wrap gap-2">
+          <button
+            type="button"
+            data-faq-expand-all
+            class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
+          >
+            Expand All
+          </button>
+          <button
+            type="button"
+            data-faq-collapse-all
+            class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
+          >
+            Collapse All
+          </button>
+        </div>
+      </div>
+
+      <!-- Right Column: Accessible <details> & <summary> Accordion Items -->
+      <div class="space-y-3 lg:col-span-8">
+        {
+          faqs.map((item, idx) => (
+            <details
+              data-faq-item
+              open={idx === 0}
+              class="cv-vertex-card group overflow-hidden bg-[var(--cv-surface)]"
+            >
+              <summary class="flex min-h-12 list-none items-center justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+                <div class="flex flex-col gap-1 text-left">
+                  <span class="font-mono text-[11px] font-bold tracking-wider text-[var(--cv-accent)]">
+                    0{idx + 1} // {item.category}
+                  </span>
+                  <span class="text-base font-bold text-[var(--cv-text)]">
+                    {item.question}
+                  </span>
+                </div>
+                <span
+                  aria-hidden="true"
+                  class="inline-flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] font-mono text-sm font-bold text-[var(--cv-text)] transition-transform duration-150 group-open:rotate-45 group-open:border-[var(--cv-accent)] group-open:text-[var(--cv-accent)]"
+                >
+                  +
+                </span>
+              </summary>
+              <div
+                data-faq-body
+                class="border-t border-dashed border-[var(--cv-border)] px-4 py-4 text-sm leading-relaxed text-[var(--cv-text-muted)] sm:px-5"
+              >
+                <p>{item.answer}</p>
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </cv-faq>
+</section>
+
+<script>
+  class CvFaq extends HTMLElement {
+    connectedCallback() {
+      const detailsList = this.querySelectorAll<HTMLDetailsElement>('[data-faq-item]');
+      const expandAllBtn = this.querySelector<HTMLButtonElement>('[data-faq-expand-all]');
+      const collapseAllBtn = this.querySelector<HTMLButtonElement>('[data-faq-collapse-all]');
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      detailsList.forEach((details) => {
+        const summary = details.querySelector('summary');
+        const body = details.querySelector<HTMLElement>('[data-faq-body]');
+        if (!summary || !body) return;
+
+        summary.addEventListener('click', (event) => {
+          if (prefersReducedMotion) return;
+          event.preventDefault();
+
+          const isOpen = details.hasAttribute('open');
+          if (isOpen) {
+            const startHeight = `${details.offsetHeight}px`;
+            const endHeight = `${summary.offsetHeight}px`;
+            const anim = details.animate(
+              [{ height: startHeight }, { height: endHeight }],
+              { duration: 180, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+            );
+            anim.onfinish = () => {
+              details.removeAttribute('open');
+              details.style.height = '';
+            };
+          } else {
+            const startHeight = `${details.offsetHeight}px`;
+            details.setAttribute('open', '');
+            const endHeight = `${details.offsetHeight}px`;
+            const anim = details.animate(
+              [{ height: startHeight }, { height: endHeight }],
+              { duration: 180, easing: 'cubic-bezier(0.22, 1, 0.36, 1)' }
+            );
+            anim.onfinish = () => {
+              details.style.height = '';
+            };
+          }
+        });
+      });
+
+      expandAllBtn?.addEventListener('click', () => {
+        detailsList.forEach((d) => d.setAttribute('open', ''));
+      });
+
+      collapseAllBtn?.addEventListener('click', () => {
+        detailsList.forEach((d) => d.removeAttribute('open'));
+      });
+    }
+  }
+
+  if (!customElements.get('cv-faq')) {
+    customElements.define('cv-faq', CvFaq);
+  }
+</script>

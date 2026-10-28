@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+import NavBar from '../components/NavBar.astro';
+import HeroSection from '../components/HeroSection.astro';
+import StorefrontCatalog from '../components/StorefrontCatalog.astro';
+import WhySection from '../components/WhySection.astro';
+import BundleBanner from '../components/BundleBanner.astro';
+import FaqSection from '../components/FaqSection.astro';
+import FooterSection from '../components/FooterSection.astro';
+import CartDrawer from '../components/CartDrawer.astro';
+import {
+  emdashStorefrontData,
+  totalCatalogRetailValue,
+  bundleDiscountPrice,
+} from '../data/emdash-cms';
+
+const { templates, benefits, faqs, cmsVersion, collectionSlug, syncedAtIso } =
+  emdashStorefrontData;
+
+const totalTemplatesCount = templates.length;
+const freeTemplatesCount = templates.filter((t) => t.price === 0).length;
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark" id="top">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Creative Vertices: Code-driven digital template storefront built with Astro v7, Tailwind CSS v4, and EmDash CMS."
+    />
+    <title>Creative Vertices // Astro v7 &amp; EmDash CMS Template Storefront</title>
+    <script is:inline>
+      try {
+        const savedTheme = localStorage.getItem('cv-theme');
+        if (savedTheme === 'light' || savedTheme === 'dark') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+      } catch {
+        // Default dark theme remains active
+      }
+    </script>
+  </head>
+  <body class="bg-[var(--cv-bg)] text-[var(--cv-text)] antialiased">
+    <!-- Skip Link for Keyboard Accessibility (R-32) -->
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border focus:border-[var(--cv-accent)] focus:bg-[var(--cv-bg)] focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-bold focus:text-[var(--cv-text)]"
+    >
+      Skip to main content
+    </a>
+
+    <!-- Sticky Glassmorphism Header (GetAstroThemes Style) -->
+    <NavBar
+      totalTemplatesCount={totalTemplatesCount}
+      bundlePrice={bundleDiscountPrice}
+    />
+
+    <!-- Central Container with Continuous Vertical Dashed Borders (Cloudflare Aesthetic) -->
+    <div
+      class="mx-auto max-w-7xl border-l border-r border-dashed border-gray-700/50"
+    >
+      <main id="main-content">
+        <!-- Hero Specification Section -->
+        <HeroSection
+          totalTemplatesCount={totalTemplatesCount}
+          freeTemplatesCount={freeTemplatesCount}
+          bundlePrice={bundleDiscountPrice}
+          retailValue={totalCatalogRetailValue}
+          syncedAtIso={syncedAtIso}
+        />
+
+        <!-- 25% Sidebar / 75% Main Content Storefront Interface (JustStart.now Style) -->
+        <StorefrontCatalog
+          templates={templates}
+          cmsVersion={cmsVersion}
+          collectionSlug={collectionSlug}
+        />
+
+        <!-- "Why Creative Vertices" Technical Benefits Grid (XocoThemes Style) -->
+        <WhySection benefits={benefits} />
+
+        <!-- All-Access 50% Off Bundle Section (XocoThemes Style) -->
+        <BundleBanner
+          totalTemplatesCount={totalTemplatesCount}
+          retailValue={totalCatalogRetailValue}
+          bundlePrice={bundleDiscountPrice}
+        />
+
+        <!-- Scoped Custom Element Accordion FAQ Section (XocoThemes Style) -->
+        <FaqSection faqs={faqs} />
+      </main>
+
+      <!-- Minimal Architectural Footer -->
+      <FooterSection
+        totalTemplatesCount={totalTemplatesCount}
+        cmsVersion={cmsVersion}
+      />
+    </div>
+
+    <!-- Scoped Custom Element Cart Drawer Dialog -->
+    <CartDrawer bundlePrice={bundleDiscountPrice} />
+  </body>
+</html>
