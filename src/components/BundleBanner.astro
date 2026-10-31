@@ -14,9 +14,25 @@ const savingsAmount = retailValue - bundlePrice;
   aria-labelledby="bundle-heading"
   class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
 >
-  <div class="cv-vertex-card border-[var(--cv-border-strong)] bg-[var(--cv-surface-elevated)] p-6 sm:p-8 lg:p-10">
+  <div class="cv-vertex-card relative border border-gray-800 bg-[var(--cv-surface-elevated)] p-6 sm:p-8 lg:p-10">
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+    ></span>
+    <span
+      aria-hidden="true"
+      class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+    ></span>
+
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
-      <!-- Left 8 Cols: Bundle Value Proposition & Included Specs -->
       <div class="lg:col-span-8">
         <div class="inline-flex items-center gap-2 border border-[var(--cv-accent)] bg-[var(--cv-bg)] px-3 py-1 font-mono text-xs font-bold text-[var(--cv-accent)]">
           <span>STUDIO ALL-ACCESS PASS</span>
@@ -32,9 +48,10 @@ const savingsAmount = retailValue - bundlePrice;
         </h2>
 
         <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--cv-text-muted)] sm:text-base">
-          Unlock the complete Creative Vertices repository: all {totalTemplatesCount} Astro v7 +
-          Tailwind CSS v4 templates, typed EmDash CMS content schemas, self-hosted variable font
-          packs, and unlimited commercial project rights.
+          Unlock the complete Creative Vertices repository: all{" "}
+          {totalTemplatesCount} Astro v7 + Tailwind CSS v4 templates, typed
+          EmDash CMS content schemas, self-hosted variable font packs, and
+          unlimited commercial project rights.
         </p>
 
         <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-4">
@@ -65,24 +82,36 @@ const savingsAmount = retailValue - bundlePrice;
         </dl>
       </div>
 
-      <!-- Right 4 Cols: Checkout Action Box -->
       <div class="flex flex-col justify-between border border-dashed border-[var(--cv-border-strong)] bg-[var(--cv-bg)] p-5 sm:p-6 lg:col-span-4">
         <div>
           <div class="flex items-baseline justify-between font-mono">
-            <span class="text-xs text-[var(--cv-text-muted)]">ONE-TIME ARCHIVE LICENSE</span>
-            <span class="text-2xl font-bold text-[var(--cv-text)]">${bundlePrice}</span>
+            <span class="text-xs text-[var(--cv-text-muted)]">
+              ONE-TIME ARCHIVE LICENSE
+            </span>
+            <span class="text-2xl font-bold text-[var(--cv-text)]">
+              ${bundlePrice}
+            </span>
           </div>
           <ul class="mt-4 space-y-2 font-mono text-xs text-[var(--cv-text-muted)]">
             <li class="flex items-center gap-2">
-              <span class="h-1.5 w-1.5 bg-[var(--cv-accent)]" aria-hidden="true"></span>
+              <span
+                class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
+                aria-hidden="true"
+              ></span>
               <span>Full Git monorepo + EmDash seed files</span>
             </li>
             <li class="flex items-center gap-2">
-              <span class="h-1.5 w-1.5 bg-[var(--cv-accent)]" aria-hidden="true"></span>
+              <span
+                class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
+                aria-hidden="true"
+              ></span>
               <span>Astro v7.4 + Tailwind v4.3 strict config</span>
             </li>
             <li class="flex items-center gap-2">
-              <span class="h-1.5 w-1.5 bg-[var(--cv-accent)]" aria-hidden="true"></span>
+              <span
+                class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
+                aria-hidden="true"
+              ></span>
               <span>Perpetual agency &amp; client license</span>
             </li>
           </ul>
@@ -102,18 +131,20 @@ const savingsAmount = retailValue - bundlePrice;
 </section>
 
 <script>
-  document.querySelectorAll<HTMLButtonElement>('[data-add-bundle-to-cart]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const price = Number(btn.dataset.bundlePrice || 246);
-      window.dispatchEvent(
-        new CustomEvent('cv:cart-add', {
-          detail: {
-            id: 'bundle-all-access',
-            title: 'All-Access Studio Bundle (All 8 Templates)',
-            price,
-          },
-        })
-      );
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-add-bundle-to-cart]")
+    .forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const price = Number(btn.dataset.bundlePrice || 246);
+        window.dispatchEvent(
+          new CustomEvent("cv:cart-add", {
+            detail: {
+              id: "bundle-all-access",
+              title: "All-Access Studio Bundle (All 8 Templates)",
+              price,
+            },
+          }),
+        );
+      });
     });
-  });
 </script>

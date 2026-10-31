@@ -1,246 +1,132 @@
 ---
 interface Props {
-  totalTemplatesCount: number;
-  bundlePrice: number;
+  totalTemplatesCount?: number;
+  bundlePrice?: number;
 }
-
-const { totalTemplatesCount, bundlePrice } = Astro.props;
 ---
 
-<header
-  class="sticky top-0 z-40 w-full border-b border-dashed border-[var(--cv-rail)] bg-[var(--cv-nav-bg)] backdrop-blur-md"
->
-  <cv-mobile-nav class="block">
-    <div
-      class="mx-auto flex max-w-7xl items-center justify-between border-l border-r border-dashed border-gray-700/50 px-4 py-3 sm:px-6 lg:px-8"
+<header class="sticky top-0 z-40 w-full border-b border-dashed border-[var(--cv-rail)] bg-[var(--cv-nav-bg)] backdrop-blur-md">
+  <div class="mx-auto flex max-w-7xl justify-between items-center border-l border-r border-dashed border-gray-700/50 px-4 py-3 sm:px-6 lg:px-8">
+    <a
+      href="#top"
+      class="group inline-flex min-h-11 items-center gap-2.5 py-1 text-left focus-visible:outline-2"
     >
-      <!-- Left: Typography-based Wordmark -->
-      <a
-        href="#top"
-        class="group inline-flex min-h-11 items-center gap-2.5 py-1 text-left focus-visible:outline-2"
-      >
-        <span
-          class="inline-block h-2.5 w-2.5 shrink-0 bg-[var(--cv-accent)] transition-transform duration-150 group-hover:scale-125"
-          aria-hidden="true"></span>
-        <span class="flex flex-col">
-          <span class="text-sm font-bold tracking-tight text-[var(--cv-text)] sm:text-base">
-            Creative Vertices
-          </span>
-          <span class="font-mono text-[11px] text-[var(--cv-text-muted)]">
-            ASTRO v7 // EMDASH CMS
-          </span>
+      <span
+        class="inline-block h-2.5 w-2.5 shrink-0 bg-[var(--cv-accent)] transition-transform duration-150 group-hover:scale-125"
+        aria-hidden="true"
+      ></span>
+      <span class="flex flex-col justify-center">
+        <span class="text-sm font-bold leading-tight tracking-tight text-[var(--cv-text)] sm:text-base">
+          Creative Vertices
         </span>
-      </a>
+        <span class="font-mono text-[11px] leading-tight text-[var(--cv-text-muted)]">
+          ASTRO v7 // EMDASH CMS
+        </span>
+      </span>
+    </a>
 
-      <!-- Center: Navigation Links (Desktop) -->
-      <nav aria-label="Primary navigation" class="hidden md:block">
-        <ul class="flex items-center gap-1 lg:gap-2">
-          <li>
-            <a
-              href="#storefront"
-              class="inline-flex min-h-11 items-center px-3 py-2 text-sm font-medium text-[var(--cv-text)] transition-colors hover:bg-[var(--cv-surface-hover)]"
-            >
-              Templates
-              <span
-                class="ml-1.5 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-1.5 py-0.5 font-mono text-xs text-[var(--cv-text-muted)]"
-              >
-                {totalTemplatesCount}
-              </span>
-            </a>
-          </li>
-          <li>
-            <a
-              href="#architecture"
-              class="inline-flex min-h-11 items-center px-3 py-2 text-sm font-medium text-[var(--cv-text)] transition-colors hover:bg-[var(--cv-surface-hover)]"
-            >
-              Architecture
-            </a>
-          </li>
-          <li>
-            <a
-              href="#bundle"
-              class="inline-flex min-h-11 items-center px-3 py-2 text-sm font-medium text-[var(--cv-text)] transition-colors hover:bg-[var(--cv-surface-hover)]"
-            >
-              All-Access (${bundlePrice})
-            </a>
-          </li>
-          <li>
-            <a
-              href="#faq"
-              class="inline-flex min-h-11 items-center px-3 py-2 text-sm font-medium text-[var(--cv-text)] transition-colors hover:bg-[var(--cv-surface-hover)]"
-            >
-              FAQ
-            </a>
-          </li>
-        </ul>
-      </nav>
-
-      <!-- Right: Theme Toggle + Cart CTA + Mobile Menu Button -->
-      <div class="flex items-center gap-2 sm:gap-3">
-        <cv-theme-toggle>
-          <button
-            type="button"
-            data-theme-btn
-            aria-label="Switch color theme"
-            class="inline-flex min-h-11 min-w-11 items-center justify-center border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 font-mono text-xs font-medium text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)] active:translate-y-px"
-          >
-            <span data-theme-label>DARK</span>
-          </button>
-        </cv-theme-toggle>
-
+    <div class="flex items-center gap-5 sm:gap-6">
+      <cv-theme-toggle class="inline-flex items-center">
         <button
           type="button"
-          data-cart-open-trigger
-          aria-haspopup="dialog"
-          aria-controls="cv-cart-dialog"
-          class="inline-flex min-h-11 items-center gap-2 border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-3.5 py-2 font-mono text-xs font-bold text-[var(--cv-accent-contrast)] transition-transform hover:-translate-y-0.5 active:translate-y-0 sm:px-4"
+          data-theme-btn
+          aria-label="Switch to light theme (currently dark)"
+          class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-none border border-transparent p-2 text-gray-400 text-[var(--cv-text-muted)] transition-colors hover:border-[var(--cv-border)] hover:bg-[var(--cv-surface-hover)] hover:text-white hover:text-[var(--cv-text)] active:translate-y-px"
         >
-          <span>CART</span>
-          <span
-            data-cart-count
-            class="border border-current px-1.5 py-0.5 text-[11px] leading-none"
-          >
-            0
+          <span class="sr-only" data-theme-label>
+            Switch color theme
           </span>
+          <svg
+            data-theme-icon="sun"
+            aria-hidden="true"
+            focusable="false"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="square"
+            stroke-linejoin="miter"
+            class="h-5 w-5"
+          >
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2.5M12 19.5V22M4.93 4.93l1.77 1.77M17.3 17.3l1.77 1.77M2 12h2.5M19.5 12H22M4.93 19.07l1.77-1.77M17.3 6.7l1.77-1.77"></path>
+          </svg>
+          <svg
+            data-theme-icon="moon"
+            aria-hidden="true"
+            focusable="false"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.75"
+            stroke-linecap="square"
+            stroke-linejoin="miter"
+            class="hidden h-5 w-5"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
         </button>
+      </cv-theme-toggle>
 
-        <button
-          type="button"
-          data-mobile-menu-btn
-          aria-expanded="false"
-          aria-controls="cv-mobile-menu-panel"
-          class="inline-flex min-h-11 items-center gap-1.5 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)] md:hidden"
-        >
-          <span data-mobile-menu-text>MENU</span>
-        </button>
-      </div>
+      <button
+        type="button"
+        data-cart-open-trigger
+        aria-haspopup="dialog"
+        aria-controls="cv-cart-dialog"
+        class="inline-flex min-h-11 items-center justify-center rounded-none border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-4 py-2 font-mono text-xs font-bold tracking-wider text-[var(--cv-accent-contrast)] transition-all hover:-translate-y-0.5 hover:border-[var(--cv-text)] hover:bg-[var(--cv-text)] hover:text-[var(--cv-bg)] active:translate-y-0 sm:px-5"
+      >
+        All Access
+      </button>
     </div>
-
-    <!-- Mobile Reflow Navigation Panel -->
-    <nav
-      id="cv-mobile-menu-panel"
-      aria-label="Mobile navigation"
-      hidden
-      class="mx-auto max-w-7xl border-t border-l border-r border-dashed border-gray-700/50 bg-[var(--cv-surface)] px-4 py-3 md:hidden"
-    >
-      <ul class="flex flex-col gap-1">
-        <li>
-          <a
-            href="#storefront"
-            data-mobile-nav-link
-            class="flex min-h-11 items-center justify-between border border-transparent px-3 py-2 text-sm font-medium text-[var(--cv-text)] hover:border-[var(--cv-border)] hover:bg-[var(--cv-surface-hover)]"
-          >
-            <span>Templates Catalog</span>
-            <span class="font-mono text-xs text-[var(--cv-text-muted)]">{totalTemplatesCount} items</span>
-          </a>
-        </li>
-        <li>
-          <a
-            href="#architecture"
-            data-mobile-nav-link
-            class="flex min-h-11 items-center justify-between border border-transparent px-3 py-2 text-sm font-medium text-[var(--cv-text)] hover:border-[var(--cv-border)] hover:bg-[var(--cv-surface-hover)]"
-          >
-            <span>Why Creative Vertices</span>
-            <span class="font-mono text-xs text-[var(--cv-text-muted)]">4 specs</span>
-          </a>
-        </li>
-        <li>
-          <a
-            href="#bundle"
-            data-mobile-nav-link
-            class="flex min-h-11 items-center justify-between border border-transparent px-3 py-2 text-sm font-medium text-[var(--cv-text)] hover:border-[var(--cv-border)] hover:bg-[var(--cv-surface-hover)]"
-          >
-            <span>All-Access Bundle (50% Off)</span>
-            <span class="font-mono text-xs text-[var(--cv-accent)]">${bundlePrice}</span>
-          </a>
-        </li>
-        <li>
-          <a
-            href="#faq"
-            data-mobile-nav-link
-            class="flex min-h-11 items-center justify-between border border-transparent px-3 py-2 text-sm font-medium text-[var(--cv-text)] hover:border-[var(--cv-border)] hover:bg-[var(--cv-surface-hover)]"
-          >
-            <span>Technical FAQ</span>
-            <span class="font-mono text-xs text-[var(--cv-text-muted)]">5 answers</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  </cv-mobile-nav>
+  </div>
 </header>
 
 <script>
   class CvThemeToggle extends HTMLElement {
     connectedCallback() {
-      const btn = this.querySelector<HTMLButtonElement>('[data-theme-btn]');
-      const label = this.querySelector<HTMLElement>('[data-theme-label]');
+      const btn = this.querySelector<HTMLButtonElement>("[data-theme-btn]");
+      const label = this.querySelector<HTMLElement>("[data-theme-label]");
+      const sunIcon = this.querySelector<SVGElement>('[data-theme-icon="sun"]');
+      const moonIcon = this.querySelector<SVGElement>(
+        '[data-theme-icon="moon"]',
+      );
       if (!btn || !label) return;
 
       const syncUi = (theme: string) => {
-        label.textContent = theme === 'light' ? 'LIGHT' : 'DARK';
-        btn.setAttribute(
-          'aria-label',
-          theme === 'light' ? 'Switch to dark theme (currently light)' : 'Switch to light theme (currently dark)'
-        );
+        const isLight = theme === "light";
+        const actionText = isLight
+          ? "Switch to dark theme (currently light)"
+          : "Switch to light theme (currently dark)";
+        label.textContent = actionText;
+        btn.setAttribute("aria-label", actionText);
+        sunIcon?.classList.toggle("hidden", isLight);
+        moonIcon?.classList.toggle("hidden", !isLight);
       };
 
-      const current = document.documentElement.getAttribute('data-theme') || 'dark';
+      const current =
+        document.documentElement.getAttribute("data-theme") || "dark";
       syncUi(current);
 
-      btn.addEventListener('click', () => {
-        const active = document.documentElement.getAttribute('data-theme') || 'dark';
-        const next = active === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
+      btn.addEventListener("click", () => {
+        const active =
+          document.documentElement.getAttribute("data-theme") || "dark";
+        const next = active === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
         try {
-          localStorage.setItem('cv-theme', next);
+          localStorage.setItem("cv-theme", next);
         } catch {
-          // Ignore storage restrictions in private browsing
+          // Ignore storage restrictions in private browsing.
         }
         syncUi(next);
       });
     }
   }
 
-  class CvMobileNav extends HTMLElement {
-    connectedCallback() {
-      const btn = this.querySelector<HTMLButtonElement>('[data-mobile-menu-btn]');
-      const text = this.querySelector<HTMLElement>('[data-mobile-menu-text]');
-      const panel = this.querySelector<HTMLElement>('#cv-mobile-menu-panel');
-      const links = this.querySelectorAll<HTMLAnchorElement>('[data-mobile-nav-link]');
-      if (!btn || !panel || !text) return;
-
-      const setOpen = (open: boolean) => {
-        btn.setAttribute('aria-expanded', String(open));
-        text.textContent = open ? 'CLOSE' : 'MENU';
-        if (open) {
-          panel.removeAttribute('hidden');
-        } else {
-          panel.setAttribute('hidden', '');
-        }
-      };
-
-      btn.addEventListener('click', () => {
-        const isExpanded = btn.getAttribute('aria-expanded') === 'true';
-        setOpen(!isExpanded);
-      });
-
-      links.forEach((link) => {
-        link.addEventListener('click', () => setOpen(false));
-      });
-
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
-          setOpen(false);
-          btn.focus();
-        }
-      });
-    }
-  }
-
-  if (!customElements.get('cv-theme-toggle')) {
-    customElements.define('cv-theme-toggle', CvThemeToggle);
-  }
-  if (!customElements.get('cv-mobile-nav')) {
-    customElements.define('cv-mobile-nav', CvMobileNav);
+  if (!customElements.get("cv-theme-toggle")) {
+    customElements.define("cv-theme-toggle", CvThemeToggle);
   }
 </script>

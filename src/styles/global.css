@@ -2,6 +2,11 @@
 
 :root,
 [data-theme="dark"] {
+  --color-canvas: #0A0B0E;
+  --color-gray-400: #A3AAB8;
+  --color-gray-500: #8B93A4;
+  --color-gray-800: rgba(163, 170, 184, 0.24);
+  --color-orange-500: #FF6A1A;
   --cv-bg: #0A0B0E;
   --cv-surface: #111318;
   --cv-surface-elevated: #171A21;
@@ -19,6 +24,11 @@
 }
 
 [data-theme="light"] {
+  --color-canvas: #F7F6F2;
+  --color-gray-400: #454B57;
+  --color-gray-500: #525866;
+  --color-gray-800: rgba(14, 16, 21, 0.22);
+  --color-orange-500: #B83700;
   --cv-bg: #F7F6F2;
   --cv-surface: #EFECE6;
   --cv-surface-elevated: #E6E2DA;
@@ -85,7 +95,6 @@
   }
 }
 
-/* Cloudflare-style corner vertex square and card hover mechanics */
 .cv-vertex-card {
   position: relative;
   background-color: var(--cv-surface);
@@ -95,26 +104,9 @@
               background-color 160ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cv-vertex-card::after {
-  content: "";
-  position: absolute;
-  top: -4px;
-  right: -4px;
-  width: 8px;
-  height: 8px;
-  background-color: var(--cv-accent);
-  pointer-events: none;
-  z-index: 20;
-  transition: transform 160ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
 .cv-vertex-card:hover {
   transform: translateY(-3px);
   border-color: var(--cv-border-strong);
-}
-
-.cv-vertex-card:hover::after {
-  transform: scale(1.25);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -125,8 +117,7 @@
   *,
   *::before,
   *::after,
-  .cv-vertex-card,
-  .cv-vertex-card::after {
+  .cv-vertex-card {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

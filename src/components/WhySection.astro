@@ -1,5 +1,5 @@
 ---
-import type { EmDashWhyBenefit } from '../data/emdash-cms';
+import type { EmDashWhyBenefit } from "../data/emdash-cms";
 
 interface Props {
   benefits: EmDashWhyBenefit[];
@@ -26,50 +26,69 @@ const { benefits } = Astro.props;
       </h2>
     </div>
     <p class="max-w-xl text-sm leading-relaxed text-[var(--cv-text-muted)]">
-      Every template in the catalog is audited against strict build-time constraints: zero external
-      network dependencies, scoped Web Components, and typed EmDash CMS schemas.
+      Every template in the catalog is audited against strict build-time
+      constraints: zero external network dependencies, scoped Web Components,
+      and typed EmDash CMS schemas.
     </p>
   </div>
 
-  <!-- 4-Column Technical Grid with Hierarchy Variation (Primary Card Emphasized) -->
   <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-    {
-      benefits.map((benefit, index) => (
-        <article
-          class={`cv-vertex-card flex flex-col justify-between p-5 sm:p-6 ${
-            benefit.emphasized
-              ? 'border-t-2 border-t-[var(--cv-accent)] bg-[var(--cv-surface-elevated)]'
-              : 'bg-[var(--cv-surface)]'
-          }`}
-        >
-          <div>
-            <div class="flex items-center justify-between gap-2 font-mono text-xs">
-              <span class="font-bold text-[var(--cv-accent)]">{benefit.codeRef}</span>
-              <span class="border border-[var(--cv-border)] px-2 py-0.5 text-[11px] text-[var(--cv-text-muted)]">
-                SPEC #{index + 1}
-              </span>
-            </div>
+    {benefits.map((benefit, index) => (
+      <article
+        class={`cv-vertex-card relative flex flex-col justify-between border border-gray-800 p-5 sm:p-6 ${
+          benefit.emphasized
+            ? "bg-[var(--cv-surface-elevated)]"
+            : "bg-[var(--cv-surface)]"
+        }`}
+      >
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+        />
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+        />
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+        />
+        <span
+          aria-hidden="true"
+          class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+        />
 
-            <h3 class="mt-4 text-lg font-bold tracking-tight text-[var(--cv-text)]">
-              {benefit.title}
-            </h3>
-
-            <p class="mt-2.5 text-sm leading-relaxed text-[var(--cv-text-muted)]">
-              {benefit.summary}
-            </p>
+        <div>
+          <div class="flex items-center justify-between gap-2 font-mono text-xs">
+            <span class="font-bold text-[var(--cv-accent)]">
+              {benefit.codeRef}
+            </span>
+            <span class="border border-[var(--cv-border)] px-2 py-0.5 text-[11px] text-[var(--cv-text-muted)]">
+              SPEC #{index + 1}
+            </span>
           </div>
 
-          <div class="mt-6 border-t border-dashed border-[var(--cv-border)] pt-4">
-            <div class="flex items-baseline justify-between font-mono text-xs">
-              <span class="text-[var(--cv-text-muted)]">{benefit.metricLabel}</span>
-              <span class="font-bold text-[var(--cv-text)]">{benefit.metricValue}</span>
-            </div>
-            <pre
-              class="mt-3 overflow-x-auto border border-[var(--cv-border)] bg-[var(--cv-bg)] p-2.5 font-mono text-[11px] leading-snug text-[var(--cv-text-muted)]"
-            ><code>{benefit.specSnippet}</code></pre>
+          <h3 class="mt-4 text-lg font-bold tracking-tight text-[var(--cv-text)]">
+            {benefit.title}
+          </h3>
+
+          <p class="mt-2.5 text-sm leading-relaxed text-[var(--cv-text-muted)]">
+            {benefit.summary}
+          </p>
+        </div>
+
+        <div class="mt-6 border-t border-dashed border-[var(--cv-border)] pt-4">
+          <div class="flex items-baseline justify-between font-mono text-xs">
+            <span class="text-[var(--cv-text-muted)]">
+              {benefit.metricLabel}
+            </span>
+            <span class="font-bold text-[var(--cv-text)]">
+              {benefit.metricValue}
+            </span>
           </div>
-        </article>
-      ))
-    }
+          <pre class="mt-3 overflow-x-auto border border-[var(--cv-border)] bg-[var(--cv-bg)] p-2.5 font-mono text-[11px] leading-snug text-[var(--cv-text-muted)]"><code>{benefit.specSnippet}</code></pre>
+        </div>
+      </article>
+    ))}
   </div>
 </section>

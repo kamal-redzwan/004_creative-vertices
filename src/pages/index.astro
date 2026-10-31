@@ -1,24 +1,60 @@
 ---
-import '../styles/global.css';
-import NavBar from '../components/NavBar.astro';
-import HeroSection from '../components/HeroSection.astro';
-import StorefrontCatalog from '../components/StorefrontCatalog.astro';
-import WhySection from '../components/WhySection.astro';
-import BundleBanner from '../components/BundleBanner.astro';
-import FaqSection from '../components/FaqSection.astro';
-import FooterSection from '../components/FooterSection.astro';
-import CartDrawer from '../components/CartDrawer.astro';
+import "../styles/global.css";
+import NavBar from "../components/NavBar.astro";
+import FooterSection from "../components/FooterSection.astro";
+import CartDrawer from "../components/CartDrawer.astro";
 import {
   emdashStorefrontData,
   totalCatalogRetailValue,
   bundleDiscountPrice,
-} from '../data/emdash-cms';
+} from "../data/emdash-cms";
 
-const { templates, benefits, faqs, cmsVersion, collectionSlug, syncedAtIso } =
-  emdashStorefrontData;
+const { templates, benefits, faqs, cmsVersion } = emdashStorefrontData;
 
 const totalTemplatesCount = templates.length;
-const freeTemplatesCount = templates.filter((t) => t.price === 0).length;
+const savingsAmount = totalCatalogRetailValue - bundleDiscountPrice;
+
+const sectorCategories = [
+  { key: "trades-industry", label: "Trades & industry", count: 14 },
+  { key: "health-practice", label: "Health & practice", count: 8 },
+  { key: "online-shop", label: "Online shop", count: 7 },
+  { key: "landing-page", label: "Landing page", count: 7 },
+  { key: "professional-services", label: "Professional services", count: 7 },
+  { key: "food-drink", label: "Food & drink", count: 6 },
+  { key: "studios-agencies", label: "Studios & agencies", count: 6 },
+  { key: "software-saas", label: "Software & SaaS", count: 6 },
+  { key: "retail-product", label: "Retail & product", count: 5 },
+  { key: "travel-leisure", label: "Travel & leisure", count: 5 },
+  { key: "personal-writing", label: "Personal & writing", count: 4 },
+  { key: "arts-culture", label: "Arts & culture", count: 3 },
+  { key: "blog", label: "Blog", count: 3 },
+];
+
+const specModalPayload = templates.map(
+  ({
+    id,
+    title,
+    subtitle,
+    emdashCollection,
+    styleTag,
+    cssPayloadKb,
+    domNodesCount,
+    routesIncluded,
+    price,
+    priceDisplay,
+  }) => ({
+    id,
+    title,
+    subtitle,
+    emdashCollection,
+    styleTag,
+    cssPayloadKb,
+    domNodesCount,
+    routesIncluded,
+    price,
+    priceDisplay,
+  }),
+);
 ---
 
 <!doctype html>
@@ -33,17 +69,16 @@ const freeTemplatesCount = templates.filter((t) => t.price === 0).length;
     <title>Creative Vertices // Astro v7 &amp; EmDash CMS Template Storefront</title>
     <script is:inline>
       try {
-        const savedTheme = localStorage.getItem('cv-theme');
-        if (savedTheme === 'light' || savedTheme === 'dark') {
-          document.documentElement.setAttribute('data-theme', savedTheme);
+        const savedTheme = localStorage.getItem("cv-theme");
+        if (savedTheme === "light" || savedTheme === "dark") {
+          document.documentElement.setAttribute("data-theme", savedTheme);
         }
       } catch {
-        // Default dark theme remains active
+        // Fall back to dark theme when storage is restricted in private browsing.
       }
     </script>
   </head>
   <body class="bg-[var(--cv-bg)] text-[var(--cv-text)] antialiased">
-    <!-- Skip Link for Keyboard Accessibility (R-32) -->
     <a
       href="#main-content"
       class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border focus:border-[var(--cv-accent)] focus:bg-[var(--cv-bg)] focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:font-bold focus:text-[var(--cv-text)]"
@@ -51,55 +86,1181 @@ const freeTemplatesCount = templates.filter((t) => t.price === 0).length;
       Skip to main content
     </a>
 
-    <!-- Sticky Glassmorphism Header (GetAstroThemes Style) -->
     <NavBar
       totalTemplatesCount={totalTemplatesCount}
       bundlePrice={bundleDiscountPrice}
     />
 
-    <!-- Central Container with Continuous Vertical Dashed Borders (Cloudflare Aesthetic) -->
-    <div
-      class="mx-auto max-w-7xl border-l border-r border-dashed border-gray-700/50"
-    >
+    <div class="mx-auto max-w-7xl border-l border-r border-dashed border-gray-700/50">
       <main id="main-content">
-        <!-- Hero Specification Section -->
-        <HeroSection
-          totalTemplatesCount={totalTemplatesCount}
-          freeTemplatesCount={freeTemplatesCount}
-          bundlePrice={bundleDiscountPrice}
-          retailValue={totalCatalogRetailValue}
-          syncedAtIso={syncedAtIso}
-        />
+        <section
+          aria-labelledby="hero-heading"
+          class="border-b border-dashed border-[var(--cv-rail)] px-4 py-14 sm:px-6 md:py-20 lg:px-8 lg:py-24"
+        >
+          <div class="max-w-4xl text-left">
+            <h1
+              id="hero-heading"
+              class="text-5xl md:text-7xl font-semibold tracking-tight text-[var(--cv-text)] leading-[1.06]"
+            >
+              Architectural Astro Templates. Built for the Modern Web.
+            </h1>
 
-        <!-- 25% Sidebar / 75% Main Content Storefront Interface (JustStart.now Style) -->
-        <StorefrontCatalog
-          templates={templates}
-          cmsVersion={cmsVersion}
-          collectionSlug={collectionSlug}
-        />
+            <p class="text-gray-400 text-lg md:text-xl leading-relaxed mt-6 max-w-[65ch]">
+              Skip the boilerplate. Ship lightning-fast, visually stunning
+              websites with distraction-free Astro v7 codebases. Fully typed,
+              GDPR-compliant, and wired for EmDash CMS.
+            </p>
 
-        <!-- "Why Creative Vertices" Technical Benefits Grid (XocoThemes Style) -->
-        <WhySection benefits={benefits} />
+            <div
+              class="mt-10 flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs text-gray-500 uppercase tracking-widest"
+              aria-label="Technical specifications"
+            >
+              <span>ASTRO v7.4</span>
+              <span aria-hidden="true">&middot;</span>
+              <span>TAILWIND v4.3</span>
+              <span aria-hidden="true">&middot;</span>
+              <span>EMDASH CMS v3.8</span>
+              <span aria-hidden="true">&middot;</span>
+              <span>0 EXTERNAL REQUESTS</span>
+            </div>
+          </div>
+        </section>
 
-        <!-- All-Access 50% Off Bundle Section (XocoThemes Style) -->
-        <BundleBanner
-          totalTemplatesCount={totalTemplatesCount}
-          retailValue={totalCatalogRetailValue}
-          bundlePrice={bundleDiscountPrice}
-        />
+        <section
+          id="templates"
+          aria-labelledby="directory-heading"
+          class="border-b border-dashed border-[var(--cv-rail)]"
+        >
+          <cv-storefront
+            class="block"
+            data-total-templates={totalTemplatesCount}
+          >
+            <div class="border-b border-dashed border-[var(--cv-border)] px-4 py-6 sm:px-6 lg:px-8">
+              <h2
+                id="directory-heading"
+                class="text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
+              >
+                The Template Archive
+              </h2>
+              <p class="mt-1.5 text-base text-[var(--cv-text-muted)]">
+                Explore production-ready Astro architectures.
+              </p>
+            </div>
 
-        <!-- Scoped Custom Element Accordion FAQ Section (XocoThemes Style) -->
-        <FaqSection faqs={faqs} />
+            <div class="grid grid-cols-1 lg:grid-cols-12">
+              <aside
+                aria-label="Template filters"
+                class="border-b border-dashed border-[var(--cv-border)] p-4 sm:p-6 lg:col-span-3 lg:border-r lg:border-b-0 lg:p-8"
+              >
+                <div class="lg:sticky lg:top-20">
+                  <div>
+                    <h3 class="font-mono text-xs font-bold tracking-wider uppercase text-[var(--cv-text-muted)]">
+                      BROWSE BY SECTOR OR SITE TYPE
+                    </h3>
+                    <ul class="mt-3 space-y-0.5" role="list">
+                      {sectorCategories.map((cat, idx) => (
+                        <li>
+                          <button
+                            type="button"
+                            data-filter-industry={cat.key}
+                            aria-pressed={idx === 0 ? "true" : "false"}
+                            class={`flex min-h-11 w-full items-center justify-between border-l-2 px-3 py-2 text-left text-sm transition-colors ${
+                              idx === 0
+                                ? "border-[var(--cv-accent)] bg-[var(--cv-surface-elevated)] font-bold text-[var(--cv-text)]"
+                                : "border-transparent font-normal text-[var(--cv-text-muted)] hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface)] hover:text-[var(--cv-text)]"
+                            }`}
+                          >
+                            <span class="truncate pr-2">{cat.label}</span>
+                            <span class="font-mono text-xs tabular-nums text-[var(--cv-text-muted)]">
+                              {cat.count}
+                            </span>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div class="mt-6 border-t border-dashed border-[var(--cv-border)] pt-5">
+                    <div class="flex items-center justify-between font-mono text-xs">
+                      <span class="text-[var(--cv-text-muted)]">SHOWING</span>
+                      <span
+                        data-visible-count-summary
+                        aria-live="polite"
+                        class="font-bold text-[var(--cv-text)]"
+                      >
+                        {totalTemplatesCount} / {totalTemplatesCount} templates
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      data-reset-filters
+                      class="mt-3 flex min-h-11 w-full items-center justify-center border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 font-mono text-xs font-semibold text-[var(--cv-text-muted)] transition-colors hover:border-[var(--cv-border-strong)] hover:text-[var(--cv-text)]"
+                    >
+                      Reset Filter Constraints
+                    </button>
+                  </div>
+                </div>
+              </aside>
+
+              <div class="p-4 sm:p-6 lg:col-span-9 lg:p-8">
+                <div
+                  data-state-panel="loading"
+                  hidden
+                  aria-live="polite"
+                  class="space-y-6"
+                >
+                  <div class="relative border border-gray-800 bg-[var(--cv-surface)] p-4 font-mono text-xs text-[var(--cv-text-muted)]">
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+                    [EMDASH_SYNC] Fetching Content Layer collection nodes from
+                    edge worker...
+                  </div>
+                  <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6">
+                    <div class="relative border border-gray-800 bg-[var(--cv-surface)] p-5 sm:col-span-2 lg:col-span-3">
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <div class="aspect-video w-full animate-pulse bg-[var(--cv-surface-elevated)]"></div>
+                      <div class="mt-4 h-5 w-2/3 animate-pulse bg-[var(--cv-surface-elevated)]"></div>
+                      <div class="mt-2 h-4 w-1/2 animate-pulse bg-[var(--cv-surface-elevated)]"></div>
+                    </div>
+                    <div class="relative border border-gray-800 bg-[var(--cv-surface)] p-5 sm:col-span-2 lg:col-span-3">
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <div class="aspect-video w-full animate-pulse bg-[var(--cv-surface-elevated)]"></div>
+                      <div class="mt-4 h-5 w-3/4 animate-pulse bg-[var(--cv-surface-elevated)]"></div>
+                      <div class="mt-2 h-4 w-1/3 animate-pulse bg-[var(--cv-surface-elevated)]"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  data-state-panel="error"
+                  hidden
+                  role="alert"
+                  class="cv-vertex-card relative border border-gray-800 bg-[var(--cv-surface)] p-6 sm:p-8"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                    <div>
+                      <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-danger)]">
+                        ERR_EMDASH_EDGE_TIMEOUT // HTTP 504
+                      </p>
+                      <h3 class="mt-1 text-lg font-bold text-[var(--cv-text)]">
+                        Remote CMS collection failed to respond within 2,500ms.
+                      </h3>
+                      <p class="mt-1 text-sm text-[var(--cv-text-muted)]">
+                        Verify your <code>EMDASH_READ_TOKEN</code> environment
+                        variable or switch back to the verified build-time
+                        snapshot.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      data-restore-live
+                      class="min-h-11 shrink-0 border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-4 py-2.5 font-mono text-xs font-bold text-[var(--cv-accent-contrast)]"
+                    >
+                      Load Verified Snapshot
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  data-state-panel="empty"
+                  hidden
+                  role="status"
+                  aria-live="polite"
+                  class="cv-vertex-card relative border border-gray-800 bg-[var(--cv-surface)] p-8"
+                >
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <span
+                    aria-hidden="true"
+                    class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                  ></span>
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    0 MATCHING TEMPLATES
+                  </p>
+                  <h3 class="mt-1 text-lg font-bold text-[var(--cv-text)]">
+                    No templates match the active sector filter.
+                  </h3>
+                  <p class="mt-1 text-sm text-[var(--cv-text-muted)]">
+                    Clear the active filter constraints to restore all{" "}
+                    {totalTemplatesCount} templates in the archive.
+                  </p>
+                  <div class="mt-5">
+                    <button
+                      type="button"
+                      data-reset-filters
+                      class="min-h-11 border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-4 py-2 font-mono text-xs font-bold text-[var(--cv-accent-contrast)]"
+                    >
+                      Restore All {totalTemplatesCount} Templates
+                    </button>
+                  </div>
+                </div>
+
+                <div
+                  data-templates-grid
+                  class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6"
+                >
+                  {templates.map((template, index) => (
+                    <a
+                      href={`#${template.slug}`}
+                      data-template-card
+                      data-inspect-template={template.id}
+                      data-id={template.id}
+                      data-title={template.title}
+                      data-price-type={
+                        template.price === 0 ? "free" : "premium"
+                      }
+                      data-price-value={template.price}
+                      data-industry={template.industry}
+                      data-grid-role={index < 2 ? "top-2col" : "body-3col"}
+                      class={`cv-vertex-card group relative block border border-gray-800 bg-[var(--cv-surface)] ${
+                        index < 2
+                          ? "col-span-1 sm:col-span-2 lg:col-span-3"
+                          : "col-span-1 sm:col-span-1 lg:col-span-2"
+                      }`}
+                    >
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+                      <span
+                        aria-hidden="true"
+                        class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                      ></span>
+
+                      <article
+                        id={template.slug}
+                        class="flex h-full flex-col justify-between"
+                      >
+                        <div class="relative overflow-hidden border-b border-[var(--cv-border)] bg-[#090A0D]">
+                          <img
+                            src={template.previewSvgDataUri}
+                            alt={template.previewAlt}
+                            width="800"
+                            height="450"
+                            fetchpriority={index === 0 ? "high" : undefined}
+                            loading={index === 0 ? undefined : "lazy"}
+                            decoding="async"
+                            class="aspect-video w-full object-cover transition-transform duration-200 group-hover:scale-[1.015]"
+                          />
+
+                          <div class="pointer-events-none absolute top-3 left-3 z-10 flex items-center gap-1.5">
+                            {template.featured ? (
+                              <span class="border border-[#F5F6F8] bg-[#0A0B0E]/90 px-2.5 py-1 font-mono text-[11px] font-semibold tracking-wider text-[#F5F6F8]">
+                                FEATURED
+                              </span>
+                            ) : (
+                              <span class="border border-[#A3AAB8]/60 bg-[#0A0B0E]/90 px-2 py-1 font-mono text-[11px] text-[#A3AAB8]">
+                                {template.emdashCollection}
+                              </span>
+                            )}
+                          </div>
+
+                          <div class="pointer-events-none absolute top-3 right-3 z-10">
+                            {template.tier === "PREMIUM" ? (
+                              <span class="inline-block bg-[#FF6A1A] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]">
+                                PREMIUM
+                              </span>
+                            ) : (
+                              <span class="inline-block bg-[#F5F6F8] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]">
+                                FREE
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        <div class="flex flex-1 flex-col justify-between border-b border-dashed border-[var(--cv-border)] px-4 py-3.5">
+                          <div class="flex items-start justify-between gap-3">
+                            <h3 class="text-base font-bold tracking-tight text-[var(--cv-text)] group-hover:text-[var(--cv-accent)] transition-colors">
+                              {template.title}
+                            </h3>
+                            <span class="inline-block shrink-0 border border-[var(--cv-border-strong)] bg-[var(--cv-surface-elevated)] px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider text-[var(--cv-text)]">
+                              {template.styleTag}
+                            </span>
+                          </div>
+                          <p class="mt-1.5 text-sm leading-snug text-[var(--cv-text-muted)]">
+                            {template.subtitle}
+                          </p>
+                        </div>
+
+                        <div class="flex items-center justify-between gap-3 bg-[var(--cv-surface)] px-4 py-3 min-w-0">
+                          <div class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
+                            <div
+                              class="flex shrink-0 items-center -space-x-1"
+                              role="group"
+                              aria-label={`Color palette for ${template.title}`}
+                            >
+                              {template.swatches.map((swatch) => (
+                                <span
+                                  class="inline-block h-4 w-4 border border-[var(--cv-border-strong)]"
+                                  style={`background-color: ${swatch.hex};`}
+                                  title={swatch.label}
+                                  aria-label={swatch.label}
+                                />
+                              ))}
+                            </div>
+                            <span
+                              class="block min-w-0 flex-1 truncate font-mono text-xs text-[var(--cv-text-muted)]"
+                              title={template.typefaces.join(" + ")}
+                            >
+                              {template.typefaces.join(" + ")}
+                            </span>
+                          </div>
+
+                          <div class="flex shrink-0 items-baseline gap-2 font-mono">
+                            <span class="text-sm font-bold text-[var(--cv-text)]">
+                              {template.priceDisplay}
+                            </span>
+                            <span class="text-xs text-[var(--cv-text-muted)]">
+                              {template.pageCount} pages
+                            </span>
+                          </div>
+                        </div>
+                      </article>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <dialog
+              data-spec-dialog
+              aria-labelledby="spec-dialog-title"
+              class="m-auto w-full max-w-xl border border-[var(--cv-border-strong)] bg-[var(--cv-surface)] p-0 text-[var(--cv-text)] backdrop:bg-black/75"
+            >
+              <div class="p-6">
+                <div class="flex items-start justify-between gap-4 border-b border-dashed border-[var(--cv-border)] pb-4">
+                  <div>
+                    <p
+                      data-spec-collection
+                      class="font-mono text-xs font-semibold text-[var(--cv-accent)]"
+                    >
+                      EMDASH SCHEMA SPECIFICATION
+                    </p>
+                    <h3
+                      id="spec-dialog-title"
+                      data-spec-title
+                      class="mt-1 text-xl font-bold"
+                    >
+                      Template Specification
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    data-close-spec-dialog
+                    aria-label="Close specification dialog"
+                    class="min-h-11 min-w-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-3 py-1.5 font-mono text-xs font-bold text-[var(--cv-text)] hover:border-[var(--cv-accent)]"
+                  >
+                    ESC
+                  </button>
+                </div>
+
+                <p
+                  data-spec-subtitle
+                  class="mt-4 text-sm text-[var(--cv-text-muted)]"
+                ></p>
+
+                <dl class="mt-5 grid grid-cols-2 gap-3 border-t border-b border-dashed border-[var(--cv-border)] py-4 font-mono text-xs sm:grid-cols-3">
+                  <div>
+                    <dt class="text-[var(--cv-text-muted)]">ASTRO ENGINE</dt>
+                    <dd class="mt-1 font-bold text-[var(--cv-text)]">
+                      v7.4 Strict
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-[var(--cv-text-muted)]">CSS PAYLOAD</dt>
+                    <dd
+                      data-spec-css
+                      class="mt-1 font-bold text-[var(--cv-text)]"
+                    ></dd>
+                  </div>
+                  <div>
+                    <dt class="text-[var(--cv-text-muted)]">DOM NODES</dt>
+                    <dd
+                      data-spec-dom
+                      class="mt-1 font-bold text-[var(--cv-text)]"
+                    ></dd>
+                  </div>
+                </dl>
+
+                <div class="mt-4">
+                  <h4 class="font-mono text-xs font-bold text-[var(--cv-text-muted)]">
+                    INCLUDED ROUTES &amp; SCHEMAS
+                  </h4>
+                  <ul
+                    data-spec-routes
+                    class="mt-2 flex flex-wrap gap-1.5 font-mono text-xs"
+                  ></ul>
+                </div>
+
+                <div class="mt-6 flex items-center justify-end gap-3">
+                  <button
+                    type="button"
+                    data-close-spec-dialog
+                    class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-4 py-2 font-mono text-xs font-semibold text-[var(--cv-text)]"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="button"
+                    data-spec-add-cart
+                    class="min-h-11 border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-4 py-2 font-mono text-xs font-bold text-[var(--cv-accent-contrast)]"
+                  >
+                    Add Template to Cart
+                  </button>
+                </div>
+              </div>
+            </dialog>
+
+            <script
+              type="application/json"
+              data-templates-json
+              set:html={JSON.stringify(specModalPayload)}
+            />
+          </cv-storefront>
+        </section>
+
+        <section
+          id="architecture"
+          aria-labelledby="why-heading"
+          class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+        >
+          <div class="flex flex-col justify-between gap-4 border-b border-dashed border-[var(--cv-border)] pb-8 lg:flex-row lg:items-end">
+            <div>
+              <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                ARCHITECTURAL GUARANTEES // XOCOTHEMES STANDARD
+              </p>
+              <h2
+                id="why-heading"
+                class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
+              >
+                Why Creative Vertices
+              </h2>
+            </div>
+            <p class="max-w-xl text-sm leading-relaxed text-[var(--cv-text-muted)]">
+              Every template in the catalog is audited against strict build-time
+              constraints: zero external network dependencies, scoped Web
+              Components, and typed EmDash CMS schemas.
+            </p>
+          </div>
+
+          <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+            {benefits.map((benefit, index) => (
+              <article
+                class={`cv-vertex-card relative flex flex-col justify-between border border-gray-800 p-5 sm:p-6 ${
+                  benefit.emphasized
+                    ? "bg-[var(--cv-surface-elevated)]"
+                    : "bg-[var(--cv-surface)]"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                ></span>
+                <span
+                  aria-hidden="true"
+                  class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                ></span>
+                <span
+                  aria-hidden="true"
+                  class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                ></span>
+                <span
+                  aria-hidden="true"
+                  class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                ></span>
+
+                <div>
+                  <div class="flex items-center justify-between gap-2 font-mono text-xs">
+                    <span class="font-bold text-[var(--cv-accent)]">
+                      {benefit.codeRef}
+                    </span>
+                    <span class="border border-[var(--cv-border)] px-2 py-0.5 text-[11px] text-[var(--cv-text-muted)]">
+                      SPEC #{index + 1}
+                    </span>
+                  </div>
+
+                  <h3 class="mt-4 text-lg font-bold tracking-tight text-[var(--cv-text)]">
+                    {benefit.title}
+                  </h3>
+
+                  <p class="mt-2.5 text-sm leading-relaxed text-[var(--cv-text-muted)]">
+                    {benefit.summary}
+                  </p>
+                </div>
+
+                <div class="mt-6 border-t border-dashed border-[var(--cv-border)] pt-4">
+                  <div class="flex items-baseline justify-between font-mono text-xs">
+                    <span class="text-[var(--cv-text-muted)]">
+                      {benefit.metricLabel}
+                    </span>
+                    <span class="font-bold text-[var(--cv-text)]">
+                      {benefit.metricValue}
+                    </span>
+                  </div>
+                  <pre class="mt-3 overflow-x-auto border border-[var(--cv-border)] bg-[var(--cv-bg)] p-2.5 font-mono text-[11px] leading-snug text-[var(--cv-text-muted)]"><code>{benefit.specSnippet}</code></pre>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section
+          id="bundle"
+          aria-labelledby="bundle-heading"
+          class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+        >
+          <div class="cv-vertex-card relative border border-gray-800 bg-[var(--cv-surface-elevated)] p-6 sm:p-8 lg:p-10">
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+            ></span>
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+            ></span>
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+            ></span>
+            <span
+              aria-hidden="true"
+              class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+            ></span>
+
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-center">
+              <div class="lg:col-span-8">
+                <div class="inline-flex items-center gap-2 border border-[var(--cv-accent)] bg-[var(--cv-bg)] px-3 py-1 font-mono text-xs font-bold text-[var(--cv-accent)]">
+                  <span>STUDIO ALL-ACCESS PASS</span>
+                  <span>//</span>
+                  <span>{totalTemplatesCount} TEMPLATES INCLUDED</span>
+                </div>
+
+                <h2
+                  id="bundle-heading"
+                  class="mt-4 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl lg:text-4xl"
+                >
+                  50% Off: One Purchase, All Templates.
+                </h2>
+
+                <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--cv-text-muted)] sm:text-base">
+                  Unlock the complete Creative Vertices repository: all{" "}
+                  {totalTemplatesCount} Astro v7 + Tailwind CSS v4 templates,
+                  typed EmDash CMS content schemas, self-hosted variable font
+                  packs, and unlimited commercial project rights.
+                </p>
+
+                <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-4">
+                  <div>
+                    <dt class="text-[var(--cv-text-muted)]">INDIVIDUAL SUM</dt>
+                    <dd class="mt-1 text-sm font-bold line-through text-[var(--cv-text-muted)]">
+                      ${totalCatalogRetailValue} USD
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-[var(--cv-text-muted)]">BUNDLE PRICE</dt>
+                    <dd class="mt-1 text-sm font-bold text-[var(--cv-accent)]">
+                      ${bundleDiscountPrice} USD
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-[var(--cv-text-muted)]">DIRECT SAVINGS</dt>
+                    <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
+                      Save ${savingsAmount} (50%)
+                    </dd>
+                  </div>
+                  <div>
+                    <dt class="text-[var(--cv-text-muted)]">LICENSE SCOPE</dt>
+                    <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
+                      Unlimited Domains
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              <div class="flex flex-col justify-between border border-dashed border-[var(--cv-border-strong)] bg-[var(--cv-bg)] p-5 sm:p-6 lg:col-span-4">
+                <div>
+                  <div class="flex items-baseline justify-between font-mono">
+                    <span class="text-xs text-[var(--cv-text-muted)]">
+                      ONE-TIME ARCHIVE LICENSE
+                    </span>
+                    <span class="text-2xl font-bold text-[var(--cv-text)]">
+                      ${bundleDiscountPrice}
+                    </span>
+                  </div>
+                  <ul class="mt-4 space-y-2 font-mono text-xs text-[var(--cv-text-muted)]">
+                    <li class="flex items-center gap-2">
+                      <span
+                        class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
+                        aria-hidden="true"
+                      ></span>
+                      <span>Full Git monorepo + EmDash seed files</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <span
+                        class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
+                        aria-hidden="true"
+                      ></span>
+                      <span>Astro v7.4 + Tailwind v4.3 strict config</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <span
+                        class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
+                        aria-hidden="true"
+                      ></span>
+                      <span>Perpetual agency &amp; client license</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <button
+                  type="button"
+                  data-add-bundle-to-cart
+                  data-bundle-price={bundleDiscountPrice}
+                  class="mt-6 inline-flex min-h-11 w-full items-center justify-center border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-5 py-3 font-mono text-xs font-bold tracking-wider text-[var(--cv-accent-contrast)] transition-transform hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  Add All-Access Bundle (${bundleDiscountPrice})
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="faq"
+          aria-labelledby="faq-heading"
+          class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
+        >
+          <cv-faq class="block">
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
+              <div class="lg:col-span-4">
+                <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                  TECHNICAL DOCUMENTATION // FAQ
+                </p>
+                <h2
+                  id="faq-heading"
+                  class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
+                >
+                  Architecture &amp; Licensing Questions
+                </h2>
+                <p class="mt-3 text-sm leading-relaxed text-[var(--cv-text-muted)]">
+                  Specific answers regarding EmDash Content Layer
+                  synchronization, Tailwind CSS v4 stylesheets, native Web
+                  Component hydration, and agency client rights.
+                </p>
+
+                <div class="mt-6 flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    data-faq-expand-all
+                    class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
+                  >
+                    Expand All
+                  </button>
+                  <button
+                    type="button"
+                    data-faq-collapse-all
+                    class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
+                  >
+                    Collapse All
+                  </button>
+                </div>
+              </div>
+
+              <div class="space-y-4 lg:col-span-8">
+                {faqs.map((item, idx) => (
+                  <details
+                    data-faq-item
+                    open={idx === 0}
+                    class="cv-vertex-card group relative border border-gray-800 bg-[var(--cv-surface)]"
+                  >
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+                    <span
+                      aria-hidden="true"
+                      class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+                    ></span>
+
+                    <summary class="flex min-h-12 list-none items-center justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+                      <div class="flex flex-col gap-1 text-left">
+                        <span class="font-mono text-[11px] font-bold tracking-wider text-[var(--cv-accent)]">
+                          0{idx + 1} // {item.category}
+                        </span>
+                        <span class="text-base font-bold text-[var(--cv-text)]">
+                          {item.question}
+                        </span>
+                      </div>
+                      <span
+                        aria-hidden="true"
+                        class="inline-flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] font-mono text-sm font-bold text-[var(--cv-text)] transition-transform duration-150 group-open:rotate-45 group-open:border-[var(--cv-accent)] group-open:text-[var(--cv-accent)]"
+                      >
+                        +
+                      </span>
+                    </summary>
+                    <div
+                      data-faq-body
+                      class="border-t border-dashed border-[var(--cv-border)] px-4 py-4 text-sm leading-relaxed text-[var(--cv-text-muted)] sm:px-5"
+                    >
+                      <p>{item.answer}</p>
+                    </div>
+                  </details>
+                ))}
+              </div>
+            </div>
+          </cv-faq>
+        </section>
       </main>
 
-      <!-- Minimal Architectural Footer -->
       <FooterSection
         totalTemplatesCount={totalTemplatesCount}
         cmsVersion={cmsVersion}
       />
     </div>
 
-    <!-- Scoped Custom Element Cart Drawer Dialog -->
     <CartDrawer bundlePrice={bundleDiscountPrice} />
   </body>
 </html>
+
+<script>
+  import type { EmDashTemplateNode } from "../data/emdash-cms";
+
+  const SECTOR_TEMPLATE_MAP: Record<string, string[]> = {
+    "trades-industry": [
+      "tpl-vertex-01",
+      "tpl-vertex-02",
+      "tpl-vertex-03",
+      "tpl-vertex-04",
+      "tpl-vertex-05",
+      "tpl-vertex-06",
+      "tpl-vertex-07",
+      "tpl-vertex-08",
+    ],
+    "health-practice": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "online-shop": ["tpl-vertex-01", "tpl-vertex-04", "tpl-vertex-08"],
+    "landing-page": [
+      "tpl-vertex-01",
+      "tpl-vertex-02",
+      "tpl-vertex-04",
+      "tpl-vertex-07",
+    ],
+    "professional-services": [
+      "tpl-vertex-01",
+      "tpl-vertex-05",
+      "tpl-vertex-06",
+      "tpl-vertex-08",
+    ],
+    "food-drink": ["tpl-vertex-04", "tpl-vertex-05", "tpl-vertex-08"],
+    "studios-agencies": ["tpl-vertex-01", "tpl-vertex-05", "tpl-vertex-08"],
+    "software-saas": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "retail-product": ["tpl-vertex-04", "tpl-vertex-08"],
+    "travel-leisure": ["tpl-vertex-03", "tpl-vertex-05"],
+    "personal-writing": ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+    "arts-culture": ["tpl-vertex-05", "tpl-vertex-08"],
+    blog: ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+  };
+
+  class CvStorefront extends HTMLElement {
+    private activeIndustry = "trades-industry";
+    private cmsState: "ready" | "loading" | "empty" | "error" = "ready";
+    private templatesData: EmDashTemplateNode[] = [];
+
+    connectedCallback() {
+      const jsonScript = this.querySelector<HTMLScriptElement>(
+        "[data-templates-json]",
+      );
+      if (jsonScript?.textContent) {
+        try {
+          this.templatesData = JSON.parse(jsonScript.textContent);
+        } catch {
+          this.templatesData = [];
+        }
+      }
+
+      const industryButtons = this.querySelectorAll<HTMLButtonElement>(
+        "[data-filter-industry]",
+      );
+      const resetButtons = this.querySelectorAll<HTMLButtonElement>(
+        "[data-reset-filters]",
+      );
+      const restoreLiveButtons = this.querySelectorAll<HTMLButtonElement>(
+        "[data-restore-live]",
+      );
+
+      industryButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          this.activeIndustry = btn.dataset.filterIndustry || "trades-industry";
+          this.cmsState = "ready";
+          this.updateFilterButtonStyles(industryButtons, this.activeIndustry);
+          this.applyFilters();
+        });
+      });
+
+      resetButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          this.activeIndustry = "trades-industry";
+          this.cmsState = "ready";
+          this.updateFilterButtonStyles(industryButtons, "trades-industry");
+          this.applyFilters();
+        });
+      });
+
+      restoreLiveButtons.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          this.cmsState = "ready";
+          this.applyFilters();
+        });
+      });
+
+      this.setupSpecModal();
+    }
+
+    private updateFilterButtonStyles(
+      buttons: NodeListOf<HTMLButtonElement>,
+      activeValue: string,
+    ) {
+      buttons.forEach((btn) => {
+        const isSelected = btn.dataset.filterIndustry === activeValue;
+        btn.setAttribute("aria-pressed", String(isSelected));
+        btn.classList.toggle("border-[var(--cv-accent)]", isSelected);
+        btn.classList.toggle("bg-[var(--cv-surface-elevated)]", isSelected);
+        btn.classList.toggle("font-bold", isSelected);
+        btn.classList.toggle("text-[var(--cv-text)]", isSelected);
+        btn.classList.toggle("border-transparent", !isSelected);
+        btn.classList.toggle("font-normal", !isSelected);
+        btn.classList.toggle("text-[var(--cv-text-muted)]", !isSelected);
+      });
+    }
+
+    private applyFilters() {
+      const cards = this.querySelectorAll<HTMLElement>("[data-template-card]");
+      const grid = this.querySelector<HTMLElement>("[data-templates-grid]");
+      const loadingPanel = this.querySelector<HTMLElement>(
+        '[data-state-panel="loading"]',
+      );
+      const errorPanel = this.querySelector<HTMLElement>(
+        '[data-state-panel="error"]',
+      );
+      const emptyPanel = this.querySelector<HTMLElement>(
+        '[data-state-panel="empty"]',
+      );
+      const countSummary = this.querySelector<HTMLElement>(
+        "[data-visible-count-summary]",
+      );
+      const total = Number(this.dataset.totalTemplates || cards.length);
+
+      if (this.cmsState === "loading") {
+        grid?.setAttribute("hidden", "");
+        loadingPanel?.removeAttribute("hidden");
+        errorPanel?.setAttribute("hidden", "");
+        emptyPanel?.setAttribute("hidden", "");
+        return;
+      }
+
+      if (this.cmsState === "error") {
+        grid?.setAttribute("hidden", "");
+        loadingPanel?.setAttribute("hidden", "");
+        errorPanel?.removeAttribute("hidden");
+        emptyPanel?.setAttribute("hidden", "");
+        return;
+      }
+
+      if (this.cmsState === "empty") {
+        grid?.setAttribute("hidden", "");
+        loadingPanel?.setAttribute("hidden", "");
+        errorPanel?.setAttribute("hidden", "");
+        emptyPanel?.removeAttribute("hidden");
+        return;
+      }
+
+      loadingPanel?.setAttribute("hidden", "");
+      errorPanel?.setAttribute("hidden", "");
+
+      const allowedIds = SECTOR_TEMPLATE_MAP[this.activeIndustry] || [];
+      let visibleIndex = 0;
+
+      cards.forEach((card) => {
+        const cardId = card.dataset.id || "";
+        const cardIndustry = card.dataset.industry || "";
+        const isVisible =
+          this.activeIndustry === "trades-industry" ||
+          cardIndustry === this.activeIndustry ||
+          allowedIds.includes(cardId);
+
+        if (isVisible) {
+          card.removeAttribute("hidden");
+          // Keep top 2 visible cards spanning 2 columns (lg:col-span-3) and the rest spanning 3 columns (lg:col-span-2).
+          const isTopTwo = visibleIndex < 2;
+          card.classList.toggle("lg:col-span-3", isTopTwo);
+          card.classList.toggle("sm:col-span-2", isTopTwo);
+          card.classList.toggle("lg:col-span-2", !isTopTwo);
+          card.classList.toggle("sm:col-span-1", !isTopTwo);
+          visibleIndex++;
+        } else {
+          card.setAttribute("hidden", "");
+        }
+      });
+
+      if (countSummary) {
+        countSummary.textContent = `${visibleIndex} / ${total} templates`;
+      }
+
+      if (visibleIndex === 0) {
+        grid?.setAttribute("hidden", "");
+        emptyPanel?.removeAttribute("hidden");
+      } else {
+        grid?.removeAttribute("hidden");
+        emptyPanel?.setAttribute("hidden", "");
+      }
+    }
+
+    private setupSpecModal() {
+      const dialog =
+        this.querySelector<HTMLDialogElement>("[data-spec-dialog]");
+      if (!dialog) return;
+
+      const titleEl = dialog.querySelector<HTMLElement>("[data-spec-title]");
+      const subtitleEl = dialog.querySelector<HTMLElement>(
+        "[data-spec-subtitle]",
+      );
+      const collectionEl = dialog.querySelector<HTMLElement>(
+        "[data-spec-collection]",
+      );
+      const cssEl = dialog.querySelector<HTMLElement>("[data-spec-css]");
+      const domEl = dialog.querySelector<HTMLElement>("[data-spec-dom]");
+      const routesList =
+        dialog.querySelector<HTMLElement>("[data-spec-routes]");
+      const addCartBtn = dialog.querySelector<HTMLButtonElement>(
+        "[data-spec-add-cart]",
+      );
+      const closeButtons = dialog.querySelectorAll<HTMLButtonElement>(
+        "[data-close-spec-dialog]",
+      );
+
+      let currentTemplate: EmDashTemplateNode | null = null;
+
+      this.querySelectorAll<HTMLElement>("[data-inspect-template]").forEach(
+        (cardLink) => {
+          cardLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            const id = cardLink.dataset.inspectTemplate;
+            const found = this.templatesData.find((t) => t.id === id);
+            if (!found) return;
+            currentTemplate = found;
+
+            if (titleEl) titleEl.textContent = found.title;
+            if (subtitleEl) subtitleEl.textContent = found.subtitle;
+            if (collectionEl)
+              collectionEl.textContent = `COLLECTION: ${found.emdashCollection} // ${found.styleTag}`;
+            if (cssEl) cssEl.textContent = found.cssPayloadKb;
+            if (domEl) domEl.textContent = `${found.domNodesCount} nodes`;
+            if (routesList) {
+              routesList.innerHTML = found.routesIncluded
+                .map(
+                  (route) =>
+                    `<li class="border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-2.5 py-1 text-[var(--cv-text)]">${route}</li>`,
+                )
+                .join("");
+            }
+            if (addCartBtn) {
+              addCartBtn.textContent =
+                found.price === 0
+                  ? `Add Free Template ($0)`
+                  : `Add to Cart (${found.priceDisplay})`;
+            }
+
+            dialog.showModal();
+          });
+        },
+      );
+
+      closeButtons.forEach((btn) => {
+        btn.addEventListener("click", () => dialog.close());
+      });
+
+      addCartBtn?.addEventListener("click", () => {
+        if (!currentTemplate) return;
+        window.dispatchEvent(
+          new CustomEvent("cv:cart-add", {
+            detail: {
+              id: currentTemplate.id,
+              title: currentTemplate.title,
+              price: currentTemplate.price,
+            },
+          }),
+        );
+        dialog.close();
+      });
+    }
+  }
+
+  class CvFaq extends HTMLElement {
+    connectedCallback() {
+      const detailsList =
+        this.querySelectorAll<HTMLDetailsElement>("[data-faq-item]");
+      const expandAllBtn = this.querySelector<HTMLButtonElement>(
+        "[data-faq-expand-all]",
+      );
+      const collapseAllBtn = this.querySelector<HTMLButtonElement>(
+        "[data-faq-collapse-all]",
+      );
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+      detailsList.forEach((details) => {
+        const summary = details.querySelector("summary");
+        const body = details.querySelector<HTMLElement>("[data-faq-body]");
+        if (!summary || !body) return;
+
+        summary.addEventListener("click", (event) => {
+          if (prefersReducedMotion) return;
+          event.preventDefault();
+
+          const isOpen = details.hasAttribute("open");
+          if (isOpen) {
+            const startHeight = `${details.offsetHeight}px`;
+            const endHeight = `${summary.offsetHeight}px`;
+            const anim = details.animate(
+              [{ height: startHeight }, { height: endHeight }],
+              { duration: 180, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+            );
+            anim.onfinish = () => {
+              details.removeAttribute("open");
+              details.style.height = "";
+            };
+          } else {
+            const startHeight = `${details.offsetHeight}px`;
+            details.setAttribute("open", "");
+            const endHeight = `${details.offsetHeight}px`;
+            const anim = details.animate(
+              [{ height: startHeight }, { height: endHeight }],
+              { duration: 180, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+            );
+            anim.onfinish = () => {
+              details.style.height = "";
+            };
+          }
+        });
+      });
+
+      expandAllBtn?.addEventListener("click", () => {
+        detailsList.forEach((d) => d.setAttribute("open", ""));
+      });
+
+      collapseAllBtn?.addEventListener("click", () => {
+        detailsList.forEach((d) => d.removeAttribute("open"));
+      });
+    }
+  }
+
+  document
+    .querySelectorAll<HTMLButtonElement>("[data-add-bundle-to-cart]")
+    .forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const price = Number(btn.dataset.bundlePrice || 246);
+        window.dispatchEvent(
+          new CustomEvent("cv:cart-add", {
+            detail: {
+              id: "bundle-all-access",
+              title: "All-Access Studio Bundle (All 8 Templates)",
+              price,
+            },
+          }),
+        );
+      });
+    });
+
+  if (!customElements.get("cv-storefront")) {
+    customElements.define("cv-storefront", CvStorefront);
+  }
+  if (!customElements.get("cv-faq")) {
+    customElements.define("cv-faq", CvFaq);
+  }
+</script>

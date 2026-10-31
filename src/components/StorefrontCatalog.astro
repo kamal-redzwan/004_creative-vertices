@@ -1,52 +1,31 @@
 ---
-import type { EmDashTemplateNode } from '../data/emdash-cms';
-import TemplateCard from './TemplateCard.astro';
+import type { EmDashTemplateNode } from "../data/emdash-cms";
+import TemplateCard from "./TemplateCard.astro";
 
 interface Props {
   templates: EmDashTemplateNode[];
-  cmsVersion: string;
-  collectionSlug: string;
+  cmsVersion?: string;
+  collectionSlug?: string;
 }
 
-const { templates, cmsVersion, collectionSlug } = Astro.props;
+const { templates, collectionSlug = "cv_storefront_templates" } = Astro.props;
 
 const totalCount = templates.length;
-const freeCount = templates.filter((t) => t.price === 0).length;
-const premiumCount = templates.filter((t) => t.price > 0).length;
 
-const industryCategories = [
-  { key: 'all', label: 'All industries', count: totalCount },
-  {
-    key: 'studios-agencies',
-    label: 'Studios & agencies',
-    count: templates.filter((t) => t.industry === 'studios-agencies').length,
-  },
-  {
-    key: 'software-saas',
-    label: 'Software & SaaS',
-    count: templates.filter((t) => t.industry === 'software-saas').length,
-  },
-  {
-    key: 'personal-writing',
-    label: 'Personal & writing',
-    count: templates.filter((t) => t.industry === 'personal-writing').length,
-  },
-  {
-    key: 'architecture-hardware',
-    label: 'Architecture & hardware',
-    count: templates.filter((t) => t.industry === 'architecture-hardware').length,
-  },
-  {
-    key: 'editorial-docs',
-    label: 'Editorial & docs',
-    count: templates.filter((t) => t.industry === 'editorial-docs').length,
-  },
-];
-
-const priceCategories = [
-  { key: 'all', label: 'All templates', count: totalCount },
-  { key: 'free', label: 'Free ($0)', count: freeCount },
-  { key: 'premium', label: 'Premium', count: premiumCount },
+const sectorCategories = [
+  { key: "trades-industry", label: "Trades & industry", count: 14 },
+  { key: "health-practice", label: "Health & practice", count: 8 },
+  { key: "online-shop", label: "Online shop", count: 7 },
+  { key: "landing-page", label: "Landing page", count: 7 },
+  { key: "professional-services", label: "Professional services", count: 7 },
+  { key: "food-drink", label: "Food & drink", count: 6 },
+  { key: "studios-agencies", label: "Studios & agencies", count: 6 },
+  { key: "software-saas", label: "Software & SaaS", count: 6 },
+  { key: "retail-product", label: "Retail & product", count: 5 },
+  { key: "travel-leisure", label: "Travel & leisure", count: 5 },
+  { key: "personal-writing", label: "Personal & writing", count: 4 },
+  { key: "arts-culture", label: "Arts & culture", count: 3 },
+  { key: "blog", label: "Blog", count: 3 },
 ];
 ---
 
@@ -56,159 +35,60 @@ const priceCategories = [
   class="border-b border-dashed border-[var(--cv-rail)]"
 >
   <cv-storefront class="block" data-total-templates={totalCount}>
-    <!-- Section Header Bar -->
-    <div
-      class="flex flex-col justify-between gap-3 border-b border-dashed border-[var(--cv-rail)] px-4 py-5 sm:flex-row sm:items-center sm:px-6 lg:px-8"
-    >
-      <div>
-        <h2
-          id="storefront-heading"
-          class="text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
-        >
-          EmDash Template Directory
-        </h2>
-        <p class="mt-0.5 font-mono text-xs text-[var(--cv-text-muted)]">
-          COLLECTION: <code>{collectionSlug}</code> // {cmsVersion}
-        </p>
-      </div>
-
-      <!-- CMS Feed State Switcher (Verifies R-27 Ready / Loading / Empty / Error states) -->
-      <div class="flex flex-wrap items-center gap-2" role="group" aria-label="CMS Feed State">
-        <span class="font-mono text-xs text-[var(--cv-text-muted)]">CMS STATE:</span>
-        <button
-          type="button"
-          data-cms-state-btn="ready"
-          aria-pressed="true"
-          class="min-h-11 border border-[var(--cv-accent)] bg-[var(--cv-surface-elevated)] px-3 py-1.5 font-mono text-xs font-semibold text-[var(--cv-text)]"
-        >
-          Live ({totalCount})
-        </button>
-        <button
-          type="button"
-          data-cms-state-btn="loading"
-          aria-pressed="false"
-          class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-1.5 font-mono text-xs text-[var(--cv-text-muted)] hover:border-[var(--cv-border-strong)] hover:text-[var(--cv-text)]"
-        >
-          Syncing
-        </button>
-        <button
-          type="button"
-          data-cms-state-btn="empty"
-          aria-pressed="false"
-          class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-1.5 font-mono text-xs text-[var(--cv-text-muted)] hover:border-[var(--cv-border-strong)] hover:text-[var(--cv-text)]"
-        >
-          Empty
-        </button>
-        <button
-          type="button"
-          data-cms-state-btn="error"
-          aria-pressed="false"
-          class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-1.5 font-mono text-xs text-[var(--cv-text-muted)] hover:border-[var(--cv-border-strong)] hover:text-[var(--cv-text)]"
-        >
-          Offline Error
-        </button>
-      </div>
+    <div class="flex flex-col justify-between gap-2 border-b border-dashed border-[var(--cv-rail)] px-4 py-5 sm:flex-row sm:items-baseline sm:px-6 lg:px-8">
+      <h2
+        id="storefront-heading"
+        class="text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+      >
+        The Template Archive
+      </h2>
+      <p class="text-sm text-gray-400">
+        Explore production-ready Astro architectures.
+      </p>
     </div>
 
-    <!-- Split Layout: 25% Sidebar (3 of 12 cols) and 75% Main Content Grid (9 of 12 cols) -->
-    <div class="grid grid-cols-1 lg:grid-cols-12">
-      <!-- 25% Minimal Sidebar -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 lg:items-start">
       <aside
         aria-label="Template catalog filters"
-        class="flex flex-col justify-between border-b border-dashed border-[var(--cv-rail)] p-4 sm:p-6 lg:col-span-3 lg:border-r lg:border-b-0"
+        class="flex flex-col justify-between border-b border-dashed border-[var(--cv-rail)] p-4 sm:p-6 lg:col-span-3 lg:border-r lg:border-b-0 lg:p-8"
       >
-        <div class="space-y-7">
-          <!-- Keyword Filter Input with Explicit Label -->
-          <div>
-            <label
-              for="cv-template-search"
-              class="block font-mono text-xs font-bold tracking-wider text-[var(--cv-text)]"
-            >
-              QUERY SCHEMA
-            </label>
-            <div class="mt-2 flex items-center gap-1.5">
-              <input
-                id="cv-template-search"
-                type="search"
-                data-search-input
-                placeholder="Filter by title or stack..."
-                class="min-h-11 w-full border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3 py-2 font-mono text-xs text-[var(--cv-text)] placeholder:text-[var(--cv-text-muted)] focus:border-[var(--cv-accent)]"
-              />
-            </div>
-          </div>
-
-          <!-- PRICE Filter List -->
-          <div>
-            <h3 class="font-mono text-xs font-bold tracking-wider text-[var(--cv-text-muted)]">
-              PRICE
-            </h3>
-            <ul class="mt-2.5 space-y-1" role="list">
-              {
-                priceCategories.map((item, idx) => (
-                  <li>
-                    <button
-                      type="button"
-                      data-filter-price={item.key}
-                      aria-pressed={idx === 0 ? 'true' : 'false'}
-                      class={`flex min-h-11 w-full items-center justify-between border-l-2 px-3 py-2 text-left text-sm transition-colors ${
-                        idx === 0
-                          ? 'border-[var(--cv-accent)] bg-[var(--cv-surface-elevated)] font-bold text-[var(--cv-text)]'
-                          : 'border-transparent font-normal text-[var(--cv-text-muted)] hover:bg-[var(--cv-surface)] hover:text-[var(--cv-text)]'
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <span class="font-mono text-xs tabular-nums text-[var(--cv-text-muted)]">
-                        {item.count}
-                      </span>
-                    </button>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
-
-          <!-- INDUSTRY Filter List -->
-          <div>
-            <h3 class="font-mono text-xs font-bold tracking-wider text-[var(--cv-text-muted)]">
-              INDUSTRY
-            </h3>
-            <ul class="mt-2.5 space-y-1" role="list">
-              {
-                industryCategories.map((item, idx) => (
-                  <li>
-                    <button
-                      type="button"
-                      data-filter-industry={item.key}
-                      aria-pressed={idx === 0 ? 'true' : 'false'}
-                      class={`flex min-h-11 w-full items-center justify-between border-l-2 px-3 py-2 text-left text-sm transition-colors ${
-                        idx === 0
-                          ? 'border-[var(--cv-accent)] bg-[var(--cv-surface-elevated)] font-bold text-[var(--cv-text)]'
-                          : 'border-transparent font-normal text-[var(--cv-text-muted)] hover:bg-[var(--cv-surface)] hover:text-[var(--cv-text)]'
-                      }`}
-                    >
-                      <span>{item.label}</span>
-                      <span class="font-mono text-xs tabular-nums text-[var(--cv-text-muted)]">
-                        {item.count}
-                      </span>
-                    </button>
-                  </li>
-                ))
-              }
-            </ul>
-          </div>
+        <div>
+          <h3 class="font-mono text-xs font-bold tracking-wider uppercase text-[var(--cv-text-muted)]">
+            BROWSE BY SECTOR OR SITE TYPE
+          </h3>
+          <ul class="mt-3 space-y-1" role="list">
+            {sectorCategories.map((item, idx) => (
+              <li>
+                <button
+                  type="button"
+                  data-filter-industry={item.key}
+                  aria-pressed={idx === 0 ? "true" : "false"}
+                  class={`flex min-h-11 w-full items-center justify-between border-l-2 px-3 py-2 text-left text-sm transition-colors ${
+                    idx === 0
+                      ? "border-[var(--cv-accent)] bg-[var(--cv-surface-elevated)] font-bold text-[var(--cv-text)]"
+                      : "border-transparent font-normal text-[var(--cv-text-muted)] hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface)] hover:text-[var(--cv-text)]"
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  <span class="font-mono text-xs tabular-nums text-right text-[var(--cv-text-muted)]">
+                    {item.count}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <!-- Bottom Total Count Indicator & Reset Action -->
         <div class="mt-8 border-t border-dashed border-[var(--cv-border)] pt-5">
           <div class="flex items-baseline justify-between font-mono text-xs">
-            <span class="text-[var(--cv-text-muted)]">ACTIVE NODES</span>
-            <span data-visible-count-summary class="font-bold tabular-nums text-[var(--cv-text)]">
+            <span class="text-[var(--cv-text-muted)]">SHOWING</span>
+            <span
+              data-visible-count-summary
+              class="font-bold tabular-nums text-[var(--cv-text)]"
+            >
               {totalCount} / {totalCount} templates
             </span>
           </div>
-          <p class="mt-1.5 font-mono text-[11px] text-[var(--cv-text-muted)]">
-            Top row: 2-col featured Flagships. Subsequent rows: 3-col catalog specs.
-          </p>
           <button
             type="button"
             data-reset-filters
@@ -219,9 +99,7 @@ const priceCategories = [
         </div>
       </aside>
 
-      <!-- 75% Main Content Grid -->
       <div class="p-4 sm:p-6 lg:col-span-9 lg:p-8">
-        <!-- Loading State (R-27) -->
         <div
           data-state-panel="loading"
           hidden
@@ -233,7 +111,8 @@ const priceCategories = [
             HYDRATING EMDASH CONTENT LAYER...
           </p>
           <p class="mt-2 text-sm text-[var(--cv-text-muted)]">
-            Fetching typed template definitions and verifying SHA-256 asset checksums from
+            Fetching typed template definitions and verifying SHA-256 asset
+            checksums from
             <code>{collectionSlug}</code>.
           </p>
           <div class="mt-6 flex justify-center">
@@ -247,7 +126,6 @@ const priceCategories = [
           </div>
         </div>
 
-        <!-- Error State (R-27) -->
         <div
           data-state-panel="error"
           hidden
@@ -263,8 +141,8 @@ const priceCategories = [
                 Remote CMS collection failed to respond within 2,500ms.
               </h3>
               <p class="mt-1 text-sm text-[var(--cv-text-muted)]">
-                Verify your <code>EMDASH_READ_TOKEN</code> environment variable or switch back to the
-                verified build-time snapshot.
+                Verify your <code>EMDASH_READ_TOKEN</code> environment variable
+                or switch back to the verified build-time snapshot.
               </p>
             </div>
             <button
@@ -277,7 +155,6 @@ const priceCategories = [
           </div>
         </div>
 
-        <!-- Empty State (R-27) -->
         <div
           data-state-panel="empty"
           hidden
@@ -289,11 +166,11 @@ const priceCategories = [
             0 MATCHING TEMPLATES
           </p>
           <h3 class="mt-1 text-lg font-bold text-[var(--cv-text)]">
-            No templates match the active price, industry, or keyword filter.
+            No templates match the active sector filter.
           </h3>
           <p class="mt-1 text-sm text-[var(--cv-text-muted)]">
-            Clear the active filter constraints to restore all {totalCount} EmDash templates in the
-            directory.
+            Clear the active filter constraints to restore all {totalCount}{" "}
+            templates in the archive.
           </p>
           <div class="mt-5">
             <button
@@ -306,25 +183,21 @@ const priceCategories = [
           </div>
         </div>
 
-        <!-- Mixed CSS Grid: 6-col base on lg -> top row cards span 3 (2 columns), subsequent cards span 2 (3 columns) -->
         <div
           data-templates-grid
           class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6"
         >
-          {
-            templates.map((template, index) => (
-              <TemplateCard
-                template={template}
-                isTopRowTwoCol={index < 2}
-                isPriorityImage={index === 0}
-              />
-            ))
-          }
+          {templates.map((template, index) => (
+            <TemplateCard
+              template={template}
+              isTopRowTwoCol={index < 2}
+              isPriorityImage={index === 0}
+            />
+          ))}
         </div>
       </div>
     </div>
 
-    <!-- Scoped Template Spec Modal Dialog -->
     <dialog
       data-spec-dialog
       aria-labelledby="spec-dialog-title"
@@ -339,7 +212,11 @@ const priceCategories = [
             >
               EMDASH SCHEMA SPECIFICATION
             </p>
-            <h3 id="spec-dialog-title" data-spec-title class="mt-1 text-xl font-bold">
+            <h3
+              id="spec-dialog-title"
+              data-spec-title
+              class="mt-1 text-xl font-bold"
+            >
               Template Specification
             </h3>
           </div>
@@ -353,7 +230,10 @@ const priceCategories = [
           </button>
         </div>
 
-        <p data-spec-subtitle class="mt-4 text-sm text-[var(--cv-text-muted)]"></p>
+        <p
+          data-spec-subtitle
+          class="mt-4 text-sm text-[var(--cv-text-muted)]"
+        ></p>
 
         <dl class="mt-5 grid grid-cols-2 gap-3 border-t border-b border-dashed border-[var(--cv-border)] py-4 font-mono text-xs sm:grid-cols-3">
           <div>
@@ -374,7 +254,10 @@ const priceCategories = [
           <h4 class="font-mono text-xs font-bold text-[var(--cv-text-muted)]">
             INCLUDED ROUTES &amp; SCHEMAS
           </h4>
-          <ul data-spec-routes class="mt-2 flex flex-wrap gap-1.5 font-mono text-xs"></ul>
+          <ul
+            data-spec-routes
+            class="mt-2 flex flex-wrap gap-1.5 font-mono text-xs"
+          ></ul>
         </div>
 
         <div class="mt-6 flex items-center justify-end gap-3">
@@ -405,17 +288,52 @@ const priceCategories = [
 </section>
 
 <script>
-  import type { EmDashTemplateNode } from '../data/emdash-cms';
+  import type { EmDashTemplateNode } from "../data/emdash-cms";
+
+  const SECTOR_TEMPLATE_MAP: Record<string, string[]> = {
+    "trades-industry": [
+      "tpl-vertex-01",
+      "tpl-vertex-02",
+      "tpl-vertex-03",
+      "tpl-vertex-04",
+      "tpl-vertex-05",
+      "tpl-vertex-06",
+      "tpl-vertex-07",
+      "tpl-vertex-08",
+    ],
+    "health-practice": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "online-shop": ["tpl-vertex-01", "tpl-vertex-04", "tpl-vertex-08"],
+    "landing-page": [
+      "tpl-vertex-01",
+      "tpl-vertex-02",
+      "tpl-vertex-04",
+      "tpl-vertex-07",
+    ],
+    "professional-services": [
+      "tpl-vertex-01",
+      "tpl-vertex-05",
+      "tpl-vertex-06",
+      "tpl-vertex-08",
+    ],
+    "food-drink": ["tpl-vertex-04", "tpl-vertex-05", "tpl-vertex-08"],
+    "studios-agencies": ["tpl-vertex-01", "tpl-vertex-05", "tpl-vertex-08"],
+    "software-saas": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "retail-product": ["tpl-vertex-04", "tpl-vertex-08"],
+    "travel-leisure": ["tpl-vertex-03", "tpl-vertex-05"],
+    "personal-writing": ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+    "arts-culture": ["tpl-vertex-05", "tpl-vertex-08"],
+    blog: ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+  };
 
   class CvStorefront extends HTMLElement {
-    private activePrice = 'all';
-    private activeIndustry = 'all';
-    private searchQuery = '';
-    private cmsState: 'ready' | 'loading' | 'empty' | 'error' = 'ready';
+    private activeIndustry = "trades-industry";
+    private cmsState: "ready" | "loading" | "empty" | "error" = "ready";
     private templatesData: EmDashTemplateNode[] = [];
 
     connectedCallback() {
-      const jsonScript = this.querySelector<HTMLScriptElement>('[data-templates-json]');
+      const jsonScript = this.querySelector<HTMLScriptElement>(
+        "[data-templates-json]",
+      );
       if (jsonScript?.textContent) {
         try {
           this.templatesData = JSON.parse(jsonScript.textContent);
@@ -424,173 +342,127 @@ const priceCategories = [
         }
       }
 
-      const priceButtons = this.querySelectorAll<HTMLButtonElement>('[data-filter-price]');
-      const industryButtons = this.querySelectorAll<HTMLButtonElement>('[data-filter-industry]');
-      const searchInput = this.querySelector<HTMLInputElement>('[data-search-input]');
-      const resetButtons = this.querySelectorAll<HTMLButtonElement>('[data-reset-filters]');
-      const cmsStateButtons = this.querySelectorAll<HTMLButtonElement>('[data-cms-state-btn]');
-      const restoreLiveButtons = this.querySelectorAll<HTMLButtonElement>('[data-restore-live]');
-
-      priceButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          this.activePrice = btn.dataset.filterPrice || 'all';
-          this.cmsState = 'ready';
-          this.updateFilterButtonStyles(priceButtons, 'filterPrice', this.activePrice);
-          this.applyFilters();
-        });
-      });
+      const industryButtons = this.querySelectorAll<HTMLButtonElement>(
+        "[data-filter-industry]",
+      );
+      const resetButtons = this.querySelectorAll<HTMLButtonElement>(
+        "[data-reset-filters]",
+      );
+      const restoreLiveButtons = this.querySelectorAll<HTMLButtonElement>(
+        "[data-restore-live]",
+      );
 
       industryButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          this.activeIndustry = btn.dataset.filterIndustry || 'all';
-          this.cmsState = 'ready';
-          this.updateFilterButtonStyles(industryButtons, 'filterIndustry', this.activeIndustry);
+        btn.addEventListener("click", () => {
+          this.activeIndustry = btn.dataset.filterIndustry || "trades-industry";
+          this.cmsState = "ready";
+          this.updateFilterButtonStyles(industryButtons, this.activeIndustry);
           this.applyFilters();
         });
-      });
-
-      searchInput?.addEventListener('input', () => {
-        this.searchQuery = searchInput.value.trim().toLowerCase();
-        this.cmsState = 'ready';
-        this.applyFilters();
       });
 
       resetButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          this.activePrice = 'all';
-          this.activeIndustry = 'all';
-          this.searchQuery = '';
-          this.cmsState = 'ready';
-          if (searchInput) searchInput.value = '';
-          this.updateFilterButtonStyles(priceButtons, 'filterPrice', 'all');
-          this.updateFilterButtonStyles(industryButtons, 'filterIndustry', 'all');
-          this.syncCmsStateButtons();
-          this.applyFilters();
-        });
-      });
-
-      cmsStateButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const nextState = (btn.dataset.cmsStateBtn || 'ready') as
-            | 'ready'
-            | 'loading'
-            | 'empty'
-            | 'error';
-          this.cmsState = nextState;
-          this.syncCmsStateButtons();
+        btn.addEventListener("click", () => {
+          this.activeIndustry = "trades-industry";
+          this.cmsState = "ready";
+          this.updateFilterButtonStyles(industryButtons, "trades-industry");
           this.applyFilters();
         });
       });
 
       restoreLiveButtons.forEach((btn) => {
-        btn.addEventListener('click', () => {
-          this.cmsState = 'ready';
-          this.syncCmsStateButtons();
+        btn.addEventListener("click", () => {
+          this.cmsState = "ready";
           this.applyFilters();
         });
       });
 
       this.setupSpecModal();
-      this.setupAddToCartButtons();
-    }
-
-    private syncCmsStateButtons() {
-      const cmsStateButtons = this.querySelectorAll<HTMLButtonElement>('[data-cms-state-btn]');
-      cmsStateButtons.forEach((btn) => {
-        const isCurrent = btn.dataset.cmsStateBtn === this.cmsState;
-        btn.setAttribute('aria-pressed', String(isCurrent));
-        btn.classList.toggle('border-[var(--cv-accent)]', isCurrent);
-        btn.classList.toggle('bg-[var(--cv-surface-elevated)]', isCurrent);
-        btn.classList.toggle('font-semibold', isCurrent);
-        btn.classList.toggle('text-[var(--cv-text)]', isCurrent);
-        btn.classList.toggle('border-[var(--cv-border)]', !isCurrent);
-        btn.classList.toggle('text-[var(--cv-text-muted)]', !isCurrent);
-      });
     }
 
     private updateFilterButtonStyles(
       buttons: NodeListOf<HTMLButtonElement>,
-      datasetKey: 'filterPrice' | 'filterIndustry',
-      activeValue: string
+      activeValue: string,
     ) {
       buttons.forEach((btn) => {
-        const isSelected = btn.dataset[datasetKey] === activeValue;
-        btn.setAttribute('aria-pressed', String(isSelected));
-        btn.classList.toggle('border-[var(--cv-accent)]', isSelected);
-        btn.classList.toggle('bg-[var(--cv-surface-elevated)]', isSelected);
-        btn.classList.toggle('font-bold', isSelected);
-        btn.classList.toggle('text-[var(--cv-text)]', isSelected);
-        btn.classList.toggle('border-transparent', !isSelected);
-        btn.classList.toggle('font-normal', !isSelected);
-        btn.classList.toggle('text-[var(--cv-text-muted)]', !isSelected);
+        const isSelected = btn.dataset.filterIndustry === activeValue;
+        btn.setAttribute("aria-pressed", String(isSelected));
+        btn.classList.toggle("border-[var(--cv-accent)]", isSelected);
+        btn.classList.toggle("bg-[var(--cv-surface-elevated)]", isSelected);
+        btn.classList.toggle("font-bold", isSelected);
+        btn.classList.toggle("text-[var(--cv-text)]", isSelected);
+        btn.classList.toggle("border-transparent", !isSelected);
+        btn.classList.toggle("font-normal", !isSelected);
+        btn.classList.toggle("text-[var(--cv-text-muted)]", !isSelected);
       });
     }
 
     private applyFilters() {
-      const cards = this.querySelectorAll<HTMLElement>('[data-template-card]');
-      const grid = this.querySelector<HTMLElement>('[data-templates-grid]');
-      const loadingPanel = this.querySelector<HTMLElement>('[data-state-panel="loading"]');
-      const errorPanel = this.querySelector<HTMLElement>('[data-state-panel="error"]');
-      const emptyPanel = this.querySelector<HTMLElement>('[data-state-panel="empty"]');
-      const countSummary = this.querySelector<HTMLElement>('[data-visible-count-summary]');
+      const cards = this.querySelectorAll<HTMLElement>("[data-template-card]");
+      const grid = this.querySelector<HTMLElement>("[data-templates-grid]");
+      const loadingPanel = this.querySelector<HTMLElement>(
+        '[data-state-panel="loading"]',
+      );
+      const errorPanel = this.querySelector<HTMLElement>(
+        '[data-state-panel="error"]',
+      );
+      const emptyPanel = this.querySelector<HTMLElement>(
+        '[data-state-panel="empty"]',
+      );
+      const countSummary = this.querySelector<HTMLElement>(
+        "[data-visible-count-summary]",
+      );
       const total = Number(this.dataset.totalTemplates || cards.length);
 
-      if (this.cmsState === 'loading') {
-        grid?.setAttribute('hidden', '');
-        loadingPanel?.removeAttribute('hidden');
-        errorPanel?.setAttribute('hidden', '');
-        emptyPanel?.setAttribute('hidden', '');
-        if (countSummary) countSummary.textContent = `Syncing / ${total} templates`;
+      if (this.cmsState === "loading") {
+        grid?.setAttribute("hidden", "");
+        loadingPanel?.removeAttribute("hidden");
+        errorPanel?.setAttribute("hidden", "");
+        emptyPanel?.setAttribute("hidden", "");
         return;
       }
 
-      if (this.cmsState === 'error') {
-        grid?.setAttribute('hidden', '');
-        loadingPanel?.setAttribute('hidden', '');
-        errorPanel?.removeAttribute('hidden');
-        emptyPanel?.setAttribute('hidden', '');
-        if (countSummary) countSummary.textContent = `Offline / ${total} templates`;
+      if (this.cmsState === "error") {
+        grid?.setAttribute("hidden", "");
+        loadingPanel?.setAttribute("hidden", "");
+        errorPanel?.removeAttribute("hidden");
+        emptyPanel?.setAttribute("hidden", "");
         return;
       }
 
-      if (this.cmsState === 'empty') {
-        grid?.setAttribute('hidden', '');
-        loadingPanel?.setAttribute('hidden', '');
-        errorPanel?.setAttribute('hidden', '');
-        emptyPanel?.removeAttribute('hidden');
-        if (countSummary) countSummary.textContent = `0 / ${total} templates`;
+      if (this.cmsState === "empty") {
+        grid?.setAttribute("hidden", "");
+        loadingPanel?.setAttribute("hidden", "");
+        errorPanel?.setAttribute("hidden", "");
+        emptyPanel?.removeAttribute("hidden");
         return;
       }
 
-      loadingPanel?.setAttribute('hidden', '');
-      errorPanel?.setAttribute('hidden', '');
+      loadingPanel?.setAttribute("hidden", "");
+      errorPanel?.setAttribute("hidden", "");
 
+      const allowedIds = SECTOR_TEMPLATE_MAP[this.activeIndustry] || [];
       let visibleIndex = 0;
+
       cards.forEach((card) => {
-        const priceType = card.dataset.priceType || '';
-        const industry = card.dataset.industry || '';
-        const title = (card.dataset.title || '').toLowerCase();
-        const textContent = (card.textContent || '').toLowerCase();
+        const cardId = card.dataset.id || "";
+        const cardIndustry = card.dataset.industry || "";
+        const isVisible =
+          this.activeIndustry === "trades-industry" ||
+          cardIndustry === this.activeIndustry ||
+          allowedIds.includes(cardId);
 
-        const matchesPrice = this.activePrice === 'all' || priceType === this.activePrice;
-        const matchesIndustry = this.activeIndustry === 'all' || industry === this.activeIndustry;
-        const matchesQuery =
-          !this.searchQuery ||
-          title.includes(this.searchQuery) ||
-          textContent.includes(this.searchQuery);
-
-        const isVisible = matchesPrice && matchesIndustry && matchesQuery;
         if (isVisible) {
-          card.removeAttribute('hidden');
-          // Maintain mixed grid hierarchy: top 2 visible cards span 2 columns (lg:col-span-3), rest span 3 columns (lg:col-span-2)
+          card.removeAttribute("hidden");
+          // Keep top 2 visible cards spanning 2 columns (lg:col-span-3) and the rest spanning 3 columns (lg:col-span-2).
           const isTopTwo = visibleIndex < 2;
-          card.classList.toggle('lg:col-span-3', isTopTwo);
-          card.classList.toggle('sm:col-span-2', isTopTwo);
-          card.classList.toggle('lg:col-span-2', !isTopTwo);
-          card.classList.toggle('sm:col-span-1', !isTopTwo);
+          card.classList.toggle("lg:col-span-3", isTopTwo);
+          card.classList.toggle("sm:col-span-2", isTopTwo);
+          card.classList.toggle("lg:col-span-2", !isTopTwo);
+          card.classList.toggle("sm:col-span-1", !isTopTwo);
           visibleIndex++;
         } else {
-          card.setAttribute('hidden', '');
+          card.setAttribute("hidden", "");
         }
       });
 
@@ -599,97 +471,95 @@ const priceCategories = [
       }
 
       if (visibleIndex === 0) {
-        grid?.setAttribute('hidden', '');
-        emptyPanel?.removeAttribute('hidden');
+        grid?.setAttribute("hidden", "");
+        emptyPanel?.removeAttribute("hidden");
       } else {
-        grid?.removeAttribute('hidden');
-        emptyPanel?.setAttribute('hidden', '');
+        grid?.removeAttribute("hidden");
+        emptyPanel?.setAttribute("hidden", "");
       }
     }
 
     private setupSpecModal() {
-      const dialog = this.querySelector<HTMLDialogElement>('[data-spec-dialog]');
+      const dialog =
+        this.querySelector<HTMLDialogElement>("[data-spec-dialog]");
       if (!dialog) return;
 
-      const titleEl = dialog.querySelector<HTMLElement>('[data-spec-title]');
-      const subtitleEl = dialog.querySelector<HTMLElement>('[data-spec-subtitle]');
-      const collectionEl = dialog.querySelector<HTMLElement>('[data-spec-collection]');
-      const cssEl = dialog.querySelector<HTMLElement>('[data-spec-css]');
-      const domEl = dialog.querySelector<HTMLElement>('[data-spec-dom]');
-      const routesList = dialog.querySelector<HTMLElement>('[data-spec-routes]');
-      const addCartBtn = dialog.querySelector<HTMLButtonElement>('[data-spec-add-cart]');
-      const closeButtons = dialog.querySelectorAll<HTMLButtonElement>('[data-close-spec-dialog]');
+      const titleEl = dialog.querySelector<HTMLElement>("[data-spec-title]");
+      const subtitleEl = dialog.querySelector<HTMLElement>(
+        "[data-spec-subtitle]",
+      );
+      const collectionEl = dialog.querySelector<HTMLElement>(
+        "[data-spec-collection]",
+      );
+      const cssEl = dialog.querySelector<HTMLElement>("[data-spec-css]");
+      const domEl = dialog.querySelector<HTMLElement>("[data-spec-dom]");
+      const routesList =
+        dialog.querySelector<HTMLElement>("[data-spec-routes]");
+      const addCartBtn = dialog.querySelector<HTMLButtonElement>(
+        "[data-spec-add-cart]",
+      );
+      const closeButtons = dialog.querySelectorAll<HTMLButtonElement>(
+        "[data-close-spec-dialog]",
+      );
 
       let currentTemplate: EmDashTemplateNode | null = null;
 
-      this.querySelectorAll<HTMLButtonElement>('[data-inspect-template]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.inspectTemplate;
-          const found = this.templatesData.find((t) => t.id === id);
-          if (!found) return;
-          currentTemplate = found;
+      this.querySelectorAll<HTMLElement>("[data-inspect-template]").forEach(
+        (cardLink) => {
+          cardLink.addEventListener("click", (event) => {
+            event.preventDefault();
+            const id = cardLink.dataset.inspectTemplate;
+            const found = this.templatesData.find((t) => t.id === id);
+            if (!found) return;
+            currentTemplate = found;
 
-          if (titleEl) titleEl.textContent = found.title;
-          if (subtitleEl) subtitleEl.textContent = found.subtitle;
-          if (collectionEl)
-            collectionEl.textContent = `COLLECTION: ${found.emdashCollection} // ${found.styleTag}`;
-          if (cssEl) cssEl.textContent = found.cssPayloadKb;
-          if (domEl) domEl.textContent = `${found.domNodesCount} nodes`;
-          if (routesList) {
-            routesList.innerHTML = found.routesIncluded
-              .map(
-                (route) =>
-                  `<li class="border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-2.5 py-1 text-[var(--cv-text)]">${route}</li>`
-              )
-              .join('');
-          }
-          if (addCartBtn) {
-            addCartBtn.textContent =
-              found.price === 0
-                ? `Add Free Template ($0)`
-                : `Add to Cart (${found.priceDisplay})`;
-          }
+            if (titleEl) titleEl.textContent = found.title;
+            if (subtitleEl) subtitleEl.textContent = found.subtitle;
+            if (collectionEl)
+              collectionEl.textContent = `COLLECTION: ${found.emdashCollection} // ${found.styleTag}`;
+            if (cssEl) cssEl.textContent = found.cssPayloadKb;
+            if (domEl) domEl.textContent = `${found.domNodesCount} nodes`;
+            if (routesList) {
+              routesList.innerHTML = found.routesIncluded
+                .map(
+                  (route) =>
+                    `<li class="border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-2.5 py-1 text-[var(--cv-text)]">${route}</li>`,
+                )
+                .join("");
+            }
+            if (addCartBtn) {
+              addCartBtn.textContent =
+                found.price === 0
+                  ? `Add Free Template ($0)`
+                  : `Add to Cart (${found.priceDisplay})`;
+            }
 
-          dialog.showModal();
-        });
-      });
+            dialog.showModal();
+          });
+        },
+      );
 
       closeButtons.forEach((btn) => {
-        btn.addEventListener('click', () => dialog.close());
+        btn.addEventListener("click", () => dialog.close());
       });
 
-      addCartBtn?.addEventListener('click', () => {
+      addCartBtn?.addEventListener("click", () => {
         if (!currentTemplate) return;
         window.dispatchEvent(
-          new CustomEvent('cv:cart-add', {
+          new CustomEvent("cv:cart-add", {
             detail: {
               id: currentTemplate.id,
               title: currentTemplate.title,
               price: currentTemplate.price,
             },
-          })
+          }),
         );
         dialog.close();
       });
     }
-
-    private setupAddToCartButtons() {
-      this.querySelectorAll<HTMLButtonElement>('[data-add-to-cart]').forEach((btn) => {
-        btn.addEventListener('click', () => {
-          const id = btn.dataset.addToCart || '';
-          const title = btn.dataset.itemTitle || 'Template';
-          const price = Number(btn.dataset.itemPrice || 0);
-          window.dispatchEvent(
-            new CustomEvent('cv:cart-add', {
-              detail: { id, title, price },
-            })
-          );
-        });
-      });
-    }
   }
 
-  if (!customElements.get('cv-storefront')) {
-    customElements.define('cv-storefront', CvStorefront);
+  if (!customElements.get("cv-storefront")) {
+    customElements.define("cv-storefront", CvStorefront);
   }
 </script>

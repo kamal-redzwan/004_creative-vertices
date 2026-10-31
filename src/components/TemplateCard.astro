@@ -1,5 +1,5 @@
 ---
-import type { EmDashTemplateNode } from '../data/emdash-cms';
+import type { EmDashTemplateNode } from "../data/emdash-cms";
 
 interface Props {
   template: EmDashTemplateNode;
@@ -7,131 +7,123 @@ interface Props {
   isPriorityImage?: boolean;
 }
 
-const { template, isTopRowTwoCol = false, isPriorityImage = false } = Astro.props;
+const {
+  template,
+  isTopRowTwoCol = false,
+  isPriorityImage = false,
+} = Astro.props;
 
 const spanClasses = isTopRowTwoCol
-  ? 'col-span-1 sm:col-span-2 lg:col-span-3'
-  : 'col-span-1 sm:col-span-1 lg:col-span-2';
+  ? "col-span-1 sm:col-span-2 lg:col-span-3"
+  : "col-span-1 sm:col-span-1 lg:col-span-2";
 ---
 
-<article
+<a
+  href={`#${template.slug}`}
   data-template-card
+  data-inspect-template={template.id}
   data-id={template.id}
   data-title={template.title}
-  data-price-type={template.price === 0 ? 'free' : 'premium'}
+  data-price-type={template.price === 0 ? "free" : "premium"}
   data-price-value={template.price}
   data-industry={template.industry}
-  data-grid-role={isTopRowTwoCol ? 'top-2col' : 'body-3col'}
-  class={`cv-vertex-card group flex flex-col justify-between ${spanClasses}`}
+  data-grid-role={isTopRowTwoCol ? "top-2col" : "body-3col"}
+  class={`cv-vertex-card group relative block border border-gray-800 bg-[var(--cv-surface)] ${spanClasses}`}
 >
-  <!-- Image Header with Overlaid Outlined FEATURED & Solid PREMIUM/FREE Badges -->
-  <div class="relative overflow-hidden border-b border-[var(--cv-border)] bg-[#090A0D]">
-    <img
-      src={template.previewSvgDataUri}
-      alt={template.previewAlt}
-      width="800"
-      height="500"
-      fetchpriority={isPriorityImage ? 'high' : undefined}
-      loading={isPriorityImage ? undefined : 'lazy'}
-      decoding="async"
-      class="aspect-[16/10] w-full object-cover transition-transform duration-200 group-hover:scale-[1.015]"
-    />
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+  ></span>
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+  ></span>
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+  ></span>
+  <span
+    aria-hidden="true"
+    class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+  ></span>
 
-    <!-- Top-Left Corner: Outlined FEATURED Badge (or Schema ID when not featured) -->
-    <div class="pointer-events-none absolute top-3 left-3 z-10 flex items-center gap-1.5">
-      {
-        template.featured ? (
-          <span
-            class="border border-[#F5F6F8] bg-[#0A0B0E]/90 px-2.5 py-1 font-mono text-[11px] font-semibold tracking-wider text-[#F5F6F8]"
-          >
+  <article id={template.slug} class="flex h-full flex-col justify-between">
+    <div class="relative overflow-hidden border-b border-[var(--cv-border)] bg-[#090A0D]">
+      <img
+        src={template.previewSvgDataUri}
+        alt={template.previewAlt}
+        width="800"
+        height="450"
+        fetchpriority={isPriorityImage ? "high" : undefined}
+        loading={isPriorityImage ? undefined : "lazy"}
+        decoding="async"
+        class="aspect-video w-full object-cover transition-transform duration-200 group-hover:scale-[1.015]"
+      />
+
+      <div class="pointer-events-none absolute top-3 left-3 z-10 flex items-center gap-1.5">
+        {template.featured ? (
+          <span class="border border-[#F5F6F8] bg-[#0A0B0E]/90 px-2.5 py-1 font-mono text-[11px] font-semibold tracking-wider text-[#F5F6F8]">
             FEATURED
           </span>
         ) : (
-          <span
-            class="border border-[#A3AAB8]/60 bg-[#0A0B0E]/90 px-2 py-1 font-mono text-[11px] text-[#A3AAB8]"
-          >
+          <span class="border border-[#A3AAB8]/60 bg-[#0A0B0E]/90 px-2 py-1 font-mono text-[11px] text-[#A3AAB8]">
             {template.emdashCollection}
           </span>
-        )
-      }
-    </div>
+        )}
+      </div>
 
-    <!-- Top-Right Corner: Solid PREMIUM / FREE Badge -->
-    <div class="pointer-events-none absolute top-3 right-3 z-10">
-      {
-        template.tier === 'PREMIUM' ? (
-          <span
-            class="inline-block bg-[#FF6A1A] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]"
-          >
+      <div class="pointer-events-none absolute top-3 right-3 z-10">
+        {template.tier === "PREMIUM" ? (
+          <span class="inline-block bg-[#FF6A1A] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]">
             PREMIUM
           </span>
         ) : (
-          <span
-            class="inline-block bg-[#F5F6F8] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]"
-          >
+          <span class="inline-block bg-[#F5F6F8] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]">
             FREE
           </span>
-        )
-      }
+        )}
+      </div>
     </div>
-  </div>
 
-  <!-- Middle Row: Left (Title + Subtitle) / Right (Style Tag + Specific Feature Bullet) -->
-  <div
-    class="grid grid-cols-1 gap-4 border-b border-dashed border-[var(--cv-border)] p-4 sm:grid-cols-12 sm:p-5"
-  >
-    <div class="sm:col-span-7">
-      <h3 class="text-base font-bold tracking-tight text-[var(--cv-text)] sm:text-lg">
-        {template.title}
-      </h3>
-      <p class="mt-1 text-sm leading-relaxed text-[var(--cv-text-muted)]">
+    <div class="flex flex-1 flex-col justify-between border-b border-dashed border-[var(--cv-border)] px-4 py-3.5">
+      <div class="flex items-start justify-between gap-3">
+        <h3 class="text-base font-bold tracking-tight text-[var(--cv-text)] group-hover:text-[var(--cv-accent)] transition-colors">
+          {template.title}
+        </h3>
+        <span class="inline-block shrink-0 border border-[var(--cv-border-strong)] bg-[var(--cv-surface-elevated)] px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider text-[var(--cv-text)]">
+          {template.styleTag}
+        </span>
+      </div>
+      <p class="mt-1.5 text-sm leading-snug text-[var(--cv-text-muted)]">
         {template.subtitle}
       </p>
     </div>
 
-    <div
-      class="flex flex-col items-start justify-between border-t border-dashed border-[var(--cv-border)] pt-3 sm:col-span-5 sm:items-end sm:border-t-0 sm:pt-0 sm:text-right"
-    >
-      <span
-        class="inline-block border border-[var(--cv-border-strong)] bg-[var(--cv-surface-elevated)] px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider text-[var(--cv-text)]"
-      >
-        {template.styleTag}
-      </span>
-      <p class="mt-2 font-mono text-xs text-[var(--cv-text-muted)]">
-        <span class="text-[var(--cv-accent)]" aria-hidden="true">&bull;</span>
-        {template.featureBullet}
-      </p>
-    </div>
-  </div>
-
-  <!-- Bottom Footer: Left (2-3 CSS Swatches + Typeface Names) / Right (Price + Page Count) -->
-  <div class="flex flex-col gap-3 bg-[var(--cv-surface)] p-4 sm:p-5">
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <!-- Left: Color Swatches + Typefaces -->
-      <div class="flex items-center gap-2.5 min-w-0">
+    <div class="flex items-center justify-between gap-3 bg-[var(--cv-surface)] px-4 py-3 min-w-0">
+      <div class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
         <div
           class="flex shrink-0 items-center -space-x-1"
           role="group"
           aria-label={`Color palette for ${template.title}`}
         >
-          {
-            template.swatches.map((swatch) => (
-              <span
-                class="inline-block h-4 w-4 border border-[var(--cv-border-strong)]"
-                style={`background-color: ${swatch.hex};`}
-                title={swatch.label}
-                aria-label={swatch.label}
-              />
-            ))
-          }
+          {template.swatches.map((swatch) => (
+            <span
+              class="inline-block h-4 w-4 border border-[var(--cv-border-strong)]"
+              style={`background-color: ${swatch.hex};`}
+              title={swatch.label}
+              aria-label={swatch.label}
+            />
+          ))}
         </div>
-        <span class="truncate font-mono text-xs text-[var(--cv-text-muted)]">
-          {template.typefaces.join(' + ')}
+        <span
+          class="block min-w-0 flex-1 truncate font-mono text-xs text-[var(--cv-text-muted)]"
+          title={template.typefaces.join(" + ")}
+        >
+          {template.typefaces.join(" + ")}
         </span>
       </div>
 
-      <!-- Right: Price + Page Count -->
-      <div class="flex shrink-0 items-baseline gap-2.5 font-mono">
+      <div class="flex shrink-0 items-baseline gap-2 font-mono">
         <span class="text-sm font-bold text-[var(--cv-text)]">
           {template.priceDisplay}
         </span>
@@ -140,26 +132,5 @@ const spanClasses = isTopRowTwoCol
         </span>
       </div>
     </div>
-
-    <!-- Action Bar: Spec Modal Trigger + Cart Action -->
-    <div class="grid grid-cols-2 gap-2 pt-1">
-      <button
-        type="button"
-        data-inspect-template={template.id}
-        class="inline-flex min-h-11 items-center justify-center border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-3 py-2 font-mono text-xs font-medium text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)] active:translate-y-px"
-      >
-        Inspect Spec
-      </button>
-      <button
-        type="button"
-        data-add-to-cart={template.id}
-        data-item-title={template.title}
-        data-item-price={template.price}
-        data-item-slug={template.slug}
-        class="inline-flex min-h-11 items-center justify-center border border-[var(--cv-border-strong)] bg-[var(--cv-text)] px-3 py-2 font-mono text-xs font-bold text-[var(--cv-bg)] transition-colors hover:border-[var(--cv-accent)] hover:bg-[var(--cv-accent)] hover:text-[var(--cv-accent-contrast)] active:translate-y-px"
-      >
-        {template.price === 0 ? 'Add Free ($0)' : `Add to Cart (${template.priceDisplay})`}
-      </button>
-    </div>
-  </div>
-</article>
+  </article>
+</a>
