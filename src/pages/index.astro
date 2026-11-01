@@ -1,7 +1,6 @@
 ---
 import "../styles/global.css";
 import NavBar from "../components/NavBar.astro";
-import FooterSection from "../components/FooterSection.astro";
 import CartDrawer from "../components/CartDrawer.astro";
 import {
   emdashStorefrontData,
@@ -12,7 +11,6 @@ import {
 const { templates, benefits, faqs, cmsVersion } = emdashStorefrontData;
 
 const totalTemplatesCount = templates.length;
-const savingsAmount = totalCatalogRetailValue - bundleDiscountPrice;
 
 const sectorCategories = [
   { key: "trades-industry", label: "Trades & industry", count: 14 },
@@ -602,27 +600,25 @@ const specModalPayload = templates.map(
           aria-labelledby="why-heading"
           class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
         >
-          <div class="flex flex-col justify-between gap-4 border-b border-dashed border-[var(--cv-border)] pb-8 lg:flex-row lg:items-end">
-            <div>
-              <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
-                ARCHITECTURAL GUARANTEES // XOCOTHEMES STANDARD
-              </p>
-              <h2
-                id="why-heading"
-                class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
-              >
-                Why Creative Vertices
-              </h2>
-            </div>
-            <p class="max-w-xl text-sm leading-relaxed text-[var(--cv-text-muted)]">
+          <div class="flex flex-col items-center border-b border-dashed border-[var(--cv-border)] pb-8 text-center">
+            <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+              ARCHITECTURAL GUARANTEES
+            </p>
+            <h2
+              id="why-heading"
+              class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
+            >
+              Engineered for Performance
+            </h2>
+            <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--cv-text-muted)]">
               Every template in the catalog is audited against strict build-time
               constraints: zero external network dependencies, scoped Web
               Components, and typed EmDash CMS schemas.
             </p>
           </div>
 
-          <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {benefits.map((benefit, index) => (
+          <div class="mt-8 grid grid-cols-1 gap-5 md:grid-cols-2 lg:gap-6">
+            {benefits.map((benefit) => (
               <article
                 class={`cv-vertex-card relative flex flex-col justify-between border border-gray-800 p-5 sm:p-6 ${
                   benefit.emphasized
@@ -648,12 +644,9 @@ const specModalPayload = templates.map(
                 ></span>
 
                 <div>
-                  <div class="flex items-center justify-between gap-2 font-mono text-xs">
+                  <div class="flex items-center font-mono text-xs">
                     <span class="font-bold text-[var(--cv-accent)]">
                       {benefit.codeRef}
-                    </span>
-                    <span class="border border-[var(--cv-border)] px-2 py-0.5 text-[11px] text-[var(--cv-text-muted)]">
-                      SPEC #{index + 1}
                     </span>
                   </div>
 
@@ -666,16 +659,13 @@ const specModalPayload = templates.map(
                   </p>
                 </div>
 
-                <div class="mt-6 border-t border-dashed border-[var(--cv-border)] pt-4">
-                  <div class="flex items-baseline justify-between font-mono text-xs">
-                    <span class="text-[var(--cv-text-muted)]">
-                      {benefit.metricLabel}
-                    </span>
-                    <span class="font-bold text-[var(--cv-text)]">
-                      {benefit.metricValue}
-                    </span>
-                  </div>
-                  <pre class="mt-3 overflow-x-auto border border-[var(--cv-border)] bg-[var(--cv-bg)] p-2.5 font-mono text-[11px] leading-snug text-[var(--cv-text-muted)]"><code>{benefit.specSnippet}</code></pre>
+                <div class="mt-6 flex items-baseline justify-between border-t border-dashed border-[var(--cv-border)] pt-4 font-mono text-xs">
+                  <span class="text-[var(--cv-text-muted)]">
+                    {benefit.metricLabel}
+                  </span>
+                  <span class="font-bold text-[var(--cv-text)]">
+                    {benefit.metricValue}
+                  </span>
                 </div>
               </article>
             ))}
@@ -727,35 +717,23 @@ const specModalPayload = templates.map(
                   packs, and unlimited commercial project rights.
                 </p>
 
-                <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-4">
+                <dl class="mt-6 grid grid-cols-1 gap-6 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-2">
                   <div>
-                    <dt class="text-[var(--cv-text-muted)]">INDIVIDUAL SUM</dt>
+                    <dt class="text-[var(--cv-text-muted)]">TOTAL VALUE</dt>
                     <dd class="mt-1 text-sm font-bold line-through text-[var(--cv-text-muted)]">
                       ${totalCatalogRetailValue} USD
                     </dd>
                   </div>
                   <div>
-                    <dt class="text-[var(--cv-text-muted)]">BUNDLE PRICE</dt>
-                    <dd class="mt-1 text-sm font-bold text-[var(--cv-accent)]">
-                      ${bundleDiscountPrice} USD
-                    </dd>
-                  </div>
-                  <div>
-                    <dt class="text-[var(--cv-text-muted)]">DIRECT SAVINGS</dt>
-                    <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
-                      Save ${savingsAmount} (50%)
-                    </dd>
-                  </div>
-                  <div>
                     <dt class="text-[var(--cv-text-muted)]">LICENSE SCOPE</dt>
                     <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
-                      Unlimited Domains
+                      Unlimited Commercial Domains
                     </dd>
                   </div>
                 </dl>
               </div>
 
-              <div class="flex flex-col justify-between border border-dashed border-[var(--cv-border-strong)] bg-[var(--cv-bg)] p-5 sm:p-6 lg:col-span-4">
+              <div class="flex flex-col justify-between border border-dashed border-[var(--cv-border-strong)] bg-[var(--cv-bg)] p-6 sm:p-8 lg:col-span-4">
                 <div>
                   <div class="flex items-baseline justify-between font-mono">
                     <span class="text-xs text-[var(--cv-text-muted)]">
@@ -765,7 +743,7 @@ const specModalPayload = templates.map(
                       ${bundleDiscountPrice}
                     </span>
                   </div>
-                  <ul class="mt-4 space-y-2 font-mono text-xs text-[var(--cv-text-muted)]">
+                  <ul class="mt-5 space-y-3 font-mono text-xs text-[var(--cv-text-muted)]">
                     <li class="flex items-center gap-2">
                       <span
                         class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
@@ -796,7 +774,7 @@ const specModalPayload = templates.map(
                   data-bundle-price={bundleDiscountPrice}
                   class="mt-6 inline-flex min-h-11 w-full items-center justify-center border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-5 py-3 font-mono text-xs font-bold tracking-wider text-[var(--cv-accent-contrast)] transition-transform hover:-translate-y-0.5 active:translate-y-0"
                 >
-                  Add All-Access Bundle (${bundleDiscountPrice})
+                  Get Instant Access
                 </button>
               </div>
             </div>
@@ -808,7 +786,7 @@ const specModalPayload = templates.map(
           aria-labelledby="faq-heading"
           class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
         >
-          <cv-faq class="block">
+          <cv-accordion class="block">
             <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
               <div class="lg:col-span-4">
                 <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
@@ -825,50 +803,17 @@ const specModalPayload = templates.map(
                   synchronization, Tailwind CSS v4 stylesheets, native Web
                   Component hydration, and agency client rights.
                 </p>
-
-                <div class="mt-6 flex flex-wrap gap-2">
-                  <button
-                    type="button"
-                    data-faq-expand-all
-                    class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
-                  >
-                    Expand All
-                  </button>
-                  <button
-                    type="button"
-                    data-faq-collapse-all
-                    class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
-                  >
-                    Collapse All
-                  </button>
-                </div>
               </div>
 
-              <div class="space-y-4 lg:col-span-8">
+              <div class="lg:col-span-8">
                 {faqs.map((item, idx) => (
                   <details
                     data-faq-item
+                    data-expanded={idx === 0 ? "true" : "false"}
                     open={idx === 0}
-                    class="cv-vertex-card group relative border border-gray-800 bg-[var(--cv-surface)]"
+                    class="group border-b border-gray-800 pb-6 mb-6 last:mb-0"
                   >
-                    <span
-                      aria-hidden="true"
-                      class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                    ></span>
-                    <span
-                      aria-hidden="true"
-                      class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                    ></span>
-                    <span
-                      aria-hidden="true"
-                      class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                    ></span>
-                    <span
-                      aria-hidden="true"
-                      class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                    ></span>
-
-                    <summary class="flex min-h-12 list-none items-center justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+                    <summary class="flex min-h-11 list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
                       <div class="flex flex-col gap-1 text-left">
                         <span class="font-mono text-[11px] font-bold tracking-wider text-[var(--cv-accent)]">
                           0{idx + 1} // {item.category}
@@ -879,14 +824,35 @@ const specModalPayload = templates.map(
                       </div>
                       <span
                         aria-hidden="true"
-                        class="inline-flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] font-mono text-sm font-bold text-[var(--cv-text)] transition-transform duration-150 group-open:rotate-45 group-open:border-[var(--cv-accent)] group-open:text-[var(--cv-accent)]"
+                        class="inline-flex shrink-0 items-center justify-center text-orange-500"
                       >
-                        +
+                        <svg
+                          data-icon-plus
+                          class={`h-5 w-5 ${idx === 0 ? "hidden" : "block"}`}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.75"
+                          stroke-linecap="square"
+                        >
+                          <path d="M12 5v14M5 12h14" />
+                        </svg>
+                        <svg
+                          data-icon-cross
+                          class={`h-5 w-5 ${idx === 0 ? "block" : "hidden"}`}
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="1.75"
+                          stroke-linecap="square"
+                        >
+                          <path d="M6 6l12 12M18 6L6 18" />
+                        </svg>
                       </span>
                     </summary>
                     <div
                       data-faq-body
-                      class="border-t border-dashed border-[var(--cv-border)] px-4 py-4 text-sm leading-relaxed text-[var(--cv-text-muted)] sm:px-5"
+                      class="mt-3 pr-8 text-sm leading-relaxed text-[var(--cv-text-muted)]"
                     >
                       <p>{item.answer}</p>
                     </div>
@@ -894,14 +860,77 @@ const specModalPayload = templates.map(
                 ))}
               </div>
             </div>
-          </cv-faq>
+          </cv-accordion>
         </section>
       </main>
 
-      <FooterSection
-        totalTemplatesCount={totalTemplatesCount}
-        cmsVersion={cmsVersion}
-      />
+      <footer class="px-4 py-10 sm:px-6 lg:px-8">
+        <div class="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+          <div>
+            <div class="flex items-center gap-2">
+              <span
+                class="inline-block h-2 w-2 bg-[var(--cv-accent)]"
+                aria-hidden="true"
+              ></span>
+              <span class="text-sm font-bold text-[var(--cv-text)]">
+                Creative Vertices
+              </span>
+              <span class="font-mono text-xs text-[var(--cv-text-muted)]">
+                // {totalTemplatesCount} Verified Astro v7 Templates
+              </span>
+            </div>
+            <p class="mt-1.5 font-mono text-xs text-[var(--cv-text-muted)]">
+              Powered by {cmsVersion} &amp; Tailwind CSS v4. Zero third-party
+              tracking scripts.
+            </p>
+          </div>
+
+          <nav aria-label="Footer navigation">
+            <ul class="flex flex-wrap items-center gap-6 font-mono text-xs">
+              <li>
+                <a
+                  href="#top"
+                  class="inline-flex min-h-11 items-center text-gray-400 hover:text-white transition-colors"
+                >
+                  Top &uarr;
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#templates"
+                  class="inline-flex min-h-11 items-center text-gray-400 hover:text-white transition-colors"
+                >
+                  Catalog
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#architecture"
+                  class="inline-flex min-h-11 items-center text-gray-400 hover:text-white transition-colors"
+                >
+                  Architecture
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#bundle"
+                  class="inline-flex min-h-11 items-center text-gray-400 hover:text-white transition-colors"
+                >
+                  All-Access
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#faq"
+                  class="inline-flex min-h-11 items-center text-gray-400 hover:text-white transition-colors"
+                >
+                  FAQ
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </footer>
     </div>
 
     <CartDrawer bundlePrice={bundleDiscountPrice} />
@@ -1180,63 +1209,155 @@ const specModalPayload = templates.map(
     }
   }
 
-  class CvFaq extends HTMLElement {
+  class CvAccordion extends HTMLElement {
+    private animations = new WeakMap<HTMLDetailsElement, Animation>();
+
     connectedCallback() {
       const detailsList =
         this.querySelectorAll<HTMLDetailsElement>("[data-faq-item]");
-      const expandAllBtn = this.querySelector<HTMLButtonElement>(
-        "[data-faq-expand-all]",
-      );
-      const collapseAllBtn = this.querySelector<HTMLButtonElement>(
-        "[data-faq-collapse-all]",
-      );
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
 
       detailsList.forEach((details) => {
-        const summary = details.querySelector("summary");
-        const body = details.querySelector<HTMLElement>("[data-faq-body]");
-        if (!summary || !body) return;
+        const summary = details.querySelector<HTMLElement>("summary");
+        if (!summary) return;
+
+        this.syncIconState(details, details.hasAttribute("open"));
 
         summary.addEventListener("click", (event) => {
-          if (prefersReducedMotion) return;
           event.preventDefault();
 
-          const isOpen = details.hasAttribute("open");
-          if (isOpen) {
-            const startHeight = `${details.offsetHeight}px`;
-            const endHeight = `${summary.offsetHeight}px`;
-            const anim = details.animate(
-              [{ height: startHeight }, { height: endHeight }],
-              { duration: 180, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
-            );
-            anim.onfinish = () => {
-              details.removeAttribute("open");
-              details.style.height = "";
-            };
+          const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+          ).matches;
+          const isCurrentlyExpanded = details.dataset.expanded === "true";
+
+          if (isCurrentlyExpanded) {
+            this.closeItem(details, summary, prefersReducedMotion);
           } else {
-            const startHeight = `${details.offsetHeight}px`;
-            details.setAttribute("open", "");
-            const endHeight = `${details.offsetHeight}px`;
-            const anim = details.animate(
-              [{ height: startHeight }, { height: endHeight }],
-              { duration: 180, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
-            );
-            anim.onfinish = () => {
-              details.style.height = "";
-            };
+            // Smoothly close any other open FAQ item before/while opening the newly clicked item.
+            detailsList.forEach((otherDetails) => {
+              if (
+                otherDetails !== details &&
+                (otherDetails.dataset.expanded === "true" ||
+                  otherDetails.hasAttribute("open"))
+              ) {
+                const otherSummary =
+                  otherDetails.querySelector<HTMLElement>("summary");
+                if (otherSummary) {
+                  this.closeItem(
+                    otherDetails,
+                    otherSummary,
+                    prefersReducedMotion,
+                  );
+                }
+              }
+            });
+
+            this.openItem(details, summary, prefersReducedMotion);
           }
         });
       });
+    }
 
-      expandAllBtn?.addEventListener("click", () => {
-        detailsList.forEach((d) => d.setAttribute("open", ""));
-      });
+    private syncIconState(details: HTMLDetailsElement, isExpanded: boolean) {
+      details.dataset.expanded = String(isExpanded);
+      const plusIcon = details.querySelector<SVGElement>("[data-icon-plus]");
+      const crossIcon = details.querySelector<SVGElement>("[data-icon-cross]");
 
-      collapseAllBtn?.addEventListener("click", () => {
-        detailsList.forEach((d) => d.removeAttribute("open"));
-      });
+      plusIcon?.classList.toggle("hidden", isExpanded);
+      plusIcon?.classList.toggle("block", !isExpanded);
+      crossIcon?.classList.toggle("block", isExpanded);
+      crossIcon?.classList.toggle("hidden", !isExpanded);
+    }
+
+    private getClosedHeight(
+      details: HTMLDetailsElement,
+      summary: HTMLElement,
+    ): number {
+      const styles = window.getComputedStyle(details);
+      const paddingY =
+        parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
+      const borderY =
+        parseFloat(styles.borderTopWidth) +
+        parseFloat(styles.borderBottomWidth);
+      return summary.offsetHeight + paddingY + borderY;
+    }
+
+    private openItem(
+      details: HTMLDetailsElement,
+      summary: HTMLElement,
+      prefersReducedMotion: boolean,
+    ) {
+      this.syncIconState(details, true);
+
+      const runningAnim = this.animations.get(details);
+      const startHeight = runningAnim
+        ? details.offsetHeight
+        : this.getClosedHeight(details, summary);
+      if (runningAnim) {
+        runningAnim.cancel();
+        this.animations.delete(details);
+      }
+
+      details.setAttribute("open", "");
+
+      if (prefersReducedMotion) {
+        details.style.height = "";
+        details.style.overflow = "";
+        return;
+      }
+
+      const endHeight = details.offsetHeight;
+      details.style.overflow = "hidden";
+
+      const anim = details.animate(
+        [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+        { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+      );
+      this.animations.set(details, anim);
+
+      anim.onfinish = () => {
+        details.style.height = "";
+        details.style.overflow = "";
+        this.animations.delete(details);
+      };
+    }
+
+    private closeItem(
+      details: HTMLDetailsElement,
+      summary: HTMLElement,
+      prefersReducedMotion: boolean,
+    ) {
+      this.syncIconState(details, false);
+
+      const runningAnim = this.animations.get(details);
+      const startHeight = details.offsetHeight;
+      if (runningAnim) {
+        runningAnim.cancel();
+        this.animations.delete(details);
+      }
+
+      if (prefersReducedMotion) {
+        details.removeAttribute("open");
+        details.style.height = "";
+        details.style.overflow = "";
+        return;
+      }
+
+      const endHeight = this.getClosedHeight(details, summary);
+      details.style.overflow = "hidden";
+
+      const anim = details.animate(
+        [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+        { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+      );
+      this.animations.set(details, anim);
+
+      anim.onfinish = () => {
+        details.removeAttribute("open");
+        details.style.height = "";
+        details.style.overflow = "";
+        this.animations.delete(details);
+      };
     }
   }
 
@@ -1260,7 +1381,7 @@ const specModalPayload = templates.map(
   if (!customElements.get("cv-storefront")) {
     customElements.define("cv-storefront", CvStorefront);
   }
-  if (!customElements.get("cv-faq")) {
-    customElements.define("cv-faq", CvFaq);
+  if (!customElements.get("cv-accordion")) {
+    customElements.define("cv-accordion", CvAccordion);
   }
 </script>

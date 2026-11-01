@@ -13,27 +13,36 @@ const { benefits } = Astro.props;
   aria-labelledby="why-heading"
   class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
 >
-  <div class="flex flex-col justify-between gap-4 border-b border-dashed border-[var(--cv-border)] pb-8 lg:flex-row lg:items-end">
-    <div>
-      <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
-        ARCHITECTURAL GUARANTEES // XOCOTHEMES STANDARD
-      </p>
-      <h2
-        id="why-heading"
-        class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
-      >
-        Why Creative Vertices
-      </h2>
-    </div>
-    <p class="max-w-xl text-sm leading-relaxed text-[var(--cv-text-muted)]">
+  <div class="flex flex-col items-center border-b border-dashed border-[var(--cv-border)] pb-8 text-center">
+    <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+      ARCHITECTURAL GUARANTEES
+    </p>
+    <h2
+      id="why-heading"
+      class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
+    >
+      Engineered for Performance
+    </h2>
+    <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--cv-text-muted)]">
+  <div class="flex flex-col items-center border-b border-dashed border-[var(--cv-border)] pb-8 text-center">
+    <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+      ARCHITECTURAL GUARANTEES
+    </p>
+    <h2
+      id="why-heading"
+      class="mt-2 text-2xl font-bold tracking-tight text-[var(--cv-text)] sm:text-3xl"
+    >
+      Engineered for Performance
+    </h2>
+    <p class="mt-3 max-w-2xl text-sm leading-relaxed text-[var(--cv-text-muted)]">
       Every template in the catalog is audited against strict build-time
       constraints: zero external network dependencies, scoped Web Components,
       and typed EmDash CMS schemas.
     </p>
   </div>
 
-  <div class="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-    {benefits.map((benefit, index) => (
+  <div class="mt-8 grid grid-cols-1 gap-5 mdmd:grid-cols-2 lg:gap-6">
+    {benefits.map((benefit) => (
       <article
         class={`cv-vertex-card relative flex flex-col justify-between border border-gray-800 p-5 sm:p-6 ${
           benefit.emphasized
@@ -43,28 +52,25 @@ const { benefits } = Astro.props;
       >
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+          class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-transparent border border-orange-500"
         />
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+          class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-transparent border border-orange-500"
         />
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+          class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-transparent border border-orange-500"
         />
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
+          class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-transparent border border-orange-500"
         />
 
         <div>
-          <div class="flex items-center justify-between gap-2 font-mono text-xs">
+          <div class="flex items-center font-mono text-xs">
             <span class="font-bold text-[var(--cv-accent)]">
               {benefit.codeRef}
-            </span>
-            <span class="border border-[var(--cv-border)] px-2 py-0.5 text-[11px] text-[var(--cv-text-muted)]">
-              SPEC #{index + 1}
             </span>
           </div>
 
@@ -77,16 +83,18 @@ const { benefits } = Astro.props;
           </p>
         </div>
 
-        <div class="mt-6 border-t border-dashed border-[var(--cv-border)] pt-4">
-          <div class="flex items-baseline justify-between font-mono text-xs">
-            <span class="text-[var(--cv-text-muted)]">
-              {benefit.metricLabel}
-            </span>
-            <span class="font-bold text-[var(--cv-text)]">
-              {benefit.metricValue}
-            </span>
-          </div>
-          <pre class="mt-3 overflow-x-auto border border-[var(--cv-border)] bg-[var(--cv-bg)] p-2.5 font-mono text-[11px] leading-snug text-[var(--cv-text-muted)]"><code>{benefit.specSnippet}</code></pre>
+        <div class="mt-6 flex items-baseline justify-between border-t border-dashed border-[var(--cv-border)] pt-4 font-mono text-xs">
+          <span class="text-[var(--cv-text-muted)]">{benefit.metricLabel}</span>
+          <span class="font-bold text-[var(--cv-text)]">
+            {benefit.metricValue}
+          </span>
+        <div class="mt-6 flex items-baseline justify-between border-t border-dashed border-[var(--cv-border)] pt-4 font-mono text-xs">
+          <span class="text-[var(--cv-text-muted)]">
+            {benefit.metricLabel}
+          </span>
+          <span class="font-bold text-[var(--cv-text)]">
+            {benefit.metricValue}
+          </span>
         </div>
       </article>
     ))}

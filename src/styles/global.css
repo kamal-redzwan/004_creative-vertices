@@ -45,6 +45,10 @@
   color-scheme: light;
 }
 
+[data-theme="light"] .hover\:text-white:hover {
+  color: var(--cv-text);
+}
+
 @layer base {
   html {
     background-color: var(--cv-bg);

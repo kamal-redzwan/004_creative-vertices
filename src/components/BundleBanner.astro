@@ -6,7 +6,6 @@ interface Props {
 }
 
 const { totalTemplatesCount, retailValue, bundlePrice } = Astro.props;
-const savingsAmount = retailValue - bundlePrice;
 ---
 
 <section
@@ -54,35 +53,23 @@ const savingsAmount = retailValue - bundlePrice;
           unlimited commercial project rights.
         </p>
 
-        <dl class="mt-6 grid grid-cols-2 gap-4 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-4">
+        <dl class="mt-6 grid grid-cols-1 gap-6 border-t border-dashed border-[var(--cv-border)] pt-5 font-mono text-xs sm:grid-cols-2">
           <div>
-            <dt class="text-[var(--cv-text-muted)]">INDIVIDUAL SUM</dt>
+            <dt class="text-[var(--cv-text-muted)]">TOTAL VALUE</dt>
             <dd class="mt-1 text-sm font-bold line-through text-[var(--cv-text-muted)]">
               ${retailValue} USD
             </dd>
           </div>
           <div>
-            <dt class="text-[var(--cv-text-muted)]">BUNDLE PRICE</dt>
-            <dd class="mt-1 text-sm font-bold text-[var(--cv-accent)]">
-              ${bundlePrice} USD
-            </dd>
-          </div>
-          <div>
-            <dt class="text-[var(--cv-text-muted)]">DIRECT SAVINGS</dt>
-            <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
-              Save ${savingsAmount} (50%)
-            </dd>
-          </div>
-          <div>
             <dt class="text-[var(--cv-text-muted)]">LICENSE SCOPE</dt>
             <dd class="mt-1 text-sm font-bold text-[var(--cv-text)]">
-              Unlimited Domains
+              Unlimited Commercial Domains
             </dd>
           </div>
         </dl>
       </div>
 
-      <div class="flex flex-col justify-between border border-dashed border-[var(--cv-border-strong)] bg-[var(--cv-bg)] p-5 sm:p-6 lg:col-span-4">
+      <div class="flex flex-col justify-between border border-dashed border-[var(--cv-border-strong)] bg-[var(--cv-bg)] p-6 sm:p-8 lg:col-span-4">
         <div>
           <div class="flex items-baseline justify-between font-mono">
             <span class="text-xs text-[var(--cv-text-muted)]">
@@ -92,7 +79,7 @@ const savingsAmount = retailValue - bundlePrice;
               ${bundlePrice}
             </span>
           </div>
-          <ul class="mt-4 space-y-2 font-mono text-xs text-[var(--cv-text-muted)]">
+          <ul class="mt-5 space-y-3 font-mono text-xs text-[var(--cv-text-muted)]">
             <li class="flex items-center gap-2">
               <span
                 class="h-1.5 w-1.5 bg-[var(--cv-bg)] border border-orange-500"
@@ -123,7 +110,7 @@ const savingsAmount = retailValue - bundlePrice;
           data-bundle-price={bundlePrice}
           class="mt-6 inline-flex min-h-11 w-full items-center justify-center border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-5 py-3 font-mono text-xs font-bold tracking-wider text-[var(--cv-accent-contrast)] transition-transform hover:-translate-y-0.5 active:translate-y-0"
         >
-          Add All-Access Bundle (${bundlePrice})
+          Get Instant Access
         </button>
       </div>
     </div>

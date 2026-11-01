@@ -13,7 +13,7 @@ const { faqs } = Astro.props;
   aria-labelledby="faq-heading"
   class="border-b border-dashed border-[var(--cv-rail)] px-4 py-12 sm:px-6 lg:px-8 lg:py-16"
 >
-  <cv-faq class="block">
+  <cv-accordion class="block">
     <div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
       <div class="lg:col-span-4">
         <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
@@ -30,50 +30,18 @@ const { faqs } = Astro.props;
           Tailwind CSS v4 stylesheets, native Web Component hydration, and
           agency client rights.
         </p>
-
-        <div class="mt-6 flex flex-wrap gap-2">
-          <button
-            type="button"
-            data-faq-expand-all
-            class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
-          >
-            Expand All
-          </button>
-          <button
-            type="button"
-            data-faq-collapse-all
-            class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface)] px-3.5 py-2 font-mono text-xs font-semibold text-[var(--cv-text)] transition-colors hover:border-[var(--cv-border-strong)] hover:bg-[var(--cv-surface-hover)]"
-          >
-            Collapse All
-          </button>
-        </div>
       </div>
 
-      <div class="space-y-4 lg:col-span-8">
+      <div class="lg:col-span-8">
         {faqs.map((item, idx) => (
           <details
             data-faq-item
+            data-expanded={idx === 0 ? "true" : "false"}
             open={idx === 0}
-            class="cv-vertex-card group relative border border-gray-800 bg-[var(--cv-surface)]"
+            class="group border-b border-gray-800 pbpb-6 mb6 mb-6 last:mb-06 last:mb-0"
           >
-            <span
-              aria-hidden="true"
-              class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-            />
-            <span
-              aria-hidden="true"
-              class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-            />
-            <span
-              aria-hidden="true"
-              class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-            />
-            <span
-              aria-hidden="true"
-              class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-            />
-
-            <summary class="flex min-h-12 list-none items-center justify-between gap-4 p-4 sm:p-5 [&::-webkit-details-marker]:hidden">
+            <summary class="flex min-h-11 list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
+            <summary class="flex min-h-11 list-none items-center justify-between gap-4 [&::-webkit-details-marker]:hidden">
               <div class="flex flex-col gap-1 text-left">
                 <span class="font-mono text-[11px] font-bold tracking-wider text-[var(--cv-accent)]">
                   0{idx + 1} // {item.category}
@@ -84,14 +52,55 @@ const { faqs } = Astro.props;
               </div>
               <span
                 aria-hidden="true"
-                class="inline-flex h-8 w-8 shrink-0 items-center justify-center border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] font-mono text-sm font-bold text-[var(--cv-text)] transition-transform duration-150 group-open:rotate-45 group-open:border-[var(--cv-accent)] group-open:text-[var(--cv-accent)]"
+                class="inline-flex shrink-0 items-center justify-center text-orangeorange-500500"
               >
-                +
+                <svg
+                  class="block h-5 w-5 group-open:hidden"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="square"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                <svg
+                  class="hidden h-5 w-5 group-open:block"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="square"
+                >
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+                <svg
+                  data-icon-plus
+                  class={`h-5 w-5 ${idx === 0 ? "hidden" : "block"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="square"
+                >
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+                <svg
+                  data-icon-cross
+                  class={`h-5 w-5 ${idx === 0 ? "block" : "hidden"}`}
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.75"
+                  stroke-linecap="square"
+                >
+                  <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
               </span>
             </summary>
             <div
               data-faq-body
-              class="border-t border-dashed border-[var(--cv-border)] px-4 py-4 text-sm leading-relaxed text-[var(--cv-text-muted)] sm:px-5"
+              class="mtmt-33 prpr-88 text-sm leading-relaxed text-[var(--cv-text-muted)]"
             >
               <p>{item.answer}</p>
             </div>
@@ -99,71 +108,158 @@ const { faqs } = Astro.props;
         ))}
       </div>
     </div>
-  </cv-faq>
+  </cv-accordion>
 </section>
 
 <script>
-  class CvFaq extends HTMLElement {
+  class CvAccordion extends HTMLElement {
+    private animations = new WeakMap<HTMLDetailsElement, Animation>();
+
     connectedCallback() {
       const detailsList =
         this.querySelectorAll<HTMLDetailsElement>("[data-faq-item]");
-      const expandAllBtn = this.querySelector<HTMLButtonElement>(
-        "[data-faq-expand-all]",
-      );
-      const collapseAllBtn = this.querySelector<HTMLButtonElement>(
-        "[data-faq-collapse-all]",
-      );
-      const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)",
-      ).matches;
 
       detailsList.forEach((details) => {
-        const summary = details.querySelector("summary");
-        const body = details.querySelector<HTMLElement>("[data-faq-body]");
-        if (!summary || !body) return;
+        const summary = details.querySelector<HTMLElement>("summary");
+        if (!summary) return;
+
+        this.syncIconState(details, details.hasAttribute("open"));
 
         summary.addEventListener("click", (event) => {
-          if (prefersReducedMotion) return;
           event.preventDefault();
 
-          const isOpen = details.hasAttribute("open");
-          if (isOpen) {
-            const startHeight = `${details.offsetHeight}px`;
-            const endHeight = `${summary.offsetHeight}px`;
-            const anim = details.animate(
-              [{ height: startHeight }, { height: endHeight }],
-              { duration: 180, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
-            );
-            anim.onfinish = () => {
-              details.removeAttribute("open");
-              details.style.height = "";
-            };
+          const prefersReducedMotion = window.matchMedia(
+            "(prefers-reduced-motion: reduce)",
+          ).matches;
+          const isCurrentlyExpanded = details.dataset.expanded === "true";
+
+          if (isCurrentlyExpanded) {
+            this.closeItem(details, summary, prefersReducedMotion);
           } else {
-            const startHeight = `${details.offsetHeight}px`;
-            details.setAttribute("open", "");
-            const endHeight = `${details.offsetHeight}px`;
-            const anim = details.animate(
-              [{ height: startHeight }, { height: endHeight }],
-              { duration: 180, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
-            );
-            anim.onfinish = () => {
-              details.style.height = "";
-            };
+            // Smoothly close any other open FAQ item before/while opening the newly clicked item.
+            detailsList.forEach((otherDetails) => {
+              if (
+                otherDetails !== details &&
+                (otherDetails.dataset.expanded === "true" ||
+                  otherDetails.hasAttribute("open"))
+              ) {
+                const otherSummary =
+                  otherDetails.querySelector<HTMLElement>("summary");
+                if (otherSummary) {
+                  this.closeItem(
+                    otherDetails,
+                    otherSummary,
+                    prefersReducedMotion,
+                  );
+                }
+              }
+            });
+
+            this.openItem(details, summary, prefersReducedMotion);
           }
         });
-      });
+    }
+    private syncIconStatedetails: HTMLDetailsElementisExpanded:boolean)
+      detailsdataset.expandedStringisExpanded)const plusIcon = details.querySelector<SVGElement>("[data-icon-plus]");
+      const crossIcon = details.querySelector<SVGElement>("[data-icon-cross]"      plusIcon?.classList.toggle("hidden", isExpanded);
+      plusIcon?.classList.toggle("block", !isExpanded);
+      crossIcon?.classList.toggle("block", isExpanded);
+      crossIcon?.classList.toggle("hidden", !isExpanded);
+    }
 
-      expandAllBtn?.addEventListener("click", () => {
-        detailsList.forEach((d) => d.setAttribute("open", ""));
-      });
+    private getClosedHeight(
+      details: HTMLDetailsElement,
+      summary: HTMLElement,
+    ): number {
+      const styles = window.getComputedStyle(details);
+      const paddingY =
+        parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
+      const borderY =
+        parseFloat(styles.borderTopWidth) +
+        parseFloat(styles.borderBottomWidth);
+      return summary.offsetHeight + paddingY + borderY;
+    }
 
-      collapseAllBtn?.addEventListener("click", () => {
-        detailsList.forEach((d) => d.removeAttribute("open"));
-      });
+    private openItem(
+      details: HTMLDetailsElement,
+      summary: HTMLElement,
+      prefersReducedMotion: boolean,
+    ) {
+      this.syncIconState(details, true);
+
+      const runningAnim = this.animations.get(details);
+      const startHeight = runningAnim
+        ? details.offsetHeight
+        : this.getClosedHeight(details, summary);
+      if (runningAnim) {
+        runningAnim.cancel();
+        this.animations.delete(details);
+      }
+
+      details.setAttribute("open", "");
+
+      if (prefersReducedMotion) {
+        details.style.height = "";
+        details.style.overflow = "";
+        return;
+      }
+
+      const endHeight = details.offsetHeight;
+      details.style.overflow = "hidden";
+
+      const anim = details.animate(
+        [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+        { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+      );
+      this.animations.set(details, anim);
+
+      anim.onfinish = () => {
+        details.style.height = "";
+        details.style.overflow = "";
+        this.animations.delete(details);
+      };
+    }
+
+    private closeItem(
+      details: HTMLDetailsElement,
+      summary: HTMLElement,
+      prefersReducedMotion: boolean,
+    ) {
+      this.syncIconState(details, false);
+
+      const runningAnim = this.animations.get(details);
+      const startHeight = details.offsetHeight;
+      if (runningAnim) {
+        runningAnim.cancel();
+        this.animations.delete(details);
+      }
+
+      if (prefersReducedMotion) {
+        details.removeAttribute("open");
+        details.style.height = "";
+        details.style.overflow = "";
+        return;
+      }
+
+      const endHeight = this.getClosedHeight(details, summary);
+      details.style.overflow = "hidden";
+
+      const anim = details.animate(
+        [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
+        { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+      );
+      this.animations.set(details, anim);
+
+      anim.onfinish = () => {
+        details.removeAttribute("open");
+        details.style.height = "";
+        details.style.overflow = "";
+        this.animations.delete(details);
+      };
     }
   }
 
-  if (!customElements.get("cv-faq")) {
-    customElements.define("cv-faq", CvFaq);
+  if (!customElements.get("cv-accordion")) {
+    customElements.define("cv-accordion", CvAccordion);
   }
 </script>
