@@ -183,18 +183,20 @@ const sectorCategories = [
           </div>
         </div>
 
-        <div
-          data-templates-grid
-          class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6"
-        >
-          {templates.map((template, index) => (
-            <TemplateCard
-              template={template}
-              isTopRowTwoCol={index < 2}
-              isPriorityImage={index === 0}
-            />
-          ))}
-        </div>
+        <cv-grid-reveal class="block">
+          <div
+            data-templates-grid
+            class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6"
+          >
+            {templates.map((template, index) => (
+              <TemplateCard
+                template={template}
+                isTopRowTwoCol={index < 2}
+                isPriorityImage={index === 0}
+              />
+            ))}
+          </div>
+        </cv-grid-reveal>
       </div>
     </div>
 
@@ -288,6 +290,7 @@ const sectorCategories = [
 </section>
 
 <script>
+  import gsap from "gsap";
   import type { EmDashTemplateNode } from "../data/emdash-cms";
 
   const SECTOR_TEMPLATE_MAP: Record<string, string[]> = {
@@ -324,6 +327,53 @@ const sectorCategories = [
     "arts-culture": ["tpl-vertex-05", "tpl-vertex-08"],
     blog: ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
   };
+
+  class CvGridReveal extends HTMLElement {
+    private observer: IntersectionObserver | null = null;
+
+    connectedCallback() {
+      const cards = this.querySelectorAll<HTMLElement>("article");
+      if (!cards.length || this.dataset.revealed === "true") return;
+
+      const prefersReducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      if (prefersReducedMotion) {
+        this.dataset.revealed = "true";
+        gsap.set(cards, { clearProps: "all" });
+        return;
+      }
+
+      this.observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && this.dataset.revealed !== "true") {
+              this.dataset.revealed = "true";
+              this.observer?.disconnect();
+              this.observer = null;
+
+              gsap.from(cards, {
+                opacity: 0,
+                y: 20,
+                duration: 0.4,
+                stagger: 0.05,
+                ease: "power2.out",
+                clearProps: "all",
+              });
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      this.observer.observe(this);
+    }
+
+    disconnectedCallback() {
+      this.observer?.disconnect();
+      this.observer = null;
+    }
+  }
 
   class CvStorefront extends HTMLElement {
     private activeIndustry = "trades-industry";
@@ -399,6 +449,10 @@ const sectorCategories = [
 
     private applyFilters() {
       const cards = this.querySelectorAll<HTMLElement>("[data-template-card]");
+      const articles = this.querySelectorAll<HTMLElement>(
+        "[data-template-card] article",
+      );
+      const gridReveal = this.querySelector<HTMLElement>("cv-grid-reveal");
       const grid = this.querySelector<HTMLElement>("[data-templates-grid]");
       const loadingPanel = this.querySelector<HTMLElement>(
         '[data-state-panel="loading"]',
@@ -413,6 +467,13 @@ const sectorCategories = [
         "[data-visible-count-summary]",
       );
       const total = Number(this.dataset.totalTemplates || cards.length);
+
+      // Zero transition time on filter updates to provide instant terminal-style feedback.
+      if (gridReveal) {
+        gridReveal.dataset.revealed = "true";
+      }
+      gsap.killTweensOf(articles);
+      gsap.set(articles, { clearProps: "all" });
 
       if (this.cmsState === "loading") {
         grid?.setAttribute("hidden", "");
@@ -559,6 +620,9 @@ const sectorCategories = [
     }
   }
 
+  if (!customElements.get("cv-grid-reveal")) {
+    customElements.define("cv-grid-reveal", CvGridReveal);
+  }
   if (!customElements.get("cv-storefront")) {
     customElements.define("cv-storefront", CvStorefront);
   }
