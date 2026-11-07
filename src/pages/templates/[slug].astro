@@ -320,9 +320,10 @@ const featureBullet = template.feature_bullet ?? "Typed EmDash Content Layer";
                     data-template-id={template.id}
                     data-template-title={template.title}
                     data-template-price={template.price}
+                    data-polar-url={template.polar_checkout_url}
                     class="mt-6 inline-flex min-h-11 w-full items-center justify-center border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-5 py-3 font-mono text-xs font-bold tracking-wider text-[var(--cv-accent-contrast)] transition-transform hover:-translate-y-0.5 active:translate-y-0"
                   >
-                    Add to Cart ({priceDisplay})
+                    Buy Now ({priceDisplay})
                   </button>
 
                   <button
@@ -481,10 +482,11 @@ const featureBullet = template.feature_bullet ?? "Typed EmDash Content Layer";
     const id = addCartBtn.dataset.templateId || "";
     const title = addCartBtn.dataset.templateTitle || "";
     const price = Number(addCartBtn.dataset.templatePrice || 0);
+    const polarUrl = addCartBtn.dataset.polarUrl || "";
 
     window.dispatchEvent(
       new CustomEvent("cv:cart-add", {
-        detail: { id, title, price },
+        detail: { id, title, price, polarUrl },
       }),
     );
   });

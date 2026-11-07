@@ -82,6 +82,7 @@ export const templateSchema = z
     dom_nodes_count: z.number().optional(),
     css_payload: z.string(),
     routes_included: z.array(z.string()).optional(),
+    polar_checkout_url: z.string().optional(),
     preview_image: z.record(z.unknown()),
     preview_alt: z.string().optional(),
     createdAt: z.coerce.date(),

@@ -21,21 +21,18 @@ const { benefits, faqs, cms_version } = emdashStorefrontData;
 
 const totalTemplatesCount = templates.length;
 
-const sectorCategories = [
-  { key: "Trades & Industry", label: "Trades & Industry", count: 14 },
-  { key: "Health & Practice", label: "Health & Practice", count: 8 },
-  { key: "Online Shop", label: "Online Shop", count: 7 },
-  { key: "Landing Page", label: "Landing Page", count: 7 },
-  { key: "Professional Services", label: "Professional Services", count: 7 },
-  { key: "Food & Drink", label: "Food & Drink", count: 6 },
-  { key: "Studios & Agencies", label: "Studios & Agencies", count: 6 },
-  { key: "Software & SaaS", label: "Software & SaaS", count: 6 },
-  { key: "Retail & Product", label: "Retail & Product", count: 5 },
-  { key: "Travel & Leisure", label: "Travel & Leisure", count: 5 },
-  { key: "Personal & Writing", label: "Personal & Writing", count: 4 },
-  { key: "Arts & Culture", label: "Arts & Culture", count: 3 },
-  { key: "Blog", label: "Blog", count: 3 },
-];
+const industryCounts = templates.reduce(
+  (acc, template) => {
+    const industry = template.industry || "Uncategorized";
+    acc[industry] = (acc[industry] || 0) + 1;
+    return acc;
+  },
+  {} as Record<string, number>,
+);
+
+const sectorCategories = Object.entries(industryCounts)
+  .map(([key, count]) => ({ key, label: key, count }))
+  .sort((a, b) => b.count - a.count);
 ---
 
 <!doctype html>
