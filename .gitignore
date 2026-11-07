@@ -8,6 +8,12 @@ dist/
 # dependencies
 node_modules/
 
+# EmDash local database and media storage
+data.db
+data.db-shm
+data.db-wal
+uploads/
+
 # logs
 npm-debug.log*
 yarn-debug.log*

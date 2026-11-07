@@ -1,5 +1,5 @@
 ---
-import type { EmDashTemplateNode } from "../data/emdash-cms";
+import type { ColorSwatch, EmDashTemplateNode } from "../data/emdash-cms";
 
 interface Props {
   template: EmDashTemplateNode;
@@ -16,12 +16,71 @@ const {
 const spanClasses = isTopRowTwoCol
   ? "col-span-1 sm:col-span-2 lg:col-span-3"
   : "col-span-1 sm:col-span-1 lg:col-span-2";
+
+const templateSlug = template.slug ?? template.id;
+
+const previewImageRecord =
+  template.preview_image && typeof template.preview_image === "object"
+    ? (template.preview_image as Record<string, unknown>)
+    : {};
+
+const previewMetaRecord =
+  previewImageRecord.meta && typeof previewImageRecord.meta === "object"
+    ? (previewImageRecord.meta as Record<string, unknown>)
+    : undefined;
+
+const storageKey =
+  (typeof previewMetaRecord?.storageKey === "string" &&
+    previewMetaRecord.storageKey) ||
+  (typeof previewImageRecord.storageKey === "string" &&
+    previewImageRecord.storageKey) ||
+  (typeof previewImageRecord.id === "string" && previewImageRecord.id) ||
+  "";
+
+const previewSrc =
+  typeof previewImageRecord.src === "string" &&
+  previewImageRecord.src.length > 0
+    ? previewImageRecord.src
+    : typeof previewImageRecord.url === "string" &&
+        previewImageRecord.url.length > 0
+      ? previewImageRecord.url
+      : typeof previewImageRecord.previewUrl === "string" &&
+          previewImageRecord.previewUrl.length > 0
+        ? previewImageRecord.previewUrl
+        : storageKey
+          ? `/_emdash/api/media/file/${storageKey}`
+          : "";
+
+const previewAlt =
+  typeof previewImageRecord.alt === "string" &&
+  previewImageRecord.alt.trim().length > 0
+    ? previewImageRecord.alt
+    : (template.preview_alt ?? template.title);
+
+const swatchesTypefacesRecord =
+  template.swatches_typefaces && typeof template.swatches_typefaces === "object"
+    ? (template.swatches_typefaces as {
+        swatches?: ColorSwatch[];
+        typefaces?: string[];
+      })
+    : undefined;
+
+const swatches: ColorSwatch[] = Array.isArray(swatchesTypefacesRecord?.swatches)
+  ? swatchesTypefacesRecord.swatches
+  : (template.swatches ?? []);
+
+const typefaces: string[] = Array.isArray(swatchesTypefacesRecord?.typefaces)
+  ? swatchesTypefacesRecord.typefaces
+  : (template.typefaces ?? []);
+
+const styleLabel = template.style_tag ?? template.style;
+const priceDisplay = template.price_display ?? `$${template.price}`;
+const collectionBadge = template.emdash_collection ?? "cv_storefront_templates";
 ---
 
 <a
-  href={`#${template.slug}`}
+  href={`/templates/${templateSlug}`}
   data-template-card
-  data-inspect-template={template.id}
   data-id={template.id}
   data-title={template.title}
   data-price-type={template.price === 0 ? "free" : "premium"}
@@ -47,17 +106,17 @@ const spanClasses = isTopRowTwoCol
     class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
   ></span>
 
-  <article id={template.slug} class="flex h-full flex-col justify-between">
+  <article id={templateSlug} class="flex h-full flex-col justify-between">
     <div class="relative overflow-hidden border-b border-[var(--cv-border)] bg-[#090A0D]">
       <img
-        src={template.previewSvgDataUri}
-        alt={template.previewAlt}
+        src={previewSrc}
+        alt={previewAlt}
         width="800"
         height="450"
         fetchpriority={isPriorityImage ? "high" : undefined}
         loading={isPriorityImage ? undefined : "lazy"}
         decoding="async"
-        class="aspect-video w-full object-cover transition-transform duration-200 group-hover:scale-[1.015]"
+        class="aspect-video w-full object-cover object-top transition-transform duration-200 group-hover:scale-[1.015]"
       />
 
       <div class="pointer-events-none absolute top-3 left-3 z-10 flex items-center gap-1.5">
@@ -67,7 +126,7 @@ const spanClasses = isTopRowTwoCol
           </span>
         ) : (
           <span class="border border-[#A3AAB8]/60 bg-[#0A0B0E]/90 px-2 py-1 font-mono text-[11px] text-[#A3AAB8]">
-            {template.emdashCollection}
+            {collectionBadge}
           </span>
         )}
       </div>
@@ -91,7 +150,7 @@ const spanClasses = isTopRowTwoCol
           {template.title}
         </h3>
         <span class="inline-block shrink-0 border border-[var(--cv-border-strong)] bg-[var(--cv-surface-elevated)] px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider text-[var(--cv-text)]">
-          {template.styleTag}
+          {styleLabel}
         </span>
       </div>
       <p class="mt-1.5 text-sm leading-snug text-[var(--cv-text-muted)]">
@@ -106,7 +165,7 @@ const spanClasses = isTopRowTwoCol
           role="group"
           aria-label={`Color palette for ${template.title}`}
         >
-          {template.swatches.map((swatch) => (
+          {swatches.map((swatch) => (
             <span
               class="inline-block h-4 w-4 border border-[var(--cv-border-strong)]"
               style={`background-color: ${swatch.hex};`}
@@ -117,18 +176,18 @@ const spanClasses = isTopRowTwoCol
         </div>
         <span
           class="block min-w-0 flex-1 truncate font-mono text-xs text-[var(--cv-text-muted)]"
-          title={template.typefaces.join(" + ")}
+          title={typefaces.join(" + ")}
         >
-          {template.typefaces.join(" + ")}
+          {typefaces.join(" + ")}
         </span>
       </div>
 
       <div class="flex shrink-0 items-baseline gap-2 font-mono">
         <span class="text-sm font-bold text-[var(--cv-text)]">
-          {template.priceDisplay}
+          {priceDisplay}
         </span>
         <span class="text-xs text-[var(--cv-text-muted)]">
-          {template.pageCount} pages
+          {template.page_count} pages
         </span>
       </div>
     </div>

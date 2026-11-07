@@ -1,12 +1,19 @@
 export type PriceFilterKey = 'all' | 'free' | 'premium';
 
 export type IndustryFilterKey =
-  | 'all'
-  | 'studios-agencies'
-  | 'software-saas'
-  | 'personal-writing'
-  | 'architecture-hardware'
-  | 'editorial-docs';
+  | 'Trades & Industry'
+  | 'Health & Practice'
+  | 'Online Shop'
+  | 'Landing Page'
+  | 'Professional Services'
+  | 'Food & Drink'
+  | 'Studios & Agencies'
+  | 'Software & SaaS'
+  | 'Retail & Product'
+  | 'Travel & Leisure'
+  | 'Personal & Writing'
+  | 'Arts & Culture'
+  | 'Blog';
 
 export interface ColorSwatch {
   hex: string;
@@ -15,37 +22,43 @@ export interface ColorSwatch {
 
 export interface EmDashTemplateNode {
   id: string;
-  slug: string;
+  slug: string | null;
+  status: string;
   title: string;
   subtitle: string;
-  featured: boolean;
+  featured?: boolean;
   tier: 'PREMIUM' | 'FREE';
   price: number;
-  priceDisplay: string;
-  industry: Exclude<IndustryFilterKey, 'all'>;
-  industryLabel: string;
-  styleTag: string;
-  featureBullet: string;
-  swatches: [ColorSwatch, ColorSwatch, ColorSwatch];
-  typefaces: [string, string];
-  pageCount: number;
-  gridRowRole: 'top-2col' | 'body-3col';
-  emdashCollection: string;
-  domNodesCount: number;
-  cssPayloadKb: string;
-  routesIncluded: string[];
-  previewSvgDataUri: string;
-  previewAlt: string;
+  price_display?: string;
+  industry: Exclude<IndustryFilterKey, 'Trades & Industry'>;
+  industry_label?: string;
+  style: string;
+  style_tag?: string;
+  feature_bullet?: string;
+  swatches?: ColorSwatch[];
+  typefaces?: string[];
+  swatches_typefaces?: unknown;
+  page_count: number;
+  grid_row_role?: 'top-2col' | 'body-3col';
+  emdash_collection?: string;
+  dom_nodes_count?: number;
+  css_payload: string;
+  routes_included?: string[];
+  preview_image: Record<string, unknown>;
+  preview_alt?: string;
+  createdAt: Date;
+  updatedAt: Date;
+  publishedAt: Date | null;
 }
 
 export interface EmDashWhyBenefit {
   id: string;
-  codeRef: string;
+  code_ref: string;
   title: string;
   summary: string;
-  metricLabel: string;
-  metricValue: string;
-  specSnippet: string;
+  metric_label: string;
+  metric_value: string;
+  spec_snippet: string;
   emphasized?: boolean;
 }
 
@@ -57,9 +70,9 @@ export interface EmDashFaqItem {
 }
 
 export interface EmDashStorefrontPayload {
-  cmsVersion: string;
-  collectionSlug: string;
-  syncedAtIso: string;
+  cms_version: string;
+  collection_slug: string;
+  synced_at_iso: string;
   templates: EmDashTemplateNode[];
   benefits: EmDashWhyBenefit[];
   faqs: EmDashFaqItem[];
@@ -180,357 +193,511 @@ function buildBlueprintDataUri(config: {
   return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
 }
 
+const seedTimestamp = new Date('2026-10-29T00:45:00Z');
+
 export const emdashStorefrontData: EmDashStorefrontPayload = {
-  cmsVersion: 'EmDash CMS v3.8 (Content Layer API)',
-  collectionSlug: 'cv_storefront_templates',
-  syncedAtIso: '2026-10-29T00:45:00Z',
+  cms_version: 'EmDash CMS v3.8 (Content Layer API)',
+  collection_slug: 'cv_storefront_templates',
+  synced_at_iso: '2026-10-29T00:45:00Z',
   templates: [
     {
       id: 'tpl-vertex-01',
       slug: 'monolith-studio-os',
+      status: 'published',
       title: 'Monolith Studio OS',
       subtitle: 'Case-study ledger and interactive scope calculator for design-engineering agencies.',
       featured: true,
       tier: 'PREMIUM',
       price: 89,
-      priceDisplay: '$89',
-      industry: 'studios-agencies',
-      industryLabel: 'Studios & agencies',
-      styleTag: 'LOUD',
-      featureBullet: 'CSS Subgrid + View Transitions',
+      price_display: '$89',
+      industry: 'Studios & Agencies',
+      industry_label: 'Studios & Agencies',
+      style: 'LOUD',
+      style_tag: 'LOUD',
+      feature_bullet: 'CSS Subgrid + View Transitions',
       swatches: [
         { hex: '#0A0B0E', label: 'Obsidian #0A0B0E' },
         { hex: '#FF6A1A', label: 'Signal Orange #FF6A1A' },
         { hex: '#F5F6F8', label: 'Chalk White #F5F6F8' },
       ],
       typefaces: ['Plus Jakarta Sans', 'JetBrains Mono'],
-      pageCount: 16,
-      gridRowRole: 'top-2col',
-      emdashCollection: 'agency_case_studies',
-      domNodesCount: 342,
-      cssPayloadKb: '7.4 KB',
-      routesIncluded: ['/', '/work/[slug]', '/scope-estimator', '/colophon', '/changelog'],
-      previewAlt: 'Wireframe blueprint of Monolith Studio OS showing split hero and case-study grid.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '01',
-        bg: '#090A0D',
-        panel: '#12151C',
-        accent: '#FF6A1A',
-        secondary: '#3A404D',
-        layoutKind: 'split-hero',
-        coordLabel: 'VERTEX // 01-A',
-        headerText: '16 ROUTES // SUBGRID',
-        metricText: '7.4 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#0A0B0E', label: 'Obsidian #0A0B0E' },
+          { hex: '#FF6A1A', label: 'Signal Orange #FF6A1A' },
+          { hex: '#F5F6F8', label: 'Chalk White #F5F6F8' },
+        ],
+        typefaces: ['Plus Jakarta Sans', 'JetBrains Mono'],
+      },
+      page_count: 16,
+      grid_row_role: 'top-2col',
+      emdash_collection: 'agency_case_studies',
+      dom_nodes_count: 342,
+      css_payload: '7.4 KB',
+      routes_included: ['/', '/work/[slug]', '/scope-estimator', '/colophon', '/changelog'],
+      preview_alt: 'Wireframe blueprint of Monolith Studio OS showing split hero and case-study grid.',
+      preview_image: {
+        id: 'media-vertex-01',
+        src: buildBlueprintDataUri({
+          id: '01',
+          bg: '#090A0D',
+          panel: '#12151C',
+          accent: '#FF6A1A',
+          secondary: '#3A404D',
+          layoutKind: 'split-hero',
+          coordLabel: 'VERTEX // 01-A',
+          headerText: '16 ROUTES // SUBGRID',
+          metricText: '7.4 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Monolith Studio OS showing split hero and case-study grid.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
     {
       id: 'tpl-vertex-02',
       slug: 'vector-cloud-control',
+      status: 'published',
       title: 'Vector Cloud Control',
       subtitle: 'Developer infrastructure storefront with live pricing matrices and changelog feed.',
       featured: true,
       tier: 'PREMIUM',
       price: 95,
-      priceDisplay: '$95',
-      industry: 'software-saas',
-      industryLabel: 'Software & SaaS',
-      styleTag: 'DENSE',
-      featureBullet: 'Typed EmDash Pricing Matrix',
+      price_display: '$95',
+      industry: 'Software & SaaS',
+      industry_label: 'Software & SaaS',
+      style: 'DENSE',
+      style_tag: 'DENSE',
+      feature_bullet: 'Typed EmDash Pricing Matrix',
       swatches: [
         { hex: '#0B0E14', label: 'Deep Slate #0B0E14' },
         { hex: '#22D3EE', label: 'Cyan Trace #22D3EE' },
         { hex: '#E2E8F0', label: 'Zinc Light #E2E8F0' },
       ],
       typefaces: ['Space Grotesk', 'IBM Plex Mono'],
-      pageCount: 22,
-      gridRowRole: 'top-2col',
-      emdashCollection: 'saas_release_matrix',
-      domNodesCount: 418,
-      cssPayloadKb: '8.9 KB',
-      routesIncluded: ['/', '/pricing', '/benchmarks', '/docs/[...slug]', '/status', '/security'],
-      previewAlt: 'Wireframe blueprint of Vector Cloud Control showing telemetry graph and sidebar layout.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '02',
-        bg: '#080B10',
-        panel: '#101620',
-        accent: '#22D3EE',
-        secondary: '#334155',
-        layoutKind: 'telemetry-grid',
-        coordLabel: 'VERTEX // 02-B',
-        headerText: '22 ROUTES // TELEMETRY',
-        metricText: '8.9 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#0B0E14', label: 'Deep Slate #0B0E14' },
+          { hex: '#22D3EE', label: 'Cyan Trace #22D3EE' },
+          { hex: '#E2E8F0', label: 'Zinc Light #E2E8F0' },
+        ],
+        typefaces: ['Space Grotesk', 'IBM Plex Mono'],
+      },
+      page_count: 22,
+      grid_row_role: 'top-2col',
+      emdash_collection: 'saas_release_matrix',
+      dom_nodes_count: 418,
+      css_payload: '8.9 KB',
+      routes_included: ['/', '/pricing', '/benchmarks', '/docs/[...slug]', '/status', '/security'],
+      preview_alt: 'Wireframe blueprint of Vector Cloud Control showing telemetry graph and sidebar layout.',
+      preview_image: {
+        id: 'media-vertex-02',
+        src: buildBlueprintDataUri({
+          id: '02',
+          bg: '#080B10',
+          panel: '#101620',
+          accent: '#22D3EE',
+          secondary: '#334155',
+          layoutKind: 'telemetry-grid',
+          coordLabel: 'VERTEX // 02-B',
+          headerText: '22 ROUTES // TELEMETRY',
+          metricText: '8.9 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Vector Cloud Control showing telemetry graph and sidebar layout.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
     {
       id: 'tpl-vertex-03',
       slug: 'kinetix-field-notes',
+      status: 'published',
       title: 'Kinetix Field Notes',
       subtitle: 'Footnote-first technical notebook with bidirectional citations and local search index.',
       featured: false,
       tier: 'FREE',
       price: 0,
-      priceDisplay: '$0',
-      industry: 'personal-writing',
-      industryLabel: 'Personal & writing',
-      styleTag: 'INDEX',
-      featureBullet: 'Zero-JS Sidenote Layout',
+      price_display: '$0',
+      industry: 'Personal & Writing',
+      industry_label: 'Personal & Writing',
+      style: 'INDEX',
+      style_tag: 'INDEX',
+      feature_bullet: 'Zero-JS Sidenote Layout',
       swatches: [
         { hex: '#121316', label: 'Graphite #121316' },
         { hex: '#FACC15', label: 'Amber Marker #FACC15' },
         { hex: '#F4F4F5', label: 'Paper White #F4F4F5' },
       ],
       typefaces: ['Newsreader', 'JetBrains Mono'],
-      pageCount: 7,
-      gridRowRole: 'body-3col',
-      emdashCollection: 'essay_backlinks',
-      domNodesCount: 194,
-      cssPayloadKb: '4.2 KB',
-      routesIncluded: ['/', '/notes/[slug]', '/topics', '/rss.xml'],
-      previewAlt: 'Wireframe blueprint of Kinetix Field Notes showing indexed rows and sidenote column.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '03',
-        bg: '#0D0E11',
-        panel: '#16181D',
-        accent: '#FACC15',
-        secondary: '#3F3F46',
-        layoutKind: 'editorial-index',
-        coordLabel: 'VERTEX // 03-C',
-        headerText: '07 ROUTES // ZERO-JS',
-        metricText: '4.2 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#121316', label: 'Graphite #121316' },
+          { hex: '#FACC15', label: 'Amber Marker #FACC15' },
+          { hex: '#F4F4F5', label: 'Paper White #F4F4F5' },
+        ],
+        typefaces: ['Newsreader', 'JetBrains Mono'],
+      },
+      page_count: 7,
+      grid_row_role: 'body-3col',
+      emdash_collection: 'essay_backlinks',
+      dom_nodes_count: 194,
+      css_payload: '4.2 KB',
+      routes_included: ['/', '/notes/[slug]', '/topics', '/rss.xml'],
+      preview_alt: 'Wireframe blueprint of Kinetix Field Notes showing indexed rows and sidenote column.',
+      preview_image: {
+        id: 'media-vertex-03',
+        src: buildBlueprintDataUri({
+          id: '03',
+          bg: '#0D0E11',
+          panel: '#16181D',
+          accent: '#FACC15',
+          secondary: '#3F3F46',
+          layoutKind: 'editorial-index',
+          coordLabel: 'VERTEX // 03-C',
+          headerText: '07 ROUTES // ZERO-JS',
+          metricText: '4.2 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Kinetix Field Notes showing indexed rows and sidenote column.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
     {
       id: 'tpl-vertex-04',
       slug: 'datum-hardware-spec',
+      status: 'published',
       title: 'Datum Hardware Spec',
       subtitle: 'Industrial datasheet catalog for audio synthesizers, PCB modules, and robotics kits.',
       featured: true,
       tier: 'PREMIUM',
       price: 79,
-      priceDisplay: '$79',
-      industry: 'architecture-hardware',
-      industryLabel: 'Architecture & hardware',
-      styleTag: 'SWISS',
-      featureBullet: 'SVG Tolerance Callout Tables',
+      price_display: '$79',
+      industry: 'Retail & Product',
+      industry_label: 'Retail & Product',
+      style: 'SWISS',
+      style_tag: 'SWISS',
+      feature_bullet: 'SVG Tolerance Callout Tables',
       swatches: [
         { hex: '#141413', label: 'Anodized Black #141413' },
         { hex: '#FF6A1A', label: 'International Orange #FF6A1A' },
         { hex: '#D6D3CD', label: 'Raw Aluminum #D6D3CD' },
       ],
       typefaces: ['Archivo', 'Commit Mono'],
-      pageCount: 14,
-      gridRowRole: 'body-3col',
-      emdashCollection: 'hardware_datasheets',
-      domNodesCount: 310,
-      cssPayloadKb: '6.8 KB',
-      routesIncluded: ['/', '/modules/[id]', '/bom-table', '/schematics', '/dealers'],
-      previewAlt: 'Wireframe blueprint of Datum Hardware Spec showing three-column tolerance specification sheet.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '04',
-        bg: '#0E0E0D',
-        panel: '#181816',
-        accent: '#FF6A1A',
-        secondary: '#44403C',
-        layoutKind: 'spec-sheet',
-        coordLabel: 'VERTEX // 04-D',
-        headerText: '14 ROUTES // DATASHEET',
-        metricText: '6.8 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#141413', label: 'Anodized Black #141413' },
+          { hex: '#FF6A1A', label: 'International Orange #FF6A1A' },
+          { hex: '#D6D3CD', label: 'Raw Aluminum #D6D3CD' },
+        ],
+        typefaces: ['Archivo', 'Commit Mono'],
+      },
+      page_count: 14,
+      grid_row_role: 'body-3col',
+      emdash_collection: 'hardware_datasheets',
+      dom_nodes_count: 310,
+      css_payload: '6.8 KB',
+      routes_included: ['/', '/modules/[id]', '/bom-table', '/schematics', '/dealers'],
+      preview_alt: 'Wireframe blueprint of Datum Hardware Spec showing three-column tolerance specification sheet.',
+      preview_image: {
+        id: 'media-vertex-04',
+        src: buildBlueprintDataUri({
+          id: '04',
+          bg: '#0E0E0D',
+          panel: '#181816',
+          accent: '#FF6A1A',
+          secondary: '#44403C',
+          layoutKind: 'spec-sheet',
+          coordLabel: 'VERTEX // 04-D',
+          headerText: '14 ROUTES // DATASHEET',
+          metricText: '6.8 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Datum Hardware Spec showing three-column tolerance specification sheet.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
     {
       id: 'tpl-vertex-05',
       slug: 'atelier-grid-archive',
+      status: 'published',
       title: 'Atelier Grid Archive',
       subtitle: 'Exhibition index and architectural monograph system with keyboard-driven lightbox.',
       featured: false,
       tier: 'PREMIUM',
       price: 69,
-      priceDisplay: '$69',
-      industry: 'studios-agencies',
-      industryLabel: 'Studios & agencies',
-      styleTag: 'BRUTAL',
-      featureBullet: 'Keyboard Lightbox Web Element',
+      price_display: '$69',
+      industry: 'Studios & Agencies',
+      industry_label: 'Studios & Agencies',
+      style: 'BRUTAL',
+      style_tag: 'BRUTAL',
+      feature_bullet: 'Keyboard Lightbox Web Element',
       swatches: [
         { hex: '#09090B', label: 'Carbon #09090B' },
         { hex: '#A3E635', label: 'Acid Lime #A3E635' },
         { hex: '#FAFAFA', label: 'Gallery White #FAFAFA' },
       ],
       typefaces: ['Syne', 'Space Mono'],
-      pageCount: 12,
-      gridRowRole: 'body-3col',
-      emdashCollection: 'project_monographs',
-      domNodesCount: 276,
-      cssPayloadKb: '5.9 KB',
-      routesIncluded: ['/', '/archive', '/project/[slug]', '/index-table', '/contact'],
-      previewAlt: 'Wireframe blueprint of Atelier Grid Archive showing studio reel and monograph index.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '05',
-        bg: '#09090B',
-        panel: '#141418',
-        accent: '#A3E635',
-        secondary: '#3F3F46',
-        layoutKind: 'studio-reel',
-        coordLabel: 'VERTEX // 05-E',
-        headerText: '12 ROUTES // ARCHIVE',
-        metricText: '5.9 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#09090B', label: 'Carbon #09090B' },
+          { hex: '#A3E635', label: 'Acid Lime #A3E635' },
+          { hex: '#FAFAFA', label: 'Gallery White #FAFAFA' },
+        ],
+        typefaces: ['Syne', 'Space Mono'],
+      },
+      page_count: 12,
+      grid_row_role: 'body-3col',
+      emdash_collection: 'project_monographs',
+      dom_nodes_count: 276,
+      css_payload: '5.9 KB',
+      routes_included: ['/', '/archive', '/project/[slug]', '/index-table', '/contact'],
+      preview_alt: 'Wireframe blueprint of Atelier Grid Archive showing studio reel and monograph index.',
+      preview_image: {
+        id: 'media-vertex-05',
+        src: buildBlueprintDataUri({
+          id: '05',
+          bg: '#09090B',
+          panel: '#141418',
+          accent: '#A3E635',
+          secondary: '#3F3F46',
+          layoutKind: 'studio-reel',
+          coordLabel: 'VERTEX // 05-E',
+          headerText: '12 ROUTES // ARCHIVE',
+          metricText: '5.9 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Atelier Grid Archive showing studio reel and monograph index.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
     {
       id: 'tpl-vertex-06',
       slug: 'protocol-rfc-manual',
+      status: 'published',
       title: 'Protocol RFC Manual',
       subtitle: 'Specification-grade documentation portal with versioned EmDash schema diffs.',
       featured: false,
       tier: 'FREE',
       price: 0,
-      priceDisplay: '$0',
-      industry: 'editorial-docs',
-      industryLabel: 'Editorial & docs',
-      styleTag: 'MONO',
-      featureBullet: 'Multi-Version Schema Diffs',
+      price_display: '$0',
+      industry: 'Blog',
+      industry_label: 'Blog',
+      style: 'MONO',
+      style_tag: 'MONO',
+      feature_bullet: 'Multi-Version Schema Diffs',
       swatches: [
         { hex: '#0C0F14', label: 'Terminal Ink #0C0F14' },
         { hex: '#38BDF8', label: 'Signal Sky #38BDF8' },
         { hex: '#E2E8F0', label: 'Manual Paper #E2E8F0' },
       ],
       typefaces: ['Plus Jakarta Sans', 'Fira Code'],
-      pageCount: 11,
-      gridRowRole: 'body-3col',
-      emdashCollection: 'rfc_specifications',
-      domNodesCount: 260,
-      cssPayloadKb: '5.1 KB',
-      routesIncluded: ['/', '/rfc/[number]', '/diff/[v1]/[v2]', '/glossary'],
-      previewAlt: 'Wireframe blueprint of Protocol RFC Manual showing indexed RFC rows.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '06',
-        bg: '#0A0D12',
-        panel: '#131822',
-        accent: '#38BDF8',
-        secondary: '#334155',
-        layoutKind: 'editorial-index',
-        coordLabel: 'VERTEX // 06-F',
-        headerText: '11 ROUTES // RFC DOCS',
-        metricText: '5.1 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#0C0F14', label: 'Terminal Ink #0C0F14' },
+          { hex: '#38BDF8', label: 'Signal Sky #38BDF8' },
+          { hex: '#E2E8F0', label: 'Manual Paper #E2E8F0' },
+        ],
+        typefaces: ['Plus Jakarta Sans', 'Fira Code'],
+      },
+      page_count: 11,
+      grid_row_role: 'body-3col',
+      emdash_collection: 'rfc_specifications',
+      dom_nodes_count: 260,
+      css_payload: '5.1 KB',
+      routes_included: ['/', '/rfc/[number]', '/diff/[v1]/[v2]', '/glossary'],
+      preview_alt: 'Wireframe blueprint of Protocol RFC Manual showing indexed RFC rows.',
+      preview_image: {
+        id: 'media-vertex-06',
+        src: buildBlueprintDataUri({
+          id: '06',
+          bg: '#0A0D12',
+          panel: '#131822',
+          accent: '#38BDF8',
+          secondary: '#334155',
+          layoutKind: 'editorial-index',
+          coordLabel: 'VERTEX // 06-F',
+          headerText: '11 ROUTES // RFC DOCS',
+          metricText: '5.1 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Protocol RFC Manual showing indexed RFC rows.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
     {
       id: 'tpl-vertex-07',
       slug: 'chronicle-release-wire',
+      status: 'published',
       title: 'Chronicle Release Wire',
       subtitle: 'High-frequency engineering changelog and incident postmortem publishing system.',
       featured: true,
       tier: 'PREMIUM',
       price: 75,
-      priceDisplay: '$75',
-      industry: 'software-saas',
-      industryLabel: 'Software & SaaS',
-      styleTag: 'RAW',
-      featureBullet: 'RSS + JSON Feed Auto-Compiler',
+      price_display: '$75',
+      industry: 'Software & SaaS',
+      industry_label: 'Software & SaaS',
+      style: 'RAW',
+      style_tag: 'RAW',
+      feature_bullet: 'RSS + JSON Feed Auto-Compiler',
       swatches: [
         { hex: '#0D0E12', label: 'Bunker #0D0E12' },
         { hex: '#FB7185', label: 'Coral Trace #FB7185' },
         { hex: '#F1F5F9', label: 'Ash White #F1F5F9' },
       ],
       typefaces: ['Instrument Sans', 'JetBrains Mono'],
-      pageCount: 10,
-      gridRowRole: 'body-3col',
-      emdashCollection: 'changelog_entries',
-      domNodesCount: 228,
-      cssPayloadKb: '4.9 KB',
-      routesIncluded: ['/', '/releases/[version]', '/postmortems', '/feed.json'],
-      previewAlt: 'Wireframe blueprint of Chronicle Release Wire showing release timeline and telemetry.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '07',
-        bg: '#0B0C10',
-        panel: '#15171F',
-        accent: '#FB7185',
-        secondary: '#334155',
-        layoutKind: 'telemetry-grid',
-        coordLabel: 'VERTEX // 07-G',
-        headerText: '10 ROUTES // CHANGELOG',
-        metricText: '4.9 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#0D0E12', label: 'Bunker #0D0E12' },
+          { hex: '#FB7185', label: 'Coral Trace #FB7185' },
+          { hex: '#F1F5F9', label: 'Ash White #F1F5F9' },
+        ],
+        typefaces: ['Instrument Sans', 'JetBrains Mono'],
+      },
+      page_count: 10,
+      grid_row_role: 'body-3col',
+      emdash_collection: 'changelog_entries',
+      dom_nodes_count: 228,
+      css_payload: '4.9 KB',
+      routes_included: ['/', '/releases/[version]', '/postmortems', '/feed.json'],
+      preview_alt: 'Wireframe blueprint of Chronicle Release Wire showing release timeline and telemetry.',
+      preview_image: {
+        id: 'media-vertex-07',
+        src: buildBlueprintDataUri({
+          id: '07',
+          bg: '#0B0C10',
+          panel: '#15171F',
+          accent: '#FB7185',
+          secondary: '#334155',
+          layoutKind: 'telemetry-grid',
+          coordLabel: 'VERTEX // 07-G',
+          headerText: '10 ROUTES // CHANGELOG',
+          metricText: '4.9 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Chronicle Release Wire showing release timeline and telemetry.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
     {
       id: 'tpl-vertex-08',
       slug: 'paragon-foundry-specimen',
+      status: 'published',
       title: 'Paragon Foundry Specimen',
       subtitle: 'Interactive OpenType variable axis tester and license tier calculator for type studios.',
       featured: false,
       tier: 'PREMIUM',
       price: 85,
-      priceDisplay: '$85',
-      industry: 'studios-agencies',
-      industryLabel: 'Studios & agencies',
-      styleTag: 'LOUD',
-      featureBullet: 'Scoped Variable Font Inspector',
+      price_display: '$85',
+      industry: 'Studios & Agencies',
+      industry_label: 'Studios & Agencies',
+      style: 'LOUD',
+      style_tag: 'LOUD',
+      feature_bullet: 'Scoped Variable Font Inspector',
       swatches: [
         { hex: '#0B0B0C', label: 'Lead Black #0B0B0C' },
         { hex: '#FF6A1A', label: 'Signal Orange #FF6A1A' },
         { hex: '#ECEBE6', label: 'Specimen Warm #ECEBE6' },
       ],
       typefaces: ['Plus Jakarta Sans', 'JetBrains Mono'],
-      pageCount: 15,
-      gridRowRole: 'body-3col',
-      emdashCollection: 'typeface_specimens',
-      domNodesCount: 305,
-      cssPayloadKb: '6.3 KB',
-      routesIncluded: ['/', '/typefaces/[slug]', '/glyph-table', '/licensing', '/cart'],
-      previewAlt: 'Wireframe blueprint of Paragon Foundry Specimen showing variable axis tester.',
-      previewSvgDataUri: buildBlueprintDataUri({
-        id: '08',
-        bg: '#09090B',
-        panel: '#141417',
-        accent: '#FF6A1A',
-        secondary: '#3F3F46',
-        layoutKind: 'spec-sheet',
-        coordLabel: 'VERTEX // 08-H',
-        headerText: '15 ROUTES // OPENTYPE',
-        metricText: '6.3 KB CSS',
-      }),
+      swatches_typefaces: {
+        swatches: [
+          { hex: '#0B0B0C', label: 'Lead Black #0B0B0C' },
+          { hex: '#FF6A1A', label: 'Signal Orange #FF6A1A' },
+          { hex: '#ECEBE6', label: 'Specimen Warm #ECEBE6' },
+        ],
+        typefaces: ['Plus Jakarta Sans', 'JetBrains Mono'],
+      },
+      page_count: 15,
+      grid_row_role: 'body-3col',
+      emdash_collection: 'typeface_specimens',
+      dom_nodes_count: 305,
+      css_payload: '6.3 KB',
+      routes_included: ['/', '/typefaces/[slug]', '/glyph-table', '/licensing', '/cart'],
+      preview_alt: 'Wireframe blueprint of Paragon Foundry Specimen showing variable axis tester.',
+      preview_image: {
+        id: 'media-vertex-08',
+        src: buildBlueprintDataUri({
+          id: '08',
+          bg: '#09090B',
+          panel: '#141417',
+          accent: '#FF6A1A',
+          secondary: '#3F3F46',
+          layoutKind: 'spec-sheet',
+          coordLabel: 'VERTEX // 08-H',
+          headerText: '15 ROUTES // OPENTYPE',
+          metricText: '6.3 KB CSS',
+        }),
+        alt: 'Wireframe blueprint of Paragon Foundry Specimen showing variable axis tester.',
+        width: 800,
+        height: 500,
+      },
+      createdAt: seedTimestamp,
+      updatedAt: seedTimestamp,
+      publishedAt: seedTimestamp,
     },
   ],
   benefits: [
     {
       id: 'why-zero-requests',
-      codeRef: 'ARCH // 01',
+      code_ref: 'ARCH // 01',
       title: 'Zero Third-Party Requests',
       summary:
         'Every template compiles with zero external CDN calls, zero tracking pixels, and zero runtime font fetches. Assets resolve strictly from your origin.',
-      metricLabel: 'EXTERNAL REQUESTS',
-      metricValue: '0 HTTP calls',
-      specSnippet: 'Content-Security-Policy: default-src \'self\'; font-src \'self\'; connect-src \'self\'',
+      metric_label: 'EXTERNAL REQUESTS',
+      metric_value: '0 HTTP calls',
+      spec_snippet: 'Content-Security-Policy: default-src \'self\'; font-src \'self\'; connect-src \'self\'',
       emphasized: true,
     },
     {
       id: 'why-custom-elements',
-      codeRef: 'ARCH // 02',
+      code_ref: 'ARCH // 02',
       title: 'Scoped Custom Elements',
       summary:
         'Interactive islands (accordions, filter matrices, lightboxes, and cart drawers) mount as native Custom Web Elements without shipping a 45 KB UI runtime.',
-      metricLabel: 'CLIENT HYDRATION',
-      metricValue: '< 3.8 KB gzip',
-      specSnippet: 'customElements.define(\'cv-storefront\', CvStorefrontElement)',
+      metric_label: 'CLIENT HYDRATION',
+      metric_value: '< 3.8 KB gzip',
+      spec_snippet: 'customElements.define(\'cv-storefront\', CvStorefrontElement)',
     },
     {
       id: 'why-gdpr-typography',
-      codeRef: 'ARCH // 03',
+      code_ref: 'ARCH // 03',
       title: 'GDPR Compliant Typography',
       summary:
         'Variable WOFF2 font subsets are self-hosted with pre-computed fallback metrics, preventing IP leakage to third-party font servers and eliminating layout shift.',
-      metricLabel: 'FONT SUBSETTING',
-      metricValue: 'Self-hosted WOFF2',
-      specSnippet: 'font-display: swap; size-adjust: 100.4%; ascent-override: 94%',
+      metric_label: 'FONT SUBSETTING',
+      metric_value: 'Self-hosted WOFF2',
+      spec_snippet: 'font-display: swap; size-adjust: 100.4%; ascent-override: 94%',
     },
     {
       id: 'why-emdash-schema',
-      codeRef: 'ARCH // 04',
+      code_ref: 'ARCH // 04',
       title: 'Typed EmDash Content Layer',
       summary:
         'Each template ships with strict EmDash CMS collection schemas and build-time TypeScript validation so malformed CMS payloads fail before deployment.',
-      metricLabel: 'SCHEMA VALIDATION',
-      metricValue: '100% Typed AST',
-      specSnippet: 'defineCollection({ loader: emdashLoader({ collection: "cv_templates" }) })',
+      metric_label: 'SCHEMA VALIDATION',
+      metric_value: '100% Typed AST',
+      spec_snippet: 'defineCollection({ loader: emdashLoader({ collection: "cv_templates" }) })',
     },
   ],
   faqs: [

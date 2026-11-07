@@ -1,58 +1,41 @@
 ---
+import { getLiveCollection } from "astro:content";
 import "../styles/global.css";
 import NavBar from "../components/NavBar.astro";
 import CartDrawer from "../components/CartDrawer.astro";
+import TemplateCard from "../components/TemplateCard.astro";
 import {
   emdashStorefrontData,
   totalCatalogRetailValue,
   bundleDiscountPrice,
 } from "../data/emdash-cms";
 
-const { templates, benefits, faqs, cmsVersion } = emdashStorefrontData;
+const rawTemplates = await getLiveCollection("templates", {
+  type: "cv_storefront_templates",
+});
+const templateEntries = Array.isArray(rawTemplates)
+  ? rawTemplates
+  : (rawTemplates.entries ?? []);
+const templates = templateEntries.map((t) => t.data);
+const { benefits, faqs, cms_version } = emdashStorefrontData;
 
 const totalTemplatesCount = templates.length;
 
 const sectorCategories = [
-  { key: "trades-industry", label: "Trades & industry", count: 14 },
-  { key: "health-practice", label: "Health & practice", count: 8 },
-  { key: "online-shop", label: "Online shop", count: 7 },
-  { key: "landing-page", label: "Landing page", count: 7 },
-  { key: "professional-services", label: "Professional services", count: 7 },
-  { key: "food-drink", label: "Food & drink", count: 6 },
-  { key: "studios-agencies", label: "Studios & agencies", count: 6 },
-  { key: "software-saas", label: "Software & SaaS", count: 6 },
-  { key: "retail-product", label: "Retail & product", count: 5 },
-  { key: "travel-leisure", label: "Travel & leisure", count: 5 },
-  { key: "personal-writing", label: "Personal & writing", count: 4 },
-  { key: "arts-culture", label: "Arts & culture", count: 3 },
-  { key: "blog", label: "Blog", count: 3 },
+  { key: "Trades & Industry", label: "Trades & Industry", count: 14 },
+  { key: "Health & Practice", label: "Health & Practice", count: 8 },
+  { key: "Online Shop", label: "Online Shop", count: 7 },
+  { key: "Landing Page", label: "Landing Page", count: 7 },
+  { key: "Professional Services", label: "Professional Services", count: 7 },
+  { key: "Food & Drink", label: "Food & Drink", count: 6 },
+  { key: "Studios & Agencies", label: "Studios & Agencies", count: 6 },
+  { key: "Software & SaaS", label: "Software & SaaS", count: 6 },
+  { key: "Retail & Product", label: "Retail & Product", count: 5 },
+  { key: "Travel & Leisure", label: "Travel & Leisure", count: 5 },
+  { key: "Personal & Writing", label: "Personal & Writing", count: 4 },
+  { key: "Arts & Culture", label: "Arts & Culture", count: 3 },
+  { key: "Blog", label: "Blog", count: 3 },
 ];
-
-const specModalPayload = templates.map(
-  ({
-    id,
-    title,
-    subtitle,
-    emdashCollection,
-    styleTag,
-    cssPayloadKb,
-    domNodesCount,
-    routesIncluded,
-    price,
-    priceDisplay,
-  }) => ({
-    id,
-    title,
-    subtitle,
-    emdashCollection,
-    styleTag,
-    cssPayloadKb,
-    domNodesCount,
-    routesIncluded,
-    price,
-    priceDisplay,
-  }),
-);
 ---
 
 <!doctype html>
@@ -369,231 +352,16 @@ const specModalPayload = templates.map(
                     class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-6 lg:gap-6"
                   >
                     {templates.map((template, index) => (
-                      <a
-                        href={`#${template.slug}`}
-                        data-template-card
-                        data-inspect-template={template.id}
-                        data-id={template.id}
-                        data-title={template.title}
-                        data-price-type={
-                          template.price === 0 ? "free" : "premium"
-                        }
-                        data-price-value={template.price}
-                        data-industry={template.industry}
-                        data-grid-role={index < 2 ? "top-2col" : "body-3col"}
-                        class={`cv-vertex-card group relative block border border-gray-800 bg-[var(--cv-surface)] ${
-                          index < 2
-                            ? "col-span-1 sm:col-span-2 lg:col-span-3"
-                            : "col-span-1 sm:col-span-1 lg:col-span-2"
-                        }`}
-                      >
-                        <span
-                          aria-hidden="true"
-                          class="pointer-events-none absolute top-0 left-0 z-20 -mt-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                        ></span>
-                        <span
-                          aria-hidden="true"
-                          class="pointer-events-none absolute top-0 right-0 z-20 -mt-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                        ></span>
-                        <span
-                          aria-hidden="true"
-                          class="pointer-events-none absolute bottom-0 left-0 z-20 -mb-1 -ml-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                        ></span>
-                        <span
-                          aria-hidden="true"
-                          class="pointer-events-none absolute bottom-0 right-0 z-20 -mb-1 -mr-1 h-2 w-2 bg-[var(--cv-bg)] border border-orange-500"
-                        ></span>
-
-                        <article
-                          id={template.slug}
-                          class="flex h-full flex-col justify-between"
-                        >
-                          <div class="relative overflow-hidden border-b border-[var(--cv-border)] bg-[#090A0D]">
-                            <img
-                              src={template.previewSvgDataUri}
-                              alt={template.previewAlt}
-                              width="800"
-                              height="450"
-                              fetchpriority={index === 0 ? "high" : undefined}
-                              loading={index === 0 ? undefined : "lazy"}
-                              decoding="async"
-                              class="aspect-video w-full object-cover transition-transform duration-200 group-hover:scale-[1.015]"
-                            />
-
-                            <div class="pointer-events-none absolute top-3 left-3 z-10 flex items-center gap-1.5">
-                              {template.featured ? (
-                                <span class="border border-[#F5F6F8] bg-[#0A0B0E]/90 px-2.5 py-1 font-mono text-[11px] font-semibold tracking-wider text-[#F5F6F8]">
-                                  FEATURED
-                                </span>
-                              ) : (
-                                <span class="border border-[#A3AAB8]/60 bg-[#0A0B0E]/90 px-2 py-1 font-mono text-[11px] text-[#A3AAB8]">
-                                  {template.emdashCollection}
-                                </span>
-                              )}
-                            </div>
-
-                            <div class="pointer-events-none absolute top-3 right-3 z-10">
-                              {template.tier === "PREMIUM" ? (
-                                <span class="inline-block bg-[#FF6A1A] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]">
-                                  PREMIUM
-                                </span>
-                              ) : (
-                                <span class="inline-block bg-[#F5F6F8] px-2.5 py-1 font-mono text-[11px] font-bold tracking-wider text-[#0A0B0E]">
-                                  FREE
-                                </span>
-                              )}
-                            </div>
-                          </div>
-
-                          <div class="flex flex-1 flex-col justify-between border-b border-dashed border-[var(--cv-border)] px-4 py-3.5">
-                            <div class="flex items-start justify-between gap-3">
-                              <h3 class="text-base font-bold tracking-tight text-[var(--cv-text)] group-hover:text-[var(--cv-accent)] transition-colors">
-                                {template.title}
-                              </h3>
-                              <span class="inline-block shrink-0 border border-[var(--cv-border-strong)] bg-[var(--cv-surface-elevated)] px-2 py-0.5 font-mono text-[11px] font-bold tracking-wider text-[var(--cv-text)]">
-                                {template.styleTag}
-                              </span>
-                            </div>
-                            <p class="mt-1.5 text-sm leading-snug text-[var(--cv-text-muted)]">
-                              {template.subtitle}
-                            </p>
-                          </div>
-
-                          <div class="flex items-center justify-between gap-3 bg-[var(--cv-surface)] px-4 py-3 min-w-0">
-                            <div class="flex items-center gap-2 min-w-0 flex-1 overflow-hidden">
-                              <div
-                                class="flex shrink-0 items-center -space-x-1"
-                                role="group"
-                                aria-label={`Color palette for ${template.title}`}
-                              >
-                                {template.swatches.map((swatch) => (
-                                  <span
-                                    class="inline-block h-4 w-4 border border-[var(--cv-border-strong)]"
-                                    style={`background-color: ${swatch.hex};`}
-                                    title={swatch.label}
-                                    aria-label={swatch.label}
-                                  />
-                                ))}
-                              </div>
-                              <span
-                                class="block min-w-0 flex-1 truncate font-mono text-xs text-[var(--cv-text-muted)]"
-                                title={template.typefaces.join(" + ")}
-                              >
-                                {template.typefaces.join(" + ")}
-                              </span>
-                            </div>
-
-                            <div class="flex shrink-0 items-baseline gap-2 font-mono">
-                              <span class="text-sm font-bold text-[var(--cv-text)]">
-                                {template.priceDisplay}
-                              </span>
-                              <span class="text-xs text-[var(--cv-text-muted)]">
-                                {template.pageCount} pages
-                              </span>
-                            </div>
-                          </div>
-                        </article>
-                      </a>
+                      <TemplateCard
+                        template={template}
+                        isTopRowTwoCol={index < 2}
+                        isPriorityImage={index === 0}
+                      />
                     ))}
                   </div>
                 </cv-grid-reveal>
               </div>
             </div>
-
-            <dialog
-              data-spec-dialog
-              aria-labelledby="spec-dialog-title"
-              class="m-auto w-full max-w-xl border border-[var(--cv-border-strong)] bg-[var(--cv-surface)] p-0 text-[var(--cv-text)] backdrop:bg-black/75"
-            >
-              <div class="p-6">
-                <div class="flex items-start justify-between gap-4 border-b border-dashed border-[var(--cv-border)] pb-4">
-                  <div>
-                    <p
-                      data-spec-collection
-                      class="font-mono text-xs font-semibold text-[var(--cv-accent)]"
-                    >
-                      EMDASH SCHEMA SPECIFICATION
-                    </p>
-                    <h3
-                      id="spec-dialog-title"
-                      data-spec-title
-                      class="mt-1 text-xl font-bold"
-                    >
-                      Template Specification
-                    </h3>
-                  </div>
-                  <button
-                    type="button"
-                    data-close-spec-dialog
-                    aria-label="Close specification dialog"
-                    class="min-h-11 min-w-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-3 py-1.5 font-mono text-xs font-bold text-[var(--cv-text)] hover:border-[var(--cv-accent)]"
-                  >
-                    ESC
-                  </button>
-                </div>
-
-                <p
-                  data-spec-subtitle
-                  class="mt-4 text-sm text-[var(--cv-text-muted)]"
-                ></p>
-
-                <dl class="mt-5 grid grid-cols-2 gap-3 border-t border-b border-dashed border-[var(--cv-border)] py-4 font-mono text-xs sm:grid-cols-3">
-                  <div>
-                    <dt class="text-[var(--cv-text-muted)]">ASTRO ENGINE</dt>
-                    <dd class="mt-1 font-bold text-[var(--cv-text)]">
-                      v7.4 Strict
-                    </dd>
-                  </div>
-                  <div>
-                    <dt class="text-[var(--cv-text-muted)]">CSS PAYLOAD</dt>
-                    <dd
-                      data-spec-css
-                      class="mt-1 font-bold text-[var(--cv-text)]"
-                    ></dd>
-                  </div>
-                  <div>
-                    <dt class="text-[var(--cv-text-muted)]">DOM NODES</dt>
-                    <dd
-                      data-spec-dom
-                      class="mt-1 font-bold text-[var(--cv-text)]"
-                    ></dd>
-                  </div>
-                </dl>
-
-                <div class="mt-4">
-                  <h4 class="font-mono text-xs font-bold text-[var(--cv-text-muted)]">
-                    INCLUDED ROUTES &amp; SCHEMAS
-                  </h4>
-                  <ul
-                    data-spec-routes
-                    class="mt-2 flex flex-wrap gap-1.5 font-mono text-xs"
-                  ></ul>
-                </div>
-
-                <div class="mt-6 flex items-center justify-end gap-3">
-                  <button
-                    type="button"
-                    data-close-spec-dialog
-                    class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-4 py-2 font-mono text-xs font-semibold text-[var(--cv-text)]"
-                  >
-                    Close
-                  </button>
-                  <button
-                    type="button"
-                    data-spec-add-cart
-                    class="min-h-11 border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-4 py-2 font-mono text-xs font-bold text-[var(--cv-accent-contrast)]"
-                  >
-                    Add Template to Cart
-                  </button>
-                </div>
-              </div>
-            </dialog>
-
-            <script
-              type="application/json"
-              data-templates-json
-              set:html={JSON.stringify(specModalPayload)}
-            />
           </cv-storefront>
         </section>
 
@@ -648,7 +416,7 @@ const specModalPayload = templates.map(
                 <div>
                   <div class="flex items-center font-mono text-xs">
                     <span class="font-bold text-[var(--cv-accent)]">
-                      {benefit.codeRef}
+                      {benefit.code_ref}
                     </span>
                   </div>
 
@@ -663,10 +431,10 @@ const specModalPayload = templates.map(
 
                 <div class="mt-6 flex items-baseline justify-between border-t border-dashed border-[var(--cv-border)] pt-4 font-mono text-xs">
                   <span class="text-[var(--cv-text-muted)]">
-                    {benefit.metricLabel}
+                    {benefit.metric_label}
                   </span>
                   <span class="font-bold text-[var(--cv-text)]">
-                    {benefit.metricValue}
+                    {benefit.metric_value}
                   </span>
                 </div>
               </article>
@@ -882,7 +650,7 @@ const specModalPayload = templates.map(
               </span>
             </div>
             <p class="mt-1.5 font-mono text-xs text-[var(--cv-text-muted)]">
-              Powered by {cmsVersion} &amp; Tailwind CSS v4. Zero third-party
+              Powered by {cms_version} &amp; Tailwind CSS v4. Zero third-party
               tracking scripts.
             </p>
           </div>
@@ -941,10 +709,9 @@ const specModalPayload = templates.map(
 
 <script>
   import gsap from "gsap";
-  import type { EmDashTemplateNode } from "../data/emdash-cms";
 
   const SECTOR_TEMPLATE_MAP: Record<string, string[]> = {
-    "trades-industry": [
+    "Trades & Industry": [
       "tpl-vertex-01",
       "tpl-vertex-02",
       "tpl-vertex-03",
@@ -954,28 +721,28 @@ const specModalPayload = templates.map(
       "tpl-vertex-07",
       "tpl-vertex-08",
     ],
-    "health-practice": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
-    "online-shop": ["tpl-vertex-01", "tpl-vertex-04", "tpl-vertex-08"],
-    "landing-page": [
+    "Health & Practice": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "Online Shop": ["tpl-vertex-01", "tpl-vertex-04", "tpl-vertex-08"],
+    "Landing Page": [
       "tpl-vertex-01",
       "tpl-vertex-02",
       "tpl-vertex-04",
       "tpl-vertex-07",
     ],
-    "professional-services": [
+    "Professional Services": [
       "tpl-vertex-01",
       "tpl-vertex-05",
       "tpl-vertex-06",
       "tpl-vertex-08",
     ],
-    "food-drink": ["tpl-vertex-04", "tpl-vertex-05", "tpl-vertex-08"],
-    "studios-agencies": ["tpl-vertex-01", "tpl-vertex-05", "tpl-vertex-08"],
-    "software-saas": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
-    "retail-product": ["tpl-vertex-04", "tpl-vertex-08"],
-    "travel-leisure": ["tpl-vertex-03", "tpl-vertex-05"],
-    "personal-writing": ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
-    "arts-culture": ["tpl-vertex-05", "tpl-vertex-08"],
-    blog: ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+    "Food & Drink": ["tpl-vertex-04", "tpl-vertex-05", "tpl-vertex-08"],
+    "Studios & Agencies": ["tpl-vertex-01", "tpl-vertex-05", "tpl-vertex-08"],
+    "Software & SaaS": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "Retail & Product": ["tpl-vertex-04", "tpl-vertex-08"],
+    "Travel & Leisure": ["tpl-vertex-03", "tpl-vertex-05"],
+    "Personal & Writing": ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+    "Arts & Culture": ["tpl-vertex-05", "tpl-vertex-08"],
+    Blog: ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
   };
 
   class CvGridReveal extends HTMLElement {
@@ -1026,22 +793,10 @@ const specModalPayload = templates.map(
   }
 
   class CvStorefront extends HTMLElement {
-    private activeIndustry = "trades-industry";
+    private activeIndustry = "Trades & Industry";
     private cmsState: "ready" | "loading" | "empty" | "error" = "ready";
-    private templatesData: EmDashTemplateNode[] = [];
 
     connectedCallback() {
-      const jsonScript = this.querySelector<HTMLScriptElement>(
-        "[data-templates-json]",
-      );
-      if (jsonScript?.textContent) {
-        try {
-          this.templatesData = JSON.parse(jsonScript.textContent);
-        } catch {
-          this.templatesData = [];
-        }
-      }
-
       const industryButtons = this.querySelectorAll<HTMLButtonElement>(
         "[data-filter-industry]",
       );
@@ -1054,7 +809,8 @@ const specModalPayload = templates.map(
 
       industryButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-          this.activeIndustry = btn.dataset.filterIndustry || "trades-industry";
+          this.activeIndustry =
+            btn.dataset.filterIndustry || "Trades & Industry";
           this.cmsState = "ready";
           this.updateFilterButtonStyles(industryButtons, this.activeIndustry);
           this.applyFilters();
@@ -1063,9 +819,9 @@ const specModalPayload = templates.map(
 
       resetButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-          this.activeIndustry = "trades-industry";
+          this.activeIndustry = "Trades & Industry";
           this.cmsState = "ready";
-          this.updateFilterButtonStyles(industryButtons, "trades-industry");
+          this.updateFilterButtonStyles(industryButtons, "Trades & Industry");
           this.applyFilters();
         });
       });
@@ -1076,8 +832,6 @@ const specModalPayload = templates.map(
           this.applyFilters();
         });
       });
-
-      this.setupSpecModal();
     }
 
     private updateFilterButtonStyles(
@@ -1159,7 +913,7 @@ const specModalPayload = templates.map(
         const cardId = card.dataset.id || "";
         const cardIndustry = card.dataset.industry || "";
         const isVisible =
-          this.activeIndustry === "trades-industry" ||
+          this.activeIndustry === "Trades & Industry" ||
           cardIndustry === this.activeIndustry ||
           allowedIds.includes(cardId);
 
@@ -1188,85 +942,6 @@ const specModalPayload = templates.map(
         grid?.removeAttribute("hidden");
         emptyPanel?.setAttribute("hidden", "");
       }
-    }
-
-    private setupSpecModal() {
-      const dialog =
-        this.querySelector<HTMLDialogElement>("[data-spec-dialog]");
-      if (!dialog) return;
-
-      const titleEl = dialog.querySelector<HTMLElement>("[data-spec-title]");
-      const subtitleEl = dialog.querySelector<HTMLElement>(
-        "[data-spec-subtitle]",
-      );
-      const collectionEl = dialog.querySelector<HTMLElement>(
-        "[data-spec-collection]",
-      );
-      const cssEl = dialog.querySelector<HTMLElement>("[data-spec-css]");
-      const domEl = dialog.querySelector<HTMLElement>("[data-spec-dom]");
-      const routesList =
-        dialog.querySelector<HTMLElement>("[data-spec-routes]");
-      const addCartBtn = dialog.querySelector<HTMLButtonElement>(
-        "[data-spec-add-cart]",
-      );
-      const closeButtons = dialog.querySelectorAll<HTMLButtonElement>(
-        "[data-close-spec-dialog]",
-      );
-
-      let currentTemplate: EmDashTemplateNode | null = null;
-
-      this.querySelectorAll<HTMLElement>("[data-inspect-template]").forEach(
-        (cardLink) => {
-          cardLink.addEventListener("click", (event) => {
-            event.preventDefault();
-            const id = cardLink.dataset.inspectTemplate;
-            const found = this.templatesData.find((t) => t.id === id);
-            if (!found) return;
-            currentTemplate = found;
-
-            if (titleEl) titleEl.textContent = found.title;
-            if (subtitleEl) subtitleEl.textContent = found.subtitle;
-            if (collectionEl)
-              collectionEl.textContent = `COLLECTION: ${found.emdashCollection} // ${found.styleTag}`;
-            if (cssEl) cssEl.textContent = found.cssPayloadKb;
-            if (domEl) domEl.textContent = `${found.domNodesCount} nodes`;
-            if (routesList) {
-              routesList.innerHTML = found.routesIncluded
-                .map(
-                  (route) =>
-                    `<li class="border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-2.5 py-1 text-[var(--cv-text)]">${route}</li>`,
-                )
-                .join("");
-            }
-            if (addCartBtn) {
-              addCartBtn.textContent =
-                found.price === 0
-                  ? `Add Free Template ($0)`
-                  : `Add to Cart (${found.priceDisplay})`;
-            }
-
-            dialog.showModal();
-          });
-        },
-      );
-
-      closeButtons.forEach((btn) => {
-        btn.addEventListener("click", () => dialog.close());
-      });
-
-      addCartBtn?.addEventListener("click", () => {
-        if (!currentTemplate) return;
-        window.dispatchEvent(
-          new CustomEvent("cv:cart-add", {
-            detail: {
-              id: currentTemplate.id,
-              title: currentTemplate.title,
-              price: currentTemplate.price,
-            },
-          }),
-        );
-        dialog.close();
-      });
     }
   }
 
@@ -1320,48 +995,39 @@ const specModalPayload = templates.map(
     }
 
     private syncIconState(details: HTMLDetailsElement, isExpanded: boolean) {
-      details.dataset.expanded = String(isExpanded);
+      details.dataset.expanded = isExpanded ? "true" : "false";
       const plusIcon = details.querySelector<SVGElement>("[data-icon-plus]");
       const crossIcon = details.querySelector<SVGElement>("[data-icon-cross]");
-
-      plusIcon?.classList.toggle("hidden", isExpanded);
-      plusIcon?.classList.toggle("block", !isExpanded);
-      crossIcon?.classList.toggle("block", isExpanded);
-      crossIcon?.classList.toggle("hidden", !isExpanded);
+      if (plusIcon) {
+        plusIcon.classList.toggle("hidden", isExpanded);
+        plusIcon.classList.toggle("block", !isExpanded);
+      }
+      if (crossIcon) {
+        crossIcon.classList.toggle("hidden", !isExpanded);
+        crossIcon.classList.toggle("block", isExpanded);
+      }
     }
 
-    private getClosedHeight(
-      details: HTMLDetailsElement,
-      summary: HTMLElement,
-    ): number {
-      const styles = window.getComputedStyle(details);
-      const paddingY =
-        parseFloat(styles.paddingTop) + parseFloat(styles.paddingBottom);
-      const borderY =
-        parseFloat(styles.borderTopWidth) +
-        parseFloat(styles.borderBottomWidth);
-      return summary.offsetHeight + paddingY + borderY;
+    private cancelExistingAnimation(details: HTMLDetailsElement) {
+      const existing = this.animations.get(details);
+      if (existing) {
+        existing.cancel();
+        this.animations.delete(details);
+      }
     }
 
     private openItem(
       details: HTMLDetailsElement,
       summary: HTMLElement,
-      prefersReducedMotion: boolean,
+      reducedMotion: boolean,
     ) {
+      this.cancelExistingAnimation(details);
+
+      const startHeight = details.offsetHeight;
+      details.setAttribute("open", "");
       this.syncIconState(details, true);
 
-      const runningAnim = this.animations.get(details);
-      const startHeight = runningAnim
-        ? details.offsetHeight
-        : this.getClosedHeight(details, summary);
-      if (runningAnim) {
-        runningAnim.cancel();
-        this.animations.delete(details);
-      }
-
-      details.setAttribute("open", "");
-
-      if (prefersReducedMotion) {
+      if (reducedMotion) {
         details.style.height = "";
         details.style.overflow = "";
         return;
@@ -1370,74 +1036,92 @@ const specModalPayload = templates.map(
       const endHeight = details.offsetHeight;
       details.style.overflow = "hidden";
 
-      const anim = details.animate(
+      const animation = details.animate(
         [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
-        { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+        {
+          duration: 240,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        },
       );
-      this.animations.set(details, anim);
 
-      anim.onfinish = () => {
+      this.animations.set(details, animation);
+
+      animation.onfinish = () => {
         details.style.height = "";
         details.style.overflow = "";
         this.animations.delete(details);
+      };
+
+      animation.oncancel = () => {
+        details.style.height = "";
+        details.style.overflow = "";
       };
     }
 
     private closeItem(
       details: HTMLDetailsElement,
       summary: HTMLElement,
-      prefersReducedMotion: boolean,
+      reducedMotion: boolean,
     ) {
+      this.cancelExistingAnimation(details);
       this.syncIconState(details, false);
 
-      const runningAnim = this.animations.get(details);
-      const startHeight = details.offsetHeight;
-      if (runningAnim) {
-        runningAnim.cancel();
-        this.animations.delete(details);
-      }
-
-      if (prefersReducedMotion) {
+      if (reducedMotion) {
         details.removeAttribute("open");
         details.style.height = "";
         details.style.overflow = "";
         return;
       }
 
-      const endHeight = this.getClosedHeight(details, summary);
+      const startHeight = details.offsetHeight;
+      const computedStyle = window.getComputedStyle(details);
+      const paddingBottom = parseFloat(computedStyle.paddingBottom) || 0;
+      const borderBottom = parseFloat(computedStyle.borderBottomWidth) || 0;
+      const endHeight = summary.offsetHeight + paddingBottom + borderBottom;
+
       details.style.overflow = "hidden";
 
-      const anim = details.animate(
+      const animation = details.animate(
         [{ height: `${startHeight}px` }, { height: `${endHeight}px` }],
-        { duration: 220, easing: "cubic-bezier(0.22, 1, 0.36, 1)" },
+        {
+          duration: 220,
+          easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        },
       );
-      this.animations.set(details, anim);
 
-      anim.onfinish = () => {
+      this.animations.set(details, animation);
+
+      animation.onfinish = () => {
         details.removeAttribute("open");
         details.style.height = "";
         details.style.overflow = "";
         this.animations.delete(details);
       };
+
+      animation.oncancel = () => {
+        details.style.height = "";
+        details.style.overflow = "";
+      };
     }
   }
 
-  document
-    .querySelectorAll<HTMLButtonElement>("[data-add-bundle-to-cart]")
-    .forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const price = Number(btn.dataset.bundlePrice || 246);
-        window.dispatchEvent(
-          new CustomEvent("cv:cart-add", {
-            detail: {
-              id: "bundle-all-access",
-              title: "All-Access Studio Bundle (All 8 Templates)",
-              price,
-            },
-          }),
-        );
-      });
+  const bundleButtons = document.querySelectorAll<HTMLButtonElement>(
+    "[data-add-bundle-to-cart]",
+  );
+  bundleButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const price = Number(btn.dataset.bundlePrice || 246);
+      window.dispatchEvent(
+        new CustomEvent("cv:cart-add", {
+          detail: {
+            id: "bundle-all-access",
+            title: "All-Access Studio Bundle (All 8 Templates)",
+            price,
+          },
+        }),
+      );
     });
+  });
 
   if (!customElements.get("cv-grid-reveal")) {
     customElements.define("cv-grid-reveal", CvGridReveal);

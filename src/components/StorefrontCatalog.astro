@@ -4,28 +4,28 @@ import TemplateCard from "./TemplateCard.astro";
 
 interface Props {
   templates: EmDashTemplateNode[];
-  cmsVersion?: string;
-  collectionSlug?: string;
+  cms_version?: string;
+  collection_slug?: string;
 }
 
-const { templates, collectionSlug = "cv_storefront_templates" } = Astro.props;
+const { templates, collection_slug = "cv_storefront_templates" } = Astro.props;
 
 const totalCount = templates.length;
 
 const sectorCategories = [
-  { key: "trades-industry", label: "Trades & industry", count: 14 },
-  { key: "health-practice", label: "Health & practice", count: 8 },
-  { key: "online-shop", label: "Online shop", count: 7 },
-  { key: "landing-page", label: "Landing page", count: 7 },
-  { key: "professional-services", label: "Professional services", count: 7 },
-  { key: "food-drink", label: "Food & drink", count: 6 },
-  { key: "studios-agencies", label: "Studios & agencies", count: 6 },
-  { key: "software-saas", label: "Software & SaaS", count: 6 },
-  { key: "retail-product", label: "Retail & product", count: 5 },
-  { key: "travel-leisure", label: "Travel & leisure", count: 5 },
-  { key: "personal-writing", label: "Personal & writing", count: 4 },
-  { key: "arts-culture", label: "Arts & culture", count: 3 },
-  { key: "blog", label: "Blog", count: 3 },
+  { key: "Trades & Industry", label: "Trades & Industry", count: 14 },
+  { key: "Health & Practice", label: "Health & Practice", count: 8 },
+  { key: "Online Shop", label: "Online Shop", count: 7 },
+  { key: "Landing Page", label: "Landing Page", count: 7 },
+  { key: "Professional Services", label: "Professional Services", count: 7 },
+  { key: "Food & Drink", label: "Food & Drink", count: 6 },
+  { key: "Studios & Agencies", label: "Studios & Agencies", count: 6 },
+  { key: "Software & SaaS", label: "Software & SaaS", count: 6 },
+  { key: "Retail & Product", label: "Retail & Product", count: 5 },
+  { key: "Travel & Leisure", label: "Travel & Leisure", count: 5 },
+  { key: "Personal & Writing", label: "Personal & Writing", count: 4 },
+  { key: "Arts & Culture", label: "Arts & Culture", count: 3 },
+  { key: "Blog", label: "Blog", count: 3 },
 ];
 ---
 
@@ -113,7 +113,7 @@ const sectorCategories = [
           <p class="mt-2 text-sm text-[var(--cv-text-muted)]">
             Fetching typed template definitions and verifying SHA-256 asset
             checksums from
-            <code>{collectionSlug}</code>.
+            <code>{collection_slug}</code>.
           </p>
           <div class="mt-6 flex justify-center">
             <button
@@ -199,102 +199,14 @@ const sectorCategories = [
         </cv-grid-reveal>
       </div>
     </div>
-
-    <dialog
-      data-spec-dialog
-      aria-labelledby="spec-dialog-title"
-      class="m-auto w-full max-w-xl border border-[var(--cv-border-strong)] bg-[var(--cv-surface)] p-0 text-[var(--cv-text)] backdrop:bg-black/75"
-    >
-      <div class="p-6">
-        <div class="flex items-start justify-between gap-4 border-b border-dashed border-[var(--cv-border)] pb-4">
-          <div>
-            <p
-              data-spec-collection
-              class="font-mono text-xs font-semibold text-[var(--cv-accent)]"
-            >
-              EMDASH SCHEMA SPECIFICATION
-            </p>
-            <h3
-              id="spec-dialog-title"
-              data-spec-title
-              class="mt-1 text-xl font-bold"
-            >
-              Template Specification
-            </h3>
-          </div>
-          <button
-            type="button"
-            data-close-spec-dialog
-            aria-label="Close specification dialog"
-            class="min-h-11 min-w-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-3 py-1.5 font-mono text-xs font-bold text-[var(--cv-text)] hover:border-[var(--cv-accent)]"
-          >
-            ESC
-          </button>
-        </div>
-
-        <p
-          data-spec-subtitle
-          class="mt-4 text-sm text-[var(--cv-text-muted)]"
-        ></p>
-
-        <dl class="mt-5 grid grid-cols-2 gap-3 border-t border-b border-dashed border-[var(--cv-border)] py-4 font-mono text-xs sm:grid-cols-3">
-          <div>
-            <dt class="text-[var(--cv-text-muted)]">ASTRO ENGINE</dt>
-            <dd class="mt-1 font-bold text-[var(--cv-text)]">v7.4 Strict</dd>
-          </div>
-          <div>
-            <dt class="text-[var(--cv-text-muted)]">CSS PAYLOAD</dt>
-            <dd data-spec-css class="mt-1 font-bold text-[var(--cv-text)]"></dd>
-          </div>
-          <div>
-            <dt class="text-[var(--cv-text-muted)]">DOM NODES</dt>
-            <dd data-spec-dom class="mt-1 font-bold text-[var(--cv-text)]"></dd>
-          </div>
-        </dl>
-
-        <div class="mt-4">
-          <h4 class="font-mono text-xs font-bold text-[var(--cv-text-muted)]">
-            INCLUDED ROUTES &amp; SCHEMAS
-          </h4>
-          <ul
-            data-spec-routes
-            class="mt-2 flex flex-wrap gap-1.5 font-mono text-xs"
-          ></ul>
-        </div>
-
-        <div class="mt-6 flex items-center justify-end gap-3">
-          <button
-            type="button"
-            data-close-spec-dialog
-            class="min-h-11 border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-4 py-2 font-mono text-xs font-semibold text-[var(--cv-text)]"
-          >
-            Close
-          </button>
-          <button
-            type="button"
-            data-spec-add-cart
-            class="min-h-11 border border-[var(--cv-accent)] bg-[var(--cv-accent)] px-4 py-2 font-mono text-xs font-bold text-[var(--cv-accent-contrast)]"
-          >
-            Add Template to Cart
-          </button>
-        </div>
-      </div>
-    </dialog>
-
-    <script
-      type="application/json"
-      data-templates-json
-      set:html={JSON.stringify(templates)}
-    />
   </cv-storefront>
 </section>
 
 <script>
   import gsap from "gsap";
-  import type { EmDashTemplateNode } from "../data/emdash-cms";
 
   const SECTOR_TEMPLATE_MAP: Record<string, string[]> = {
-    "trades-industry": [
+    "Trades & Industry": [
       "tpl-vertex-01",
       "tpl-vertex-02",
       "tpl-vertex-03",
@@ -304,28 +216,28 @@ const sectorCategories = [
       "tpl-vertex-07",
       "tpl-vertex-08",
     ],
-    "health-practice": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
-    "online-shop": ["tpl-vertex-01", "tpl-vertex-04", "tpl-vertex-08"],
-    "landing-page": [
+    "Health & Practice": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "Online Shop": ["tpl-vertex-01", "tpl-vertex-04", "tpl-vertex-08"],
+    "Landing Page": [
       "tpl-vertex-01",
       "tpl-vertex-02",
       "tpl-vertex-04",
       "tpl-vertex-07",
     ],
-    "professional-services": [
+    "Professional Services": [
       "tpl-vertex-01",
       "tpl-vertex-05",
       "tpl-vertex-06",
       "tpl-vertex-08",
     ],
-    "food-drink": ["tpl-vertex-04", "tpl-vertex-05", "tpl-vertex-08"],
-    "studios-agencies": ["tpl-vertex-01", "tpl-vertex-05", "tpl-vertex-08"],
-    "software-saas": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
-    "retail-product": ["tpl-vertex-04", "tpl-vertex-08"],
-    "travel-leisure": ["tpl-vertex-03", "tpl-vertex-05"],
-    "personal-writing": ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
-    "arts-culture": ["tpl-vertex-05", "tpl-vertex-08"],
-    blog: ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+    "Food & Drink": ["tpl-vertex-04", "tpl-vertex-05", "tpl-vertex-08"],
+    "Studios & Agencies": ["tpl-vertex-01", "tpl-vertex-05", "tpl-vertex-08"],
+    "Software & SaaS": ["tpl-vertex-02", "tpl-vertex-06", "tpl-vertex-07"],
+    "Retail & Product": ["tpl-vertex-04", "tpl-vertex-08"],
+    "Travel & Leisure": ["tpl-vertex-03", "tpl-vertex-05"],
+    "Personal & Writing": ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
+    "Arts & Culture": ["tpl-vertex-05", "tpl-vertex-08"],
+    Blog: ["tpl-vertex-03", "tpl-vertex-06", "tpl-vertex-07"],
   };
 
   class CvGridReveal extends HTMLElement {
@@ -376,22 +288,10 @@ const sectorCategories = [
   }
 
   class CvStorefront extends HTMLElement {
-    private activeIndustry = "trades-industry";
+    private activeIndustry = "Trades & Industry";
     private cmsState: "ready" | "loading" | "empty" | "error" = "ready";
-    private templatesData: EmDashTemplateNode[] = [];
 
     connectedCallback() {
-      const jsonScript = this.querySelector<HTMLScriptElement>(
-        "[data-templates-json]",
-      );
-      if (jsonScript?.textContent) {
-        try {
-          this.templatesData = JSON.parse(jsonScript.textContent);
-        } catch {
-          this.templatesData = [];
-        }
-      }
-
       const industryButtons = this.querySelectorAll<HTMLButtonElement>(
         "[data-filter-industry]",
       );
@@ -404,7 +304,8 @@ const sectorCategories = [
 
       industryButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-          this.activeIndustry = btn.dataset.filterIndustry || "trades-industry";
+          this.activeIndustry =
+            btn.dataset.filterIndustry || "Trades & Industry";
           this.cmsState = "ready";
           this.updateFilterButtonStyles(industryButtons, this.activeIndustry);
           this.applyFilters();
@@ -413,9 +314,9 @@ const sectorCategories = [
 
       resetButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
-          this.activeIndustry = "trades-industry";
+          this.activeIndustry = "Trades & Industry";
           this.cmsState = "ready";
-          this.updateFilterButtonStyles(industryButtons, "trades-industry");
+          this.updateFilterButtonStyles(industryButtons, "Trades & Industry");
           this.applyFilters();
         });
       });
@@ -426,8 +327,6 @@ const sectorCategories = [
           this.applyFilters();
         });
       });
-
-      this.setupSpecModal();
     }
 
     private updateFilterButtonStyles(
@@ -509,7 +408,7 @@ const sectorCategories = [
         const cardId = card.dataset.id || "";
         const cardIndustry = card.dataset.industry || "";
         const isVisible =
-          this.activeIndustry === "trades-industry" ||
+          this.activeIndustry === "Trades & Industry" ||
           cardIndustry === this.activeIndustry ||
           allowedIds.includes(cardId);
 
@@ -538,85 +437,6 @@ const sectorCategories = [
         grid?.removeAttribute("hidden");
         emptyPanel?.setAttribute("hidden", "");
       }
-    }
-
-    private setupSpecModal() {
-      const dialog =
-        this.querySelector<HTMLDialogElement>("[data-spec-dialog]");
-      if (!dialog) return;
-
-      const titleEl = dialog.querySelector<HTMLElement>("[data-spec-title]");
-      const subtitleEl = dialog.querySelector<HTMLElement>(
-        "[data-spec-subtitle]",
-      );
-      const collectionEl = dialog.querySelector<HTMLElement>(
-        "[data-spec-collection]",
-      );
-      const cssEl = dialog.querySelector<HTMLElement>("[data-spec-css]");
-      const domEl = dialog.querySelector<HTMLElement>("[data-spec-dom]");
-      const routesList =
-        dialog.querySelector<HTMLElement>("[data-spec-routes]");
-      const addCartBtn = dialog.querySelector<HTMLButtonElement>(
-        "[data-spec-add-cart]",
-      );
-      const closeButtons = dialog.querySelectorAll<HTMLButtonElement>(
-        "[data-close-spec-dialog]",
-      );
-
-      let currentTemplate: EmDashTemplateNode | null = null;
-
-      this.querySelectorAll<HTMLElement>("[data-inspect-template]").forEach(
-        (cardLink) => {
-          cardLink.addEventListener("click", (event) => {
-            event.preventDefault();
-            const id = cardLink.dataset.inspectTemplate;
-            const found = this.templatesData.find((t) => t.id === id);
-            if (!found) return;
-            currentTemplate = found;
-
-            if (titleEl) titleEl.textContent = found.title;
-            if (subtitleEl) subtitleEl.textContent = found.subtitle;
-            if (collectionEl)
-              collectionEl.textContent = `COLLECTION: ${found.emdashCollection} // ${found.styleTag}`;
-            if (cssEl) cssEl.textContent = found.cssPayloadKb;
-            if (domEl) domEl.textContent = `${found.domNodesCount} nodes`;
-            if (routesList) {
-              routesList.innerHTML = found.routesIncluded
-                .map(
-                  (route) =>
-                    `<li class="border border-[var(--cv-border)] bg-[var(--cv-surface-elevated)] px-2.5 py-1 text-[var(--cv-text)]">${route}</li>`,
-                )
-                .join("");
-            }
-            if (addCartBtn) {
-              addCartBtn.textContent =
-                found.price === 0
-                  ? `Add Free Template ($0)`
-                  : `Add to Cart (${found.priceDisplay})`;
-            }
-
-            dialog.showModal();
-          });
-        },
-      );
-
-      closeButtons.forEach((btn) => {
-        btn.addEventListener("click", () => dialog.close());
-      });
-
-      addCartBtn?.addEventListener("click", () => {
-        if (!currentTemplate) return;
-        window.dispatchEvent(
-          new CustomEvent("cv:cart-add", {
-            detail: {
-              id: currentTemplate.id,
-              title: currentTemplate.title,
-              price: currentTemplate.price,
-            },
-          }),
-        );
-        dialog.close();
-      });
     }
   }
 
