@@ -7,6 +7,16 @@ const swatchSchema = z.object({
   label: z.string(),
 });
 
+const faqItemSchema = z.object({
+  question: z.string(),
+  answer: z.string(),
+});
+
+const flexibleTextSchema = z
+  .union([z.string(), z.array(z.record(z.unknown()))])
+  .nullable()
+  .optional();
+
 function resolvePreviewImage(
   rawImage: Record<string, unknown>,
 ): Record<string, unknown> {
@@ -83,6 +93,25 @@ export const templateSchema = z
     css_payload: z.string(),
     routes_included: z.array(z.string()).optional(),
     polar_checkout_url: z.string().optional(),
+    about_info: flexibleTextSchema,
+    pages_info: flexibleTextSchema,
+    tech_stack: flexibleTextSchema,
+    design_rationale: flexibleTextSchema,
+    target_audience: flexibleTextSchema,
+    engineering_principles: flexibleTextSchema,
+    getting_started: flexibleTextSchema,
+    faq_items: z
+      .preprocess((val) => {
+        if (typeof val === "string") {
+          try {
+            return JSON.parse(val);
+          } catch {
+            return [];
+          }
+        }
+        return val;
+      }, z.array(faqItemSchema).nullable().optional())
+      .optional(),
     preview_image: z.record(z.unknown()),
     preview_alt: z.string().optional(),
     createdAt: z.coerce.date(),

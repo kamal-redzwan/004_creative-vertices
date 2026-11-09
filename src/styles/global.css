@@ -62,7 +62,7 @@
     background-color: var(--cv-bg);
     color: var(--cv-text);
     min-height: 100dvh;
-    overflow-x: hidden;
+    overflow-x: clip;
     line-height: 1.5;
   }
 

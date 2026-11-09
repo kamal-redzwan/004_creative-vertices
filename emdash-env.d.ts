@@ -20,6 +20,15 @@ export interface CvStorefrontTemplate {
   css_payload: string;
   preview_image: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown>; darkVariant?: { id: string; src?: string; alt?: string; caption?: string; width?: number; height?: number; filename?: string; mimeType?: string; blurhash?: string; dominantColor?: string; focalX?: number; focalY?: number; provider?: string; previewUrl?: string; meta?: Record<string, unknown> } };
   swatches_typefaces?: unknown;
+  polar_checkout_url?: string;
+  about_info?: string;
+  pages_info?: string;
+  tech_stack?: string;
+  design_rationale?: string;
+  target_audience?: string;
+  engineering_principles?: string;
+  getting_started?: string;
+  faq_items?: unknown;
   createdAt: Date;
   updatedAt: Date;
   publishedAt: Date | null;

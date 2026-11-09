@@ -1,5 +1,5 @@
 ---
-import { getCollection, getLiveCollection } from "astro:content";
+import { getLiveCollection } from "astro:content";
 import "../../styles/global.css";
 import NavBar from "../../components/NavBar.astro";
 import CartDrawer from "../../components/CartDrawer.astro";
@@ -9,25 +9,6 @@ import {
   bundleDiscountPrice,
 } from "../../data/emdash-cms";
 
-export const prerender = true;
-
-export async function getStaticPaths() {
-  const rawAllTemplates = await getLiveCollection("templates", {
-    type: "cv_storefront_templates",
-  });
-  const allTemplateEntries = Array.isArray(rawAllTemplates)
-    ? rawAllTemplates
-    : (rawAllTemplates.entries ?? []);
-  const allTemplates = allTemplateEntries.filter(({ data }) =>
-    Boolean(data.slug || data.id),
-  );
-
-  return allTemplates.map((entry) => ({
-    params: { slug: (entry.data.slug || entry.data.id) as string },
-    props: { entry },
-  }));
-}
-
 const { slug } = Astro.params;
 const rawPublishedTemplates = await getLiveCollection("templates", {
   type: "cv_storefront_templates",
@@ -36,19 +17,17 @@ const publishedTemplates = Array.isArray(rawPublishedTemplates)
   ? rawPublishedTemplates
   : (rawPublishedTemplates.entries ?? []);
 
-const matchedEntry =
-  Astro.props.entry ??
-  publishedTemplates.find((item) => (item.data.slug || item.data.id) === slug);
+const matchedEntry = publishedTemplates.find(
+  (item) => (item.data.slug || item.data.id) === slug,
+);
 
 if (!matchedEntry) {
   return Astro.redirect("/#templates");
 }
 
-const template = matchedEntry.data;
+const template = matchedEntry.data as Record<string, any>;
 const totalTemplatesCount = publishedTemplates.length;
 const cmsVersion = emdashStorefrontData.cms_version;
-
-const templateSlug = template.slug || template.id;
 
 const previewImageRecord =
   template.preview_image && typeof template.preview_image === "object"
@@ -107,9 +86,75 @@ const typefaces: string[] = Array.isArray(swatchesTypefacesRecord?.typefaces)
 const styleTag = template.style_tag ?? template.style;
 const priceDisplay = template.price_display ?? `$${template.price}`;
 const domNodesCount = template.dom_nodes_count ?? 0;
-const routesIncluded = template.routes_included ?? ["/"];
-const collectionSlug = template.emdash_collection ?? "cv_storefront_templates";
-const featureBullet = template.feature_bullet ?? "Typed EmDash Content Layer";
+const routesIncluded: string[] = template.routes_included ?? ["/"];
+const featureBullet = template.feature_bullet ?? "";
+
+function resolveTextField(value: unknown): string {
+  if (typeof value === "string" && value.trim().length > 0) {
+    return value.trim();
+  }
+  if (Array.isArray(value)) {
+    const extracted = value
+      .map((block) => {
+        if (typeof block === "string") return block;
+        if (
+          block &&
+          typeof block === "object" &&
+          Array.isArray((block as Record<string, unknown>).children)
+        ) {
+          return (
+            (block as Record<string, unknown>).children as Array<
+              Record<string, unknown>
+            >
+          )
+            .map((child) => (typeof child?.text === "string" ? child.text : ""))
+            .join("");
+        }
+        return "";
+      })
+      .filter(Boolean)
+      .join("\n\n");
+    if (extracted.trim().length > 0) return extracted.trim();
+  }
+  return "";
+}
+
+interface TemplateFaqItem {
+  question: string;
+  answer: string;
+}
+
+function resolveFaqItems(value: unknown): TemplateFaqItem[] {
+  let parsed = value;
+  if (typeof parsed === "string" && parsed.trim().length > 0) {
+    try {
+      parsed = JSON.parse(parsed);
+    } catch {
+      parsed = [];
+    }
+  }
+  if (Array.isArray(parsed)) {
+    return parsed
+      .filter((item): item is Record<string, unknown> =>
+        Boolean(item && typeof item === "object"),
+      )
+      .map((item) => ({
+        question: resolveTextField(item.question),
+        answer: resolveTextField(item.answer),
+      }))
+      .filter((item) => item.question.length > 0 && item.answer.length > 0);
+  }
+  return [];
+}
+
+const aboutInfo = resolveTextField(template.about_info);
+const pagesInfo = resolveTextField(template.pages_info);
+const techStack = resolveTextField(template.tech_stack);
+const designRationale = resolveTextField(template.design_rationale);
+const targetAudience = resolveTextField(template.target_audience);
+const engineeringPrinciples = resolveTextField(template.engineering_principles);
+const gettingStarted = resolveTextField(template.getting_started);
+const faqItems = resolveFaqItems(template.faq_items);
 ---
 
 <!doctype html>
@@ -159,9 +204,8 @@ const featureBullet = template.feature_bullet ?? "Typed EmDash Content Layer";
           </a>
 
           <div class="flex items-center gap-2 font-mono text-xs text-[var(--cv-text-muted)]">
-            <span>COLLECTION // {collectionSlug}</span>
-            <span aria-hidden="true">&middot;</span>
-            <span class="text-[var(--cv-accent)]">{templateSlug}</span>
+            <span>COLLECTION //</span>
+            <span class="text-[var(--cv-accent)]">{template.title}</span>
           </div>
         </div>
 
@@ -171,7 +215,7 @@ const featureBullet = template.feature_bullet ?? "Typed EmDash Content Layer";
           class="border-b border-dashed border-[var(--cv-rail)]"
         >
           <div class="grid grid-cols-1 lg:grid-cols-12">
-            <!-- Left 8 Columns: Hero Header & Blueprint Preview Image -->
+            <!-- Left 8 Columns: Hero Header, Blueprint Preview Image & Product Information Sections -->
             <div class="border-b border-dashed border-[var(--cv-rail)] p-4 sm:p-6 lg:col-span-8 lg:border-r lg:border-b-0 lg:p-8">
               <div class="flex flex-wrap items-center gap-2 font-mono text-xs">
                 <span class="border border-[var(--cv-accent)] bg-[var(--cv-surface-elevated)] px-2.5 py-1 font-bold tracking-wider text-[var(--cv-accent)]">
@@ -234,14 +278,181 @@ const featureBullet = template.feature_bullet ?? "Typed EmDash Content Layer";
                   <span>ASTRO v7.4 + TAILWIND CSS v4.3</span>
                 </div>
               </div>
+
+              {aboutInfo && (
+                <section
+                  aria-labelledby="about-info-heading"
+                  class="mt-8 border-b border-dashed border-[var(--cv-border)] py-8"
+                >
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    01 // ABOUT THE ARCHITECTURE
+                  </p>
+                  <h2
+                    id="about-info-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    About the Architecture
+                  </h2>
+                  <p class="mt-3 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                    {aboutInfo}
+                  </p>
+                </section>
+              )}
+
+              {pagesInfo && (
+                <section
+                  aria-labelledby="pages-info-heading"
+                  class="border-b border-dashed border-[var(--cv-border)] py-8"
+                >
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    02 // INCLUDED VIEWS
+                  </p>
+                  <h2
+                    id="pages-info-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    Included Views
+                  </h2>
+                  <p class="mt-3 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                    {pagesInfo}
+                  </p>
+                </section>
+              )}
+
+              {techStack && (
+                <article
+                  aria-labelledby="tech-stack-heading"
+                  class="border-b border-dashed border-[var(--cv-border)] py-8"
+                >
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    03 // TECHNICAL INVENTORY
+                  </p>
+                  <h2
+                    id="tech-stack-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    Technical Inventory
+                  </h2>
+                  <p class="mt-3 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                    {techStack}
+                  </p>
+                </article>
+              )}
+
+              {designRationale && (
+                <section
+                  aria-labelledby="design-rationale-heading"
+                  class="border-b border-dashed border-[var(--cv-border)] py-8"
+                >
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    04 // DESIGN RATIONALE
+                  </p>
+                  <h2
+                    id="design-rationale-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    Design Rationale
+                  </h2>
+                  <p class="mt-3 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                    {designRationale}
+                  </p>
+                </section>
+              )}
+
+              {targetAudience && (
+                <section
+                  aria-labelledby="target-audience-heading"
+                  class="border-b border-dashed border-[var(--cv-border)] py-8"
+                >
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    05 // TARGET AUDIENCE
+                  </p>
+                  <h2
+                    id="target-audience-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    Target Audience
+                  </h2>
+                  <p class="mt-3 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                    {targetAudience}
+                  </p>
+                </section>
+              )}
+
+              {engineeringPrinciples && (
+                <article
+                  aria-labelledby="engineering-principles-heading"
+                  class="border-b border-dashed border-[var(--cv-border)] py-8"
+                >
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    06 // ENGINEERING PRINCIPLES
+                  </p>
+                  <h2
+                    id="engineering-principles-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    Engineering Principles
+                  </h2>
+                  <p class="mt-3 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                    {engineeringPrinciples}
+                  </p>
+                </article>
+              )}
+
+              {gettingStarted && (
+                <section
+                  aria-labelledby="getting-started-heading"
+                  class="border-b border-dashed border-[var(--cv-border)] py-8"
+                >
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    07 // DEPLOYMENT STEPS
+                  </p>
+                  <h2
+                    id="getting-started-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    How to Get Started
+                  </h2>
+                  <p class="mt-3 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                    {gettingStarted}
+                  </p>
+                </section>
+              )}
+
+              {faqItems.length > 0 && (
+                <section aria-labelledby="template-faq-heading" class="pt-8">
+                  <p class="font-mono text-xs font-bold tracking-wider text-[var(--cv-accent)]">
+                    08 // FAQ
+                  </p>
+                  <h2
+                    id="template-faq-heading"
+                    class="mt-2 text-xl font-bold tracking-tight text-[var(--cv-text)] sm:text-2xl"
+                  >
+                    Frequently Asked Questions
+                  </h2>
+
+                  <div class="mt-6 space-y-6">
+                    {faqItems.map((item) => (
+                      <article class="border-b border-dashed border-[var(--cv-border)] pb-6 last:border-b-0 last:pb-0">
+                        <h3 class="text-base font-bold text-[var(--cv-text)]">
+                          {item.question}
+                        </h3>
+                        <p class="mt-2 text-base leading-relaxed text-[var(--cv-text-muted)]">
+                          {item.answer}
+                        </p>
+                      </article>
+                    ))}
+                  </div>
+                </section>
+              )}
             </div>
 
             <!-- Right 4 Columns: Specifications Rail & Checkout Action -->
             <aside
               aria-label="Template specifications and licensing"
-              class="flex flex-col justify-between p-4 sm:p-6 lg:col-span-4 lg:p-8"
+              class="p-4 sm:p-6 lg:col-span-4 lg:p-8"
             >
-              <div>
+              <div class="lg:sticky lg:top-20">
                 <div class="relative border border-gray-800 bg-[var(--cv-surface-elevated)] p-6">
                   <span
                     aria-hidden="true"
@@ -355,7 +566,7 @@ const featureBullet = template.feature_bullet ?? "Typed EmDash Content Layer";
                               class="inline-block h-4 w-4 shrink-0 border border-[var(--cv-border-strong)]"
                               style={`background-color: ${swatch.hex};`}
                               aria-hidden="true"
-                            />
+                            ></span>
                             <span class="text-[var(--cv-text)]">
                               {swatch.label}
                             </span>

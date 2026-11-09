@@ -75,7 +75,6 @@ const typefaces: string[] = Array.isArray(swatchesTypefacesRecord?.typefaces)
 
 const styleLabel = template.style_tag ?? template.style;
 const priceDisplay = template.price_display ?? `$${template.price}`;
-const collectionBadge = template.emdash_collection ?? "cv_storefront_templates";
 ---
 
 <a
@@ -126,7 +125,7 @@ const collectionBadge = template.emdash_collection ?? "cv_storefront_templates";
           </span>
         ) : (
           <span class="border border-[#A3AAB8]/60 bg-[#0A0B0E]/90 px-2 py-1 font-mono text-[11px] text-[#A3AAB8]">
-            {collectionBadge}
+            {template.industry}
           </span>
         )}
       </div>
